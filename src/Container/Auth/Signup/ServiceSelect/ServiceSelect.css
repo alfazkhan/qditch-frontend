@@ -1,0 +1,10 @@
+.list::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE and Edge */
+.list {
+    -ms-overflow-style: none;
+    border-top: 1px solid grey;
+    border-bottom: 1px solid grey;
+}

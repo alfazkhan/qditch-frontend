@@ -3,7 +3,7 @@ import {
     Switch,
     Route,
     Link,
-    Router
+    withRouter,
 } from "react-router-dom";
 import Landing from '../Landing/Landing';
 import Results from '../Results/Results'
@@ -15,7 +15,23 @@ import Signup from '../Auth/Signup/Signup';
 
 class Navigator extends Component {
 
+    componentDidMount() {
+    }
+    routeChangeHandler = (param) => {
+        console.log(window.location.href)
+        this.props.history.push({
+            pathname: param,
+        })
+        if (window.innerWidth < 768 || param === '/Register/User' || param === '/Register/Business') {
+            this.props.history.go(0)
+            console.log('true')
+        }
+    }
 
+    reloadHandler = () => {
+        
+
+    }
 
     render() {
         return (
@@ -25,18 +41,22 @@ class Navigator extends Component {
                         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
                             <span className="navbar-toggler-icon"></span>
                         </button>
-                        <Link to='/' className="navbar-brand mx-auto">
+                        <Link to='/' className="navbar-brand mx-auto" onClick={() => this.routeChangeHandler('/')}>
                             <img src="https://getbootstrap.com/docs/4.5/assets/brand/bootstrap-solid.svg" width="30" height="30" alt="Qditch" loading="lazy" />
                         </Link>
 
-                        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                        <div className="collapse navbar-collapse" id="navbarTogglerDemo03">
                             <ul className="navbar-nav mx-auto mt-2 mt-lg-0">
                                 <li className="nav-item">
-                                    <Link to='/user/Login' className="nav-link mx-auto">Login</Link>
+                                    <Link to='/Login' className="nav-link mx-auto" onClick={() => this.routeChangeHandler('/Login')}>Login</Link>
                                 </li>
                                 <li className="nav-item">
-                                    <div className="btn btn-success btn-sm"><Link to='/user/Register' className="nav-link">Register</Link></div>
+                                    <Link to='/Register/User' className="nav-link mx-auto" onClick={() => this.routeChangeHandler('/Register/User')}>User Signup</Link>
                                 </li>
+                                <li className="nav-item">
+                                    <Link to='/Register/Business' className="nav-link mx-auto" onClick={() => this.routeChangeHandler('/Register/Business')}>Business Signup</Link>
+                                </li>
+
                             </ul>
                         </div>
                     </nav>
@@ -46,8 +66,8 @@ class Navigator extends Component {
                         <Route path="/" exact children={<Landing />} />
                         <Route path="/results/:type/:query" children={<Results />} />
                         <Route path="/businessinfo" exact children={<BusinessInfo />} />
-                        <Route path="/user/Login" exact children={<Login/>} />
-                        <Route path="/user/Register" exact children={<Signup/>} />
+                        <Route path="/Login" exact children={<Login />} />
+                        <Route path="/Register/:mode" exact children={<Signup />} />
                     </Switch>
                 </div>
             </div>
@@ -55,4 +75,4 @@ class Navigator extends Component {
     }
 }
 
-export default Navigator
+export default withRouter(Navigator)
