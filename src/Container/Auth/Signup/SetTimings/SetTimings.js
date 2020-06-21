@@ -1,15 +1,15 @@
 import React, { Component } from 'react'
-import { TextField, Checkbox, FormControlLabel } from '@material-ui/core'
-import {MuiPickersUtilsProvider,KeyboardTimePicker} from '@material-ui/pickers';
+import { Checkbox, FormControlLabel } from '@material-ui/core'
+import { MuiPickersUtilsProvider, KeyboardTimePicker } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 // import './BasicDetails.css'
-import { Button, Select, FormControl, InputLabel, MenuItem } from '@material-ui/core'
+import { Button } from '@material-ui/core'
 import Colors from '../../../../Constants/Colors'
 
 
 
 
-class SetTimings extends Component { 
+class SetTimings extends Component {
 
     state = {
         Days: {
@@ -22,7 +22,7 @@ class SetTimings extends Component {
             'Sunday': false
         },
         scheduleList: [],
-    } 
+    }
 
     componentDidMount() {
         const days = this.state.Days
@@ -38,32 +38,32 @@ class SetTimings extends Component {
                             labelPlacement="end"
                             // onChange={this.setState({Days:!this.state.Days[key]})}
                             className="col-2"
-                            style={{width:'10%'}}
+                            style={{ width: '10%' }}
                         />
                     </td>
                     <td>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <KeyboardTimePicker
-                            // value={selectedDate}
-                            // onChange={handleDateChange}
-                            KeyboardButtonProps={{
-                                'aria-label': 'change time',
-                            }}
-                            disabled={!days[key]}
-                            className="ml-0"
-                        />
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <KeyboardTimePicker
+                                // value={selectedDate}
+                                // onChange={handleDateChange}
+                                KeyboardButtonProps={{
+                                    'aria-label': 'change time',
+                                }}
+                                disabled={!days[key]}
+                                className="ml-0"
+                            />
                         </MuiPickersUtilsProvider>
                     </td>
                     <td>
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <KeyboardTimePicker
-                            // value={selectedDate}
-                            // onChange={handleDateChange}
-                            KeyboardButtonProps={{
-                                'aria-label': 'change time',
-                            }}
-                            disabled={!days[key]}
-                        />
+                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <KeyboardTimePicker
+                                // value={selectedDate}
+                                // onChange={handleDateChange}
+                                KeyboardButtonProps={{
+                                    'aria-label': 'change time',
+                                }}
+                                disabled={!days[key]}
+                            />
                         </MuiPickersUtilsProvider>
                     </td>
 
@@ -80,13 +80,11 @@ class SetTimings extends Component {
     submitHandler = () => {
         this.props.toggleLoading(true)
 
-        setTimeout(() => {
-            const mode = this.props.mode
-            const progress = mode === 'User' ? 50 : 100*3/8
-            this.props.changeProgress(progress)
-            this.props.toggleLoading(false)
-            this.props.nextScreen('CategorySelect')
-        }, 1000)
+        const mode = this.props.mode
+        const progress = mode === 'User' ? 50 : 100 * 3 / 8
+        this.props.changeProgress(progress)
+        this.props.toggleLoading(false)
+        this.props.nextScreen('CategorySelect')
     }
 
 
@@ -94,18 +92,18 @@ class SetTimings extends Component {
         return (
             <div className="container" style={styles.screen}>
                 <div className="table-responsive-sm">
-                <table className="table table-borderless table-sm">
-                    <thead>
-                        <tr>
-                            <th scope="col"></th>
-                            <th scope="col">Opening Time</th>
-                            <th scope="col">Closing Time</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.state.scheduleList}
-                    </tbody>
-                </table>
+                    <table className="table table-borderless table-sm">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col">Opening Time</th>
+                                <th scope="col">Closing Time</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this.state.scheduleList}
+                        </tbody>
+                    </table>
                 </div>
                 <div className="submitButton text-right">
                     <Button variant="contained" size="large" style={{ backgroundColor: Colors.success, color: 'white' }} onClick={this.submitHandler}>

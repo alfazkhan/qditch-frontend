@@ -58,6 +58,16 @@ class ServiceSelect extends Component {
                 autoComplete=""
                 className="col-sm"
             />
+            <TextField
+                variant="outlined"
+                // margin="normal"
+                required
+                id="sal-name"
+                label={"Buffer Time(Hours)"}
+                name="sal-name"
+                autoComplete=""
+                className="col-sm"
+            />
             
         </div>)
         List.push(serviceItem)

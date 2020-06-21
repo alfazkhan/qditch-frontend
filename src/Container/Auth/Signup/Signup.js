@@ -52,7 +52,7 @@ class Signup extends Component {
                 this.setState({screen: <SetTimings nextScreen={this.screenHandler} changeProgress={this.changeProgressHandler} toggleLoading={this.toggleLoadingHandler} mode={this.props.match.params.mode} />})
                 break;
             case 'CategorySelect':
-                this.setState({ screen: <CategorySelect nextScreen={this.screenHandler} changeProgress={this.changeProgressHandler} toggleLoading={this.toggleLoadingHandler} /> })
+                this.setState({ screen: <CategorySelect nextScreen={this.screenHandler} changeProgress={this.changeProgressHandler} toggleLoading={this.toggleLoadingHandler} Loading={this.state.Loading} /> })
                 break;
             case 'ServiceSelect':
                 this.setState({screen: <ServiceSelect nextScreen={this.screenHandler} changeProgress={this.changeProgressHandler} toggleLoading={this.toggleLoadingHandler} />})
@@ -66,6 +66,8 @@ class Signup extends Component {
             case 'UploadImages':
                 this.setState({screen: <UploadImages nextScreen={this.screenHandler} changeProgress={this.changeProgressHandler} toggleLoading={this.toggleLoadingHandler} mode={this.props.match.params.mode} />})
                 break;
+            default:
+                console.log("Load Failed")
 
         }
     }
