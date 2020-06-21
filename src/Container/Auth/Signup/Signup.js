@@ -5,12 +5,13 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import { Box } from '@material-ui/core'
 import { withRouter } from 'react-router-dom';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import SaloonInfoForm from './BusinessInfo/SaloonInfoForm';
+import SaloonInfoForm from './SaloonInfoForm/SaloonInfoForm';
 import CategorySelect from './CategorySelect/CategorySelect';
 import ServiceSelect from './ServiceSelect/ServiceSelect'
 import StylistSelect from './StylistSelect/StylistSelect';
 import SafetyFeatures from './SafetyFeatures/SafetyFeatures';
 import UploadImages from './UploadImages/UploadImages';
+import SetTimings from './SetTimings/SetTimings';
 
 
 class Signup extends Component {
@@ -26,7 +27,7 @@ class Signup extends Component {
 
         const Mode = this.props.match.params.mode
         this.setState({ Mode: Mode })
-        this.screenHandler('BasicDetails')
+        this.screenHandler('BasicDetails') 
     }
 
     toggleLoadingHandler = (value) => {
@@ -44,8 +45,11 @@ class Signup extends Component {
             case 'BasicDetails':
                 this.setState({ screen: <BasicDetails nextScreen={this.screenHandler} changeProgress={this.changeProgressHandler} toggleLoading={this.toggleLoadingHandler} mode={this.props.match.params.mode} /> })
                 break;
-            case 'BusinessInfo':
+            case 'SaloonInfoForm':
                 this.setState({ screen: <SaloonInfoForm nextScreen={this.screenHandler} changeProgress={this.changeProgressHandler} toggleLoading={this.toggleLoadingHandler} /> })
+                break;
+            case 'SetTimings':
+                this.setState({screen: <SetTimings nextScreen={this.screenHandler} changeProgress={this.changeProgressHandler} toggleLoading={this.toggleLoadingHandler} mode={this.props.match.params.mode} />})
                 break;
             case 'CategorySelect':
                 this.setState({ screen: <CategorySelect nextScreen={this.screenHandler} changeProgress={this.changeProgressHandler} toggleLoading={this.toggleLoadingHandler} /> })

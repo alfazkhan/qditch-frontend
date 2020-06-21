@@ -25,10 +25,10 @@ class SaloonInfoForm extends Component {
 
         setTimeout(() => {
             const mode = this.props.mode
-            const progress = mode === 'User' ? 50 : 40
+            const progress = mode === 'User' ? 50 : 100*2/8
             this.props.changeProgress(progress)
             this.props.toggleLoading(false)
-            this.props.nextScreen('CategorySelect')
+            this.props.nextScreen('SetTimings')
         }, 1000)
     }
 

@@ -45,7 +45,7 @@ class CategorySelect extends Component {
 
         setTimeout(() => {
             const mode = this.props.mode
-            const progress = mode === 'User' ? 50 : 50
+            const progress = mode === 'User' ? 50 : 100*4/8
             this.props.changeProgress(progress)
             this.props.toggleLoading(false)
             this.props.nextScreen('ServiceSelect')

@@ -27,10 +27,10 @@ class BasicDetails extends Component {
 
         setTimeout(() => {
             const mode = this.props.mode
-            const progress = mode === 'User' ? 50 : 15
+            const progress = mode === 'User' ? 50 : 100/8
             this.props.changeProgress(progress)
             this.props.toggleLoading(false)
-            this.props.nextScreen(mode==='Business'?'BusinessInfo':'UploadImages')
+            this.props.nextScreen(mode==='Business'?'SaloonInfoForm':'UploadImages')
         }, 1000)
 
     }

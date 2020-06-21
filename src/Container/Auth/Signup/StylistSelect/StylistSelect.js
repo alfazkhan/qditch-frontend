@@ -51,7 +51,7 @@ class StylistSelect extends Component {
 
         setTimeout(() => {
             const mode = this.props.mode
-            const progress = mode === 'User' ? 50 : 80
+            const progress = mode === 'User' ? 50 : 100*6/8
             this.props.changeProgress(progress)
             this.props.toggleLoading(false)
             this.props.nextScreen('SafetyFeatures')

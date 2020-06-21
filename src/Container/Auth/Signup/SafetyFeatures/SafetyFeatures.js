@@ -42,7 +42,7 @@ class SafetyFeatures extends Component {
 
         setTimeout(() => {
             const mode = this.props.mode
-            const progress = mode === 'User' ? 50 : 90
+            const progress = mode === 'User' ? 50 : 100*7/8
             this.props.changeProgress(progress)
             this.props.toggleLoading(false)
             this.props.nextScreen('UploadImages')

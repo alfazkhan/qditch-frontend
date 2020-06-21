@@ -22,10 +22,10 @@ class Navigator extends Component {
         this.props.history.push({
             pathname: param,
         })
-        // if (window.innerWidth < 768 || param === '/Register/User' || param === '/Register/Business') {
-        //     this.props.history.go(0)
-        //     console.log('true')
-        // }
+        if (window.innerWidth < 768 || param === '/Register/User' || param === '/Register/Business') {
+            this.props.history.go(param)
+            console.log('true')
+        }
     }
 
     reloadHandler = () => {

@@ -51,10 +51,10 @@ class UploadImages extends Component {
 
         setTimeout(() => {
             const mode = this.props.mode
-            const progress = mode === 'User' ? 50 : 40
+            const progress = mode === 'User' ? 50 : 100
             this.props.changeProgress(progress)
             this.props.toggleLoading(false)
-            this.props.nextScreen('CategorySelect')
+            this.props.nextScreen('BasicInfo')
         }, 1000)
     }
 

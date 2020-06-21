@@ -74,7 +74,7 @@ class ServiceSelect extends Component {
 
         setTimeout(() => {
             const mode = this.props.mode
-            const progress = mode === 'User' ? 50 : 75
+            const progress = mode === 'User' ? 50 : 100*5/8
             this.props.changeProgress(progress)
             this.props.toggleLoading(false)
             this.props.nextScreen('StylistSelect')
