@@ -14,7 +14,7 @@ class CategorySelect extends Component {
         selectedCategoryList: [],
         selectedCategory: [],
         values: [],
-        mainCategory: 'None'
+        mainCategory: false
     }
 
     componentDidMount() {
@@ -31,6 +31,8 @@ class CategorySelect extends Component {
                 this.setState({ CategoryList: CatList }, () => {
                     this.initialValuesHandler();
                 })
+                this.props.toggleLoading(false)
+
             })
             .catch((e) => {
                 console.log(e)
@@ -56,8 +58,7 @@ class CategorySelect extends Component {
                 />
             </div>)
             if (values[i] === true) {
-                // newCatList.push(<option key={Categories[i]} onSelect={() => this.mainCategoryChange(Categories[i])} name={Categories[i]} value={values[i]}>{Categories[i]}</option>)
-                newCatList.push(<MenuItem  key={Categories[i]} value={Categories[i]}>{Categories[i]}</MenuItem>)
+                newCatList.push(<MenuItem key={Categories[i]} value={Categories[i]}>{Categories[i]}</MenuItem>)
             }
         }
 
@@ -70,9 +71,9 @@ class CategorySelect extends Component {
         Values[id] = !Values[id]
 
         const selectedCategories = this.state.selectedCategory
-        console.log(this.state.CategoryList[id])
-
-        this.setState({ values: Values },
+        selectedCategories.push(this.state.CategoryList[id])
+        console.log(selectedCategories)
+        this.setState({ values: Values,selectedCategories:selectedCategories },
             () => {
                 this.initialValuesHandler()
             })
@@ -82,7 +83,7 @@ class CategorySelect extends Component {
         // this.initialValuesHandler()
         // const mainCat = document.getElementById("mainCatSelect")
         console.log(e.target.value)
-        this.setState({mainCategory:e.target.value})
+        this.setState({ mainCategory: e.target.value })
     }
 
     submitHandler = () => {
@@ -105,18 +106,18 @@ class CategorySelect extends Component {
                 <div className="list" style={{ width: '100%', height: window.innerHeight / 3, overflowX: 'hidden' }}>
                     {this.state.List}
                 </div>
-                <div className="mt-4">
-                    <div className="col-md form-group">
-                        <label>Main Category</label>
+                <div className="row" >
+                    <div className="col-md form-group mt-5">
+                    <InputLabel id="demo-simple-select-label">Main Category</InputLabel>
                         <Select
                             labelId="demo-simple-select-label"
                             id="main_category"
-                            value={this.state.mainCategory}
+                            value={this.state.mainCategory ? this.state.mainCategory : 'None'}
                             onChange={this.mainCategoryChange}
+                            placeholder="None"
+                            style={{ width: '100%' }}
                         >
-                            {/* <MenuItem value={10}>Ten</MenuItem>
-                            <MenuItem value={20}>Twenty</MenuItem>
-                            <MenuItem value={30}>Thirty</MenuItem> */}
+                            <MenuItem key={'placeholder'} disabled>None</MenuItem>
                             {this.state.selectedCategoryList}
                         </Select>
                     </div>

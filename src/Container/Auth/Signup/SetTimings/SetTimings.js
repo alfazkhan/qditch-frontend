@@ -132,11 +132,11 @@ class SetTimings extends Component {
 
     submitHandler = () => {
         console.table(this.state.startTimings)
-        // const mode = this.props.mode
-        // const progress = mode === 'User' ? 50 : 100 * 3 / 8
-        // this.props.changeProgress(progress)
-        // this.props.toggleLoading(false)
-        // this.props.nextScreen('CategorySelect')
+        const mode = this.props.mode
+        const progress = mode === 'User' ? 50 : 100 * 3 / 8
+        this.props.changeProgress(progress)
+        this.props.toggleLoading(false)
+        this.props.nextScreen('CategorySelect')
     }
 
 
