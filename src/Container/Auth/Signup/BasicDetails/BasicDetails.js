@@ -1,63 +1,88 @@
 import React, { Component } from 'react'
 import { TextField } from '@material-ui/core'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 import './BasicDetails.css'
 import { Button } from '@material-ui/core'
 import Colors from '../../../../Constants/Colors'
 import { withRouter } from 'react-router-dom'
-import {Select,MenuItem,FormControl,InputLabel} from '@material-ui/core';
-
-
+import { Select, MenuItem, FormControl, InputLabel } from '@material-ui/core';
+import * as actionTypes from '../../../../store/Action/Action'
+import Axios from '../../../../Axios'
+var axios = require('axios');
 
 class BasicDetails extends Component {
 
     state = {
-        values:{
-            first_name:'',
-            last_name:'',
-            email:'',
-            mobile_number:'',
-            role:'',
-            gender:'',
-            password:'',
+        values: {
+            first_name: '',
+            last_name: '',
+            email: '',
+            mobile_number: '',
+            role: '1',
+            gender: '',
+            password: '',
         },
-        Mode:'',
+        Mode: '',
         confirmPassword: false
     }
 
     componentDidMount() {
-      const mode=this.props.match.params.mode
-      const role=mode === 'Business' ? '1':'0' 
-      this.setState({Mode:mode})
+        const mode = this.props.match.params.mode
+        const role = mode === 'Business' ? '1' : '0'
+        this.setState({ Mode: mode })
     }
 
-    valueChangeHandler = (event,param="null") => {
-        const field = param==='gender'?event.target.value:event.target.id
-        const newValues=this.state.values
-        if(param==='gender'){
-            newValues.gender=field
-        }else{
-            newValues[field]=event.target.value
+    valueChangeHandler = (event, param = "null") => {
+        const field = param === 'gender' ? event.target.value : event.target.id
+        const newValues = this.state.values
+        if (param === 'gender') {
+            newValues.gender = field
+        } else {
+            newValues[field] = event.target.value
         }
-        newValues.role= newValues.role === ''? this.state.Mode === 'Business' ? '1':'0':null
-        this.setState({values:newValues})
+        // newValues.role = newValues.role === '' ? this.state.Mode === 'Business' ? '1' : '0' : console.log()
+        this.setState({ values: newValues })
     }
 
-    confirmPasswordHandler=(e)=>{ 
+    confirmPasswordHandler = (e) => {
 
     }
 
     submitHandler = () => {
         console.table(this.state.values)
+        const url = 'users/user/'
+        const gender = this.state.values.gender === 'Male' ? 'M' : 'F'
+        var data = JSON.stringify({
+            "first_name": this.state.values.first_name.toString(),
+            "last_name": this.state.values.last_name.toString(),
+            "email": this.state.values.email.toString(),
+            "mobile_number": this.state.values.mobile_number.toString(),
+            "gender": gender,
+            "role": this.state.values.role.toString()
+        });
+
         this.props.toggleLoading(true)
 
-        setTimeout(() => {
-            const mode = this.props.mode
-            const progress = mode === 'User' ? 50 : 100 / 8
-            this.props.changeProgress(progress)
-            this.props.toggleLoading(false)
-            this.props.nextScreen(mode === 'Business' ? 'SaloonInfoForm' : 'UploadImages')
-        }, 1000)
+        Axios.post(url, data)
+            .then((response)=>{
+                console.log(JSON.stringify(response.data));
+                this.props.onResponseRecieve(response.data.id)
+                this.props.toggleLoading(false)
+                const progress = this.props.Mode === 'User' ? 50 : 100 / 8
+                this.props.changeProgress(progress)
+                this.props.nextScreen(this.state.Mode === 'Business' ? 'SaloonInfoForm' : 'UploadImages')
+            })
+            .catch((error)=>{
+                this.props.toggleLoading(false)
+                console.log(error.response);
+            });
+
+        // axios(config)
+
+
+
+
+
 
     }
 
@@ -75,7 +100,7 @@ class BasicDetails extends Component {
                         name="fname"
                         autoComplete="firstName"
                         className="col-md"
-                        onChange={(e)=>{this.valueChangeHandler(e)}}
+                        onChange={(e) => { this.valueChangeHandler(e) }}
 
                     />
                     <TextField
@@ -88,7 +113,7 @@ class BasicDetails extends Component {
                         name="lname"
                         autoComplete="lastName"
                         className="col-md"
-                        onChange={(e)=>{this.valueChangeHandler(e)}}
+                        onChange={(e) => { this.valueChangeHandler(e) }}
 
                     />
                 </div>
@@ -102,7 +127,7 @@ class BasicDetails extends Component {
                         name="email"
                         autoComplete="email"
                         className="col-md"
-                        onChange={(e)=>{this.valueChangeHandler(e)}}
+                        onChange={(e) => { this.valueChangeHandler(e) }}
 
                     />
                     <TextField
@@ -115,7 +140,7 @@ class BasicDetails extends Component {
                         name="PhoneNumber"
                         autoComplete="phone"
                         className="col-md"
-                        onChange={(e)=>{this.valueChangeHandler(e)}}
+                        onChange={(e) => { this.valueChangeHandler(e) }}
 
                     />
 
@@ -125,7 +150,7 @@ class BasicDetails extends Component {
                             // value={age}
                             id="gender"
 
-                            onChange={(e)=>{this.valueChangeHandler(e,'gender')}}
+                            onChange={(e) => { this.valueChangeHandler(e, 'gender') }}
                             label="Age"
                         >
                             <MenuItem value="">
@@ -148,7 +173,7 @@ class BasicDetails extends Component {
                         className="col-md"
                         margin="normal"
                         required
-                        onChange={(e)=>{this.valueChangeHandler(e)}}
+                        onChange={(e) => { this.valueChangeHandler(e) }}
                     />
                     <TextField
                         label="Confirm Password"
@@ -158,7 +183,7 @@ class BasicDetails extends Component {
                         className="col-md"
                         margin="normal"
                         required
-                        onChange={(e)=>{this.valueChangeHandler(e)}}
+                        onChange={(e) => { this.valueChangeHandler(e) }}
                     />
                 </div>
                 <div className="submitButton text-right">
@@ -182,12 +207,20 @@ const styles = {
 }
 
 
-const mapStateToProps = (state) => ({
-    
-})
+const mapStateToProps = state => {
+    return {
 
-const mapDispatchToProps = {
-    
+    }
+
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onResponseRecieve: (data) => dispatch({
+            type: actionTypes.UPDATE_USER_ID,
+            user_id: data
+        })
+    }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(BasicDetails))

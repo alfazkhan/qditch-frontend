@@ -3,7 +3,7 @@ import { TextField } from '@material-ui/core'
 // import './BasicDetails.css'
 import { Button, Select, FormControl, InputLabel, MenuItem } from '@material-ui/core'
 import Colors from '../../../../Constants/Colors'
-
+import {connect} from 'react-redux'
 
 
 
@@ -13,12 +13,15 @@ class SaloonInfoForm extends Component {
         values:{
             business_name:'',
             business_type:'',
-            user_id:'1',
             map_url:''
-        }
+        },
+        user_id: null
     }
 
     componentDidMount() {
+        this.setState({user_id:this.props.user_id},()=>{
+            console.log(this.state.user_id)
+        })
     }
 
     valueChangeHandler = (event,param="null") => {
@@ -112,7 +115,19 @@ const styles = {
     }
 }
 
-export default SaloonInfoForm
+
+
+const mapStateToProps = (state) =>{ 
+    return{
+        user_id:state.user_id
+    }    
+}
+
+const mapDispatchToProps = {
+    
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SaloonInfoForm)
 
 
 

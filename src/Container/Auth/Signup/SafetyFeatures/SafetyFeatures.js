@@ -3,6 +3,7 @@ import './SafetyFeatures.css'
 import { Button, FormControlLabel, Checkbox} from '@material-ui/core'
 import Colors from '../../../../Constants/Colors'
 import SafetyFeaturesList from '../../../../Constants/SafetyFeaturesList'
+import Axios from '../../../../Axios'
 
 
 
@@ -15,6 +16,10 @@ class SafetyFeatures extends Component {
 
     componentDidMount() {
         //getCategories from server
+        Axios.get()
+    }
+
+    initialValuesHandler = () =>{
         const Categories = this.state.CategoryList
         const List = []
         for (var key in Categories) {

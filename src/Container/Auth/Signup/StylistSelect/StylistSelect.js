@@ -50,7 +50,6 @@ class StylistSelect extends Component {
         const stylists=this.state.Stylists
         stylists[id] = value
         this.setState({Stylists:stylists})
-        console.log(id,value)
     }
 
     submitHandler = () => {
@@ -62,7 +61,7 @@ class StylistSelect extends Component {
         //     const progress = mode === 'User' ? 50 : 100 * 6 / 8
         //     this.props.changeProgress(progress)
         //     this.props.toggleLoading(false)
-        //     this.props.nextScreen('SafetyFeatures')
+            this.props.nextScreen('SafetyFeatures')
         // }, 1000)
     }
 

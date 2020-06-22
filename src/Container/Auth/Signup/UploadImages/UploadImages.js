@@ -3,15 +3,16 @@ import React, { Component } from 'react'
 import { Button } from '@material-ui/core'
 import Colors from '../../../../Constants/Colors'
 import { withRouter } from 'react-router-dom'
+import ImageUploader from 'react-images-upload';
 
-
+import Axios from '../../../../Axios'
 
 
 class UploadImages extends Component {
 
     state = {
         inputFields: [],
-        images: []
+        Pictures:[]
     }
 
     componentDidMount() {
@@ -28,34 +29,55 @@ class UploadImages extends Component {
             inputFields.push(<form key={i}>
                 <div className="form-group">
                     {/* <label for="exampleFormControlFile1">Example file input</label> */}
-                    <input type="file" className="form-control-file" onChange={this.imagePreviewHandler} />
+                    <ImageUploader
+                        withIcon={false}
+                        withPreview={true}
+                        buttonText='Choose Image'
+                        onChange={this.valueChangeHandler}
+                        imgExtension={['.jpg', '.gif', '.png', '.gif','.jpeg']}
+                        maxFileSize={5242880}
+                        withLabel={false}
+                        className="col-md"
+                        singleImage={true}
+                    />
                 </div>
             </form>)
         }
         this.setState({ inputFields: inputFields })
     }
 
-    imagePreviewHandler = (event) => {
-        console.log(event.target.value)
-        const images = this.state.inputFields
-        images.push(event.target.value)
-        this.setState({ inputFields: images })
-    }
 
-    valueChangeHandler = () => {
-
+    valueChangeHandler = (picture) => {
+        const pictures = this.state.Pictures
+        pictures.concat(picture)
+        this.setState({Pictures:pictures});
     }
 
     submitHandler = () => {
-        this.props.toggleLoading(true)
+        console.table(this.state.Pictures)
 
-        setTimeout(() => {
-            const mode = this.props.mode
-            const progress = mode === 'User' ? 50 : 100
-            this.props.changeProgress(progress)
+        this.props.toggleLoading(true)
+        Axios.post('/images/business_image/',{
+            "business": "2",
+            "cover": "false",
+            "blob_data": this.state.Pictures[0]
+        })
+        .then((res)=>{
+            console.log(res)
             this.props.toggleLoading(false)
-            this.props.nextScreen('BasicInfo')
-        }, 1000)
+
+        })
+        .catch((e)=>{
+            console.log(e)
+            this.props.toggleLoading(false)
+        })
+        // setTimeout(() => {
+        //     const mode = this.props.mode
+        //     const progress = mode === 'User' ? 50 : 100
+        //     this.props.changeProgress(progress)
+        //     this.props.toggleLoading(false)
+        //     this.props.nextScreen('BasicInfo')
+        // }, 1000)
     }
 
 

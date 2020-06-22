@@ -9,6 +9,7 @@ import {Provider} from 'react-redux'
 import Reducer from './store/Reducers/Reducer'
 
 const store = createStore(Reducer)
+var cors = require('cors')
 
 
 ReactDOM.render(
