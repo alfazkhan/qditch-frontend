@@ -13,6 +13,11 @@ const reducer = (state = initialState, action) => {
             ...state,
             user_id : action.user_id
         }
+        case actionTypes.UPDATE_BUSINESS_ID:
+        return{
+            ...state,
+            business_id : action.business_id
+        }
     }
 }
 

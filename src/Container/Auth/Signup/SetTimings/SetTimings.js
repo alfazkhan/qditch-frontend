@@ -3,10 +3,12 @@ import { Checkbox, FormControlLabel } from '@material-ui/core'
 import { MuiPickersUtilsProvider, KeyboardTimePicker } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 // import './BasicDetails.css'
+import { connect } from 'react-redux'
+
 import { Button } from '@material-ui/core'
 import Colors from '../../../../Constants/Colors'
 import { format } from 'date-fns'
-
+import Axios from '../../../../Axios'
 
 
 
@@ -15,10 +17,10 @@ class SetTimings extends Component {
 
     state = {
         Days: {
-            'Monday': true,
+            'Monday': false,
             'Tuesday': false,
             'Wednesday': false,
-            'Thrusday': false,
+            'Thursday': false,
             'Friday': false,
             'Saturday': false,
             'Sunday': false
@@ -30,9 +32,12 @@ class SetTimings extends Component {
         endTimings: {
 
         },
+        business_id: '',
+        user_id: '',
     }
 
     componentDidMount() {
+        this.setState({business_id:this.props.business_id,user_id:this.state.user_id})
         this.initialTimeValues()
         this.initialValueHandler()
     }
@@ -63,7 +68,7 @@ class SetTimings extends Component {
                                 name="appt"
                                 value={this.state.startTimings[key]}
                                 className="form-control"
-                                onChange={(e)=>{this.valueChangeHandler(e,'startTimings')}} />
+                                onChange={(e) => { this.valueChangeHandler(e, 'startTimings') }} />
                         </MuiPickersUtilsProvider>
                     </td>
                     <td>
@@ -74,7 +79,7 @@ class SetTimings extends Component {
                                 name="appt"
                                 value={this.state.endTimings[key]}
                                 className="form-control"
-                                onChange={(e)=>{this.valueChangeHandler(e,'endTimings')}} />
+                                onChange={(e) => { this.valueChangeHandler(e, 'endTimings') }} />
                         </MuiPickersUtilsProvider>
                     </td>
 
@@ -99,26 +104,27 @@ class SetTimings extends Component {
         this.setState({ startTimings: startTimings, endTimings: endTimings })
     }
 
-    valueChangeHandler = (event,mode) => {
-        let suff = 'AM'
+    valueChangeHandler = (event, mode) => {
+        // let suff = 'AM'
         const day = event.target.id
-        let timeString = event.target.value.split(':')
-        if(timeString[0] === '00'){
-            timeString[0]=12
-        }
-        else if(timeString[0] == 12){
-            suff = 'PM'
-        }
-        else if (timeString[0] > 12) {
-            timeString[0]=(timeString[0]%12).toString()
-            timeString[0]= timeString[0].length >= 2?timeString[0]:'0'+timeString[0]
-            suff = 'PM'
-        }
-        timeString = timeString.toString().replace(',',':')
+        // let timeString = event.target.value.split(':')
+        // if(timeString[0] === '00'){
+        //     timeString[0]=12
+        // }
+        // else if(timeString[0] == 12){
+        //     suff = 'PM'
+        // }
+        // else if (timeString[0] > 12) {
+        //     timeString[0]=(timeString[0]%12).toString()
+        //     timeString[0]= timeString[0].length >= 2?timeString[0]:'0'+timeString[0]
+        //     suff = 'PM'
+        // }
+        // timeString = timeString.toString().replace(',',':')
         const timings = this.state[mode]
-        timings[day]= timeString
+        // timings[day]= timeString+suff
+        timings[day] = event.target.value
         // console.table(timings)
-        mode === 'startTimings' ? this.setState({startTimings:timings},this.initialValueHandler) : this.setState({endTimings:timings},this.initialValueHandler)   
+        mode === 'startTimings' ? this.setState({ startTimings: timings }, this.initialValueHandler) : this.setState({ endTimings: timings }, this.initialValueHandler)
     }
 
     activeDaysHandler = (event) => {
@@ -131,12 +137,40 @@ class SetTimings extends Component {
     }
 
     submitHandler = () => {
-        console.table(this.state.startTimings)
-        const mode = this.props.mode
-        const progress = mode === 'User' ? 50 : 100 * 3 / 8
-        this.props.changeProgress(progress)
-        this.props.toggleLoading(false)
-        this.props.nextScreen('CategorySelect')
+        const url = 'availability/timing/'
+        const start = Object.values(this.state.startTimings)
+        const end = Object.values(this.state.endTimings)
+        const Days = Object.values(this.state.Days)
+        const DaysName = Object.keys(this.state.Days)
+
+        var data = JSON.stringify({
+            "monday": Days[0]?(start[0]+'/'+end[0]).toString():'false',
+            "tuesday": Days[1]?(start[1]+'/'+end[1]).toString():'false',
+            "wednesday": Days[2]?(start[2]+'/'+end[2]).toString():'false',
+            "thursday": Days[3]?(start[3]+'/'+end[3]).toString():'false',
+            "friday": Days[4]?(start[4]+'/'+end[4]).toString():'false',
+            "saturday": Days[5]?(start[5]+'/'+end[5]).toString():'false',
+            "sunday": Days[6]?(start[6]+'/'+end[6]).toString():'false',
+            "business" : this.state.business_id
+        });
+        
+        // console.log(Data)
+
+        this.props.toggleLoading(true)
+
+        Axios.post(url, data)
+            .then((response)=>{
+                console.log(JSON.stringify(response.data));
+                // this.props.onResponseRecieve(response.data.id)
+                this.props.toggleLoading(false)
+                const progress = 100*3 / 8
+                this.props.changeProgress(progress)
+                this.props.nextScreen('CategorySelect')
+            })
+            .catch((error)=>{
+                this.props.toggleLoading(false)
+                console.log(error.response);
+            });
     }
 
 
@@ -175,7 +209,15 @@ const styles = {
     }
 }
 
-export default SetTimings
 
+const mapStateToProps = (state) => ({
+    user_id : state.user_id,
+    business_id : state.business_id
+})
 
+const mapDispatchToProps = {
+
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SetTimings)
 

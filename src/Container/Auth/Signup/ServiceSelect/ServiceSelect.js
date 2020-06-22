@@ -23,7 +23,7 @@ class ServiceSelect extends Component {
 
     componentDidMount() {
         //getServices from server
-        Axios.get('/service/services')
+        Axios.get('/service/services/')
             .then(res => {
                 const data = res.data
                 const newServiceList = this.state.ServiceList

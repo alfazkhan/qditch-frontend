@@ -4,7 +4,8 @@ import { TextField } from '@material-ui/core'
 import { Button, Select, FormControl, InputLabel, MenuItem } from '@material-ui/core'
 import Colors from '../../../../Constants/Colors'
 import {connect} from 'react-redux'
-
+import Axios from '../../../../Axios'
+import * as actionTypes from '../../../../store/Action/Action'
 
 
 class SaloonInfoForm extends Component {
@@ -41,16 +42,29 @@ class SaloonInfoForm extends Component {
     }
 
     submitHandler = () => {
-        console.table(this.state.values)
+        const url = 'users/business/'
+        var data = JSON.stringify({
+            "business_name": this.state.values.business_name,
+            "business_type": this.state.values.business_type,
+            "user": this.state.user_id,
+            "stylist_available": 0
+        });
+
         this.props.toggleLoading(true)
 
-        setTimeout(() => {
-            const mode = this.props.mode
-            const progress = mode === 'User' ? 50 : 100*2/8
-            this.props.changeProgress(progress)
-            this.props.toggleLoading(false)
-            this.props.nextScreen('SetTimings')
-        }, 1000)
+        Axios.post(url, data)
+            .then((response)=>{
+                console.log(JSON.stringify(response.data));
+                this.props.onResponseRecieve(response.data.id)
+                this.props.toggleLoading(false)
+                const progress = 100*2 / 8
+                this.props.changeProgress(progress)
+                this.props.nextScreen('SetTimings')
+            })
+            .catch((error)=>{
+                this.props.toggleLoading(false)
+                console.log(error.response);
+            });
     }
 
 
@@ -79,9 +93,9 @@ class SaloonInfoForm extends Component {
                             <MenuItem value="">
                                 <em>None</em>
                             </MenuItem>
-                            <MenuItem value={'Male'}>Male</MenuItem>
-                            <MenuItem value={'Female'}>Female</MenuItem>
-                            <MenuItem value={'Unisex'}>Unisex</MenuItem>
+                            <MenuItem value={'male'}>Male</MenuItem>
+                            <MenuItem value={'female'}>Female</MenuItem>
+                            <MenuItem value={'unisex'}>Unisex</MenuItem>
                         </Select>
                     </FormControl>
                 </div>
@@ -123,8 +137,13 @@ const mapStateToProps = (state) =>{
     }    
 }
 
-const mapDispatchToProps = {
-    
+const mapDispatchToProps = dispatch=>{
+    return {
+        onResponseRecieve: (data) => dispatch({
+            type: actionTypes.UPDATE_BUSINESS_ID,
+            business_id: data
+        })
+    }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SaloonInfoForm)

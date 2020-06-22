@@ -8,7 +8,6 @@ import { withRouter } from 'react-router-dom'
 import { Select, MenuItem, FormControl, InputLabel } from '@material-ui/core';
 import * as actionTypes from '../../../../store/Action/Action'
 import Axios from '../../../../Axios'
-var axios = require('axios');
 
 class BasicDetails extends Component {
 
@@ -49,7 +48,6 @@ class BasicDetails extends Component {
     }
 
     submitHandler = () => {
-        console.table(this.state.values)
         const url = 'users/user/'
         const gender = this.state.values.gender === 'Male' ? 'M' : 'F'
         var data = JSON.stringify({
@@ -58,6 +56,7 @@ class BasicDetails extends Component {
             "email": this.state.values.email.toString(),
             "mobile_number": this.state.values.mobile_number.toString(),
             "gender": gender,
+            "password": this.state.values.password,
             "role": this.state.values.role.toString()
         });
 
@@ -76,13 +75,6 @@ class BasicDetails extends Component {
                 this.props.toggleLoading(false)
                 console.log(error.response);
             });
-
-        // axios(config)
-
-
-
-
-
 
     }
 

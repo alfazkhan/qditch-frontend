@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import './CategorySelect.css'
 import { Button, FormControlLabel, Checkbox, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
 import Colors from '../../../../Constants/Colors'
+import { connect } from 'react-redux'
 
 import Axios from '../../../../Axios'
 
@@ -14,12 +15,15 @@ class CategorySelect extends Component {
         selectedCategoryList: [],
         selectedCategory: [],
         values: [],
-        mainCategory: false
+        mainCategory: false,
+        business_id: '3',
+        success: true
     }
 
     componentDidMount() {
         //getCategories from server
-        Axios.get('/category/categories')
+        this.setState({business_id:this.props.business_id})
+        Axios.get('category/categories/')
             .then(res => {
                 const data = res.data
                 const CatList = this.state.CategoryList
@@ -72,8 +76,8 @@ class CategorySelect extends Component {
 
         const selectedCategories = this.state.selectedCategory
         selectedCategories.push(this.state.CategoryList[id])
-        console.log(selectedCategories)
-        this.setState({ values: Values,selectedCategories:selectedCategories },
+        // console.log(selectedCategories)
+        this.setState({ values: Values, selectedCategories: selectedCategories },
             () => {
                 this.initialValuesHandler()
             })
@@ -87,9 +91,42 @@ class CategorySelect extends Component {
     }
 
     submitHandler = () => {
-        // this.props.toggleLoading(true)
-        console.log(this.state)
+        this.props.toggleLoading(true)
+        // console.log(this.state)
+        const url = 'category/business_categories/'
+        const catList = this.state.CategoryList
+        const values = this.state.values
+        const superCat = this.state.mainCategory
+        for (var i = 0; i < catList.length; i++) {
+            if (values[i]) {
+                const data = {
+                    "business": this.state.business_id,
+                    "category": (i + 1).toString(),
+                    "super_category": catList[i] === superCat ? "true" : "false"
+                }
+                Axios.post(url, data)
+                    .then((response) => {
+                        this.setState({success: true})
+                        console.log(JSON.stringify(response.data));
+                        // this.props.onResponseRecieve(response.data.id)
 
+                    })
+                    .catch((error) => {
+                        this.setState({success: false})
+                        console.log(error.response);
+                    });
+
+            }
+        }
+        console.log(this.state.success)
+        if (this.state.success) {
+            this.props.toggleLoading(false)
+            const progress = 100 * 4 / 8
+            this.props.changeProgress(progress)
+            this.props.nextScreen('ServiceSelect')
+        } else {
+            this.props.toggleLoading(false)
+        }
         // setTimeout(() => {
         //     const mode = this.props.mode
         //     const progress = mode === 'User' ? 50 : 100 * 4 / 8
@@ -108,7 +145,7 @@ class CategorySelect extends Component {
                 </div>
                 <div className="row" >
                     <div className="col-md form-group mt-5">
-                    <InputLabel id="demo-simple-select-label">Main Category</InputLabel>
+                        <InputLabel id="demo-simple-select-label">Main Category</InputLabel>
                         <Select
                             labelId="demo-simple-select-label"
                             id="main_category"
@@ -140,7 +177,13 @@ const styles = {
     }
 }
 
-export default CategorySelect
+const mapStateToProps = (state) => ({
+    // user_id : state.user_id,
+    business_id : state.business_id
+})
+
+
+export default connect(mapStateToProps, null)(CategorySelect)
 
 
 
