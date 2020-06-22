@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { TextField } from '@material-ui/core'
+import {connect} from 'react-redux'
 import './BasicDetails.css'
 import { Button } from '@material-ui/core'
 import Colors from '../../../../Constants/Colors'
@@ -33,26 +34,30 @@ class BasicDetails extends Component {
     valueChangeHandler = (event,param="null") => {
         const field = param==='gender'?event.target.value:event.target.id
         const newValues=this.state.values
-        newValues[field]=event.target.value
-        newValues.role= this.state.Mode === 'Business' ? '1':'0'
+        if(param==='gender'){
+            newValues.gender=field
+        }else{
+            newValues[field]=event.target.value
+        }
+        newValues.role= newValues.role === ''? this.state.Mode === 'Business' ? '1':'0':null
         this.setState({values:newValues})
     }
 
-    confirmPasswordHandler=(e)=>{
+    confirmPasswordHandler=(e)=>{ 
 
     }
 
     submitHandler = () => {
         console.table(this.state.values)
-        // this.props.toggleLoading(true)
+        this.props.toggleLoading(true)
 
-        // setTimeout(() => {
-        //     const mode = this.props.mode
-        //     const progress = mode === 'User' ? 50 : 100 / 8
-        //     this.props.changeProgress(progress)
-        //     this.props.toggleLoading(false)
-        //     this.props.nextScreen(mode === 'Business' ? 'SaloonInfoForm' : 'UploadImages')
-        // }, 1000)
+        setTimeout(() => {
+            const mode = this.props.mode
+            const progress = mode === 'User' ? 50 : 100 / 8
+            this.props.changeProgress(progress)
+            this.props.toggleLoading(false)
+            this.props.nextScreen(mode === 'Business' ? 'SaloonInfoForm' : 'UploadImages')
+        }, 1000)
 
     }
 
@@ -168,10 +173,21 @@ class BasicDetails extends Component {
 }
 
 
+
+
 const styles = {
     screen: {
         marginTop: 40
     }
 }
 
-export default withRouter(BasicDetails)
+
+const mapStateToProps = (state) => ({
+    
+})
+
+const mapDispatchToProps = {
+    
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(BasicDetails))

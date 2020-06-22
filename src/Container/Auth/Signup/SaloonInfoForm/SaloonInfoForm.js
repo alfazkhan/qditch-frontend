@@ -10,17 +10,35 @@ import Colors from '../../../../Constants/Colors'
 class SaloonInfoForm extends Component {
 
     state = {
-
+        values:{
+            business_name:'',
+            business_type:'',
+            user_id:'1',
+            map_url:''
+        }
     }
 
     componentDidMount() {
     }
 
-    valueChangeHandler = () => {
+    valueChangeHandler = (event,param="null") => {
+        const field = param==='business_type'?event.target.value:event.target.id
+        const newValues=this.state.values
+        if(param==='business_type'){
+            newValues.business_type=field
+        }
+        else{
+            newValues[field]=event.target.value
+        }
+
+        // newValues.role= this.state.Mode === 'Business' ? '1':'0'
+        this.setState({values:newValues})
+        // console.log(newValues)
 
     }
 
     submitHandler = () => {
+        console.table(this.state.values)
         this.props.toggleLoading(true)
 
         setTimeout(() => {
@@ -41,7 +59,8 @@ class SaloonInfoForm extends Component {
                         variant="outlined"
                         // margin="normal"
                         required
-                        id="sal-name"
+                        id="business_name"
+                        onChange={this.valueChangeHandler}
                         label="Saloon Name"
                         name="sal-name"
                         autoComplete=""
@@ -51,7 +70,7 @@ class SaloonInfoForm extends Component {
                         <InputLabel>Saloon Type</InputLabel>
                         <Select
                             // value={age}
-                            // onChange={handleChange}
+                            onChange={(e)=>this.valueChangeHandler(e,'business_type')}
                             label="Age"
                         >
                             <MenuItem value="">
@@ -67,6 +86,8 @@ class SaloonInfoForm extends Component {
                     <TextField
                         label="Google Map URL"
                         multiline
+                        id="map_url"
+                        onChange={this.valueChangeHandler}
                         rows={4}
                         variant="outlined"
                         className="col-md"

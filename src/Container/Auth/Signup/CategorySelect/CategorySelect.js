@@ -87,7 +87,7 @@ class CategorySelect extends Component {
 
     submitHandler = () => {
         // this.props.toggleLoading(true)
-        console.log(this.state.mainCategory)
+        console.log(this.state)
 
         // setTimeout(() => {
         //     const mode = this.props.mode
@@ -110,7 +110,7 @@ class CategorySelect extends Component {
                         <label>Main Category</label>
                         <Select
                             labelId="demo-simple-select-label"
-                            id="demo-simple-select"
+                            id="main_category"
                             value={this.state.mainCategory}
                             onChange={this.mainCategoryChange}
                         >

@@ -5,6 +5,8 @@ import DateFnsUtils from '@date-io/date-fns';
 // import './BasicDetails.css'
 import { Button } from '@material-ui/core'
 import Colors from '../../../../Constants/Colors'
+import { format } from 'date-fns'
+
 
 
 
@@ -14,19 +16,31 @@ class SetTimings extends Component {
     state = {
         Days: {
             'Monday': true,
-            'Tuesday': true,
-            'Wednesday': true,
-            'Thrusday': true,
-            'Friday': true,
+            'Tuesday': false,
+            'Wednesday': false,
+            'Thrusday': false,
+            'Friday': false,
             'Saturday': false,
             'Sunday': false
         },
         scheduleList: [],
+        startTimings: {
+
+        },
+        endTimings: {
+
+        },
     }
 
     componentDidMount() {
+        this.initialTimeValues()
+        this.initialValueHandler()
+    }
+
+    initialValueHandler = () => {
         const days = this.state.Days
         const scheduleList = []
+        let dayNum = 0
         for (var key in this.state.Days) {
             scheduleList.push(
                 <tr key={key}>
@@ -36,55 +50,93 @@ class SetTimings extends Component {
                             control={<Checkbox checked={days[key]} color="primary" />}
                             label={key}
                             labelPlacement="end"
-                            // onChange={this.setState({Days:!this.state.Days[key]})}
+                            onChange={this.activeDaysHandler}
                             className="col-2"
                             style={{ width: '10%' }}
                         />
                     </td>
                     <td>
-                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                            <KeyboardTimePicker
-                                // value={selectedDate}
-                                // onChange={handleDateChange}
-                                KeyboardButtonProps={{
-                                    'aria-label': 'change time',
-                                }}
+                        <MuiPickersUtilsProvider utils={DateFnsUtils} >
+                            <input type="time"
+                                id={key}
                                 disabled={!days[key]}
-                                className="ml-0"
-                            />
+                                name="appt"
+                                value={this.state.startTimings[key]}
+                                className="form-control"
+                                onChange={(e)=>{this.valueChangeHandler(e,'startTimings')}} />
                         </MuiPickersUtilsProvider>
                     </td>
                     <td>
-                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                            <KeyboardTimePicker
-                                // value={selectedDate}
-                                // onChange={handleDateChange}
-                                KeyboardButtonProps={{
-                                    'aria-label': 'change time',
-                                }}
+                        <MuiPickersUtilsProvider utils={DateFnsUtils} >
+                            <input type="time"
+                                id={key}
                                 disabled={!days[key]}
-                            />
+                                name="appt"
+                                value={this.state.endTimings[key]}
+                                className="form-control"
+                                onChange={(e)=>{this.valueChangeHandler(e,'endTimings')}} />
                         </MuiPickersUtilsProvider>
                     </td>
 
                 </tr>
             )
+            dayNum += 1
         }
         this.setState({ scheduleList: scheduleList })
+
+
     }
 
-    valueChangeHandler = () => {
+    initialTimeValues = () => {
+        const Days = Object.keys(this.state.Days)
+        const startTimings = this.state.startTimings
+        const endTimings = this.state.endTimings
+        const initialTime = format(new Date(2014, 1, 11), 'HH:mm')
+        for (var i in Days) {
+            startTimings[Days[i]] = initialTime
+            endTimings[Days[i]] = initialTime
+        }
+        this.setState({ startTimings: startTimings, endTimings: endTimings })
+    }
 
+    valueChangeHandler = (event,mode) => {
+        let suff = 'AM'
+        const day = event.target.id
+        let timeString = event.target.value.split(':')
+        if(timeString[0] === '00'){
+            timeString[0]=12
+        }
+        else if(timeString[0] == 12){
+            suff = 'PM'
+        }
+        else if (timeString[0] > 12) {
+            timeString[0]=(timeString[0]%12).toString()
+            timeString[0]= timeString[0].length >= 2?timeString[0]:'0'+timeString[0]
+            suff = 'PM'
+        }
+        timeString = timeString.toString().replace(',',':')
+        const timings = this.state[mode]
+        timings[day]= timeString
+        // console.table(timings)
+        mode === 'startTimings' ? this.setState({startTimings:timings},this.initialValueHandler) : this.setState({endTimings:timings},this.initialValueHandler)   
+    }
+
+    activeDaysHandler = (event) => {
+        const newDays = this.state.Days
+        const currentDay = event.target.value
+        newDays[currentDay] = !newDays[currentDay]
+        this.setState({ Days: newDays }, () => {
+            this.initialValueHandler();
+        })
     }
 
     submitHandler = () => {
-        this.props.toggleLoading(true)
-
-        const mode = this.props.mode
-        const progress = mode === 'User' ? 50 : 100 * 3 / 8
-        this.props.changeProgress(progress)
-        this.props.toggleLoading(false)
-        this.props.nextScreen('CategorySelect')
+        console.table(this.state.startTimings)
+        // const mode = this.props.mode
+        // const progress = mode === 'User' ? 50 : 100 * 3 / 8
+        // this.props.changeProgress(progress)
+        // this.props.toggleLoading(false)
+        // this.props.nextScreen('CategorySelect')
     }
 
 
