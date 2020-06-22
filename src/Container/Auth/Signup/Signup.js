@@ -27,7 +27,7 @@ class Signup extends Component {
 
         const Mode = this.props.match.params.mode
         this.setState({ Mode: Mode })
-        this.screenHandler('ServiceSelect') 
+        this.screenHandler('StylistSelect') 
     }
 
     toggleLoadingHandler = (value) => {
