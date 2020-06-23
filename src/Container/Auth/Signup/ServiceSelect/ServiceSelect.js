@@ -3,6 +3,7 @@ import { TextField, Button, FormControl, InputLabel, Select, MenuItem } from '@m
 // import './CategorySelect.css'
 import Colors from '../../../../Constants/Colors'
 import Axios from '../../../../Axios'
+import { connect } from 'react-redux'
 
 
 
@@ -18,11 +19,13 @@ class ServiceSelect extends Component {
         durations:[],
         buffers:[],
         elementNumber: 0,
-        Services: []
+        Services: [],
+        business_id:''
     }
 
     componentDidMount() {
         //getServices from server
+        this.setState({business_id:this.props.business_id})
         Axios.get('/service/services/')
             .then(res => {
                 const data = res.data
@@ -133,17 +136,52 @@ class ServiceSelect extends Component {
         }
     }
 
-    submitHandler = () => {
-        console.log(this.state)
-        // this.props.toggleLoading(true)
+    findIndex=(element,array)=>{
+        for(var i=0;i<array.length;i++){
+            if(array[i]===element){
+                return i
+            }
+        }
+    }
 
-        // setTimeout(() => {
-        //     const mode = this.props.mode
-        //     const progress = mode === 'User' ? 50 : 100 * 5 / 8
-        //     this.props.changeProgress(progress)
-        //     this.props.toggleLoading(false)
-        //     this.props.nextScreen('StylistSelect')
-        // }, 1000)
+    submitHandler = () => {
+        // console.log(this.state)
+        this.props.toggleLoading(true)
+
+        const url = '/service/business_services/'
+        const selectedService = this.state.selectedServices
+        const price = this.state.prices
+        const duration = this.state.durations
+        const buffer = this.state.buffers
+        const ServiceList = this.state.Services
+        let success = 0
+        for(var i=0;i<selectedService.length;i++){
+            const data= JSON.stringify({
+                "business":this.state.business_id,
+                "service": this.findIndex(selectedService[i],ServiceList)+1,
+                "business_service_price": price[i],
+                "business_service_duration": duration[i],
+                "buffer_time":buffer[i],
+                "disable":"False"
+            })
+            // console.log(data)
+            Axios.post(url,data,{Headers:{"Content-Type": "application/x-www-form-urlencoded"}})
+            .then(res=>{
+                success = 1
+                console.log(res.data)
+            })
+            .catch(e=>{
+                success = 0
+                console.log(e.response)
+            })
+           
+        }
+        console.log(success)
+
+            const progress =  100 * 5 / 8
+            this.props.changeProgress(progress)
+            this.props.toggleLoading(false)
+            this.props.nextScreen('StylistSelect')
     }
 
 
@@ -177,7 +215,15 @@ const styles = {
     }
 }
 
-export default ServiceSelect
+const mapStateToProps = (state) => ({
+    // user_id : state.user_id,
+    business_id : state.business_id
+})
+
+
+export default connect(mapStateToProps, null)(ServiceSelect)
+
+
 
 
 

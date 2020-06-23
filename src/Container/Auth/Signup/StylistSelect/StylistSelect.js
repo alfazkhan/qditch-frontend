@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import { TextField, Button } from '@material-ui/core'
 // import './CategorySelect.css'
 import Colors from '../../../../Constants/Colors'
-
+import Axios from '../../../../Axios'
+import { connect } from 'react-redux'
+var FormData = require('form-data');
 
 
 
@@ -11,11 +13,13 @@ class StylistSelect extends Component {
     state = {
         Stylists: [],
         List: [],
-        currentNumber: 0
+        currentNumber: 0,
+        business_id: null
     }
 
     componentDidMount() {
         //getServices from server
+        this.setState({business_id:this.props.business_id})
         this.addNewStylistField()
     }
 
@@ -48,21 +52,39 @@ class StylistSelect extends Component {
         const id = e.target.id
         const value = e.target.value
         const stylists=this.state.Stylists
-        stylists[id] = value
+        stylists[id-1] = value
         this.setState({Stylists:stylists})
     }
 
     submitHandler = () => {
-        console.table(this.state.Stylists)
-        // this.props.toggleLoading(true)
+        const stylists = this.state.Stylists
+        const url = '/stylist/stylist_details/'
+        console.log(stylists)
+        for (var i = 0; i < stylists.length; i++) {
+            var data = new FormData();
+            data.append('business', this.state.business_id);
+            data.append('name', stylists[i]);
+            console.log(data)
+            Axios.post(url, data)
+                .then((res) => {
+                    console.log(res)
+                    this.props.toggleLoading(false)
 
-        // setTimeout(() => {
-        //     const mode = this.props.mode
-        //     const progress = mode === 'User' ? 50 : 100 * 6 / 8
-        //     this.props.changeProgress(progress)
-        //     this.props.toggleLoading(false)
+                })
+                .catch((e) => {
+                    console.log(e.response)
+                    this.props.toggleLoading(false)
+                })
+        }
+        this.props.toggleLoading(true)
+
+        setTimeout(() => {
+            const mode = this.props.mode
+            const progress = mode === 'User' ? 50 : 100 * 6 / 8
+            this.props.changeProgress(progress)
+            this.props.toggleLoading(false)
             this.props.nextScreen('SafetyFeatures')
-        // }, 1000)
+        }, 1000)
     }
 
 
@@ -97,7 +119,13 @@ const styles = {
     }
 }
 
-export default StylistSelect
+const mapStateToProps = (state) => ({
+    // user_id : state.user_id,
+    business_id : state.business_id
+})
+
+
+export default connect(mapStateToProps, null)(StylistSelect)
 
 
 

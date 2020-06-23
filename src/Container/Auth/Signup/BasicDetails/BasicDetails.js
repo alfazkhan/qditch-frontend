@@ -26,7 +26,7 @@ class BasicDetails extends Component {
     }
 
     componentDidMount() {
-        const mode = this.props.match.params.mode
+        const mode = this.props.mode
         const role = mode === 'Business' ? '1' : '0'
         this.setState({ Mode: mode })
     }
@@ -64,7 +64,7 @@ class BasicDetails extends Component {
 
         Axios.post(url, data)
             .then((response)=>{
-                console.log(JSON.stringify(response.data));
+                console.table(response.data);
                 this.props.onResponseRecieve(response.data.id)
                 this.props.toggleLoading(false)
                 const progress = this.props.Mode === 'User' ? 50 : 100 / 8

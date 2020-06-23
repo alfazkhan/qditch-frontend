@@ -1,48 +1,102 @@
 import React, { Component } from 'react'
 import './SafetyFeatures.css'
-import { Button, FormControlLabel, Checkbox} from '@material-ui/core'
+import { Button, FormControlLabel, Checkbox } from '@material-ui/core'
 import Colors from '../../../../Constants/Colors'
-import SafetyFeaturesList from '../../../../Constants/SafetyFeaturesList'
 import Axios from '../../../../Axios'
+import { connect } from 'react-redux'
+var FormData = require('form-data');
 
 
 
 class SafetyFeatures extends Component {
 
     state = {
-        CategoryList: {...SafetyFeaturesList},
-        List: []
+        SafetyFeatures: {},
+        List: [],
+        SelectedFeatures: [],
+        business_id:null
     }
 
     componentDidMount() {
         //getCategories from server
-        Axios.get()
+        this.setState({business_id:this.props.business_id})
+        Axios.get('/safety_feature/safety_features/')
+            .then(res => {
+                let saf_fec = this.setState.SafetyFeatures
+                saf_fec = { ...res.data }
+                // console.table(saf_fec)
+                this.setState({ SafetyFeatures: saf_fec }, () => {
+                    this.initialValuesHandler()
+                })
+            })
     }
 
-    initialValuesHandler = () =>{
-        const Categories = this.state.CategoryList
+    initialValuesHandler = () => {
+        const safetyFeatures = this.state.SafetyFeatures
         const List = []
-        for (var key in Categories) {
+        for (var key in safetyFeatures) {
+            // console.log(safetyFeatures[key].safety_feature)
             List.push(<div className="row ml-5">
 
                 <FormControlLabel
                     key={key}
                     value={key}
                     control={<Checkbox color="primary" />}
-                    label={Categories[key]}
+                    label={safetyFeatures[key].safety_feature}
                     labelPlacement="end"
-                    
+                    onChange={this.valueChangeHandler}
+
                 />
             </div>)
         }
         this.setState({ List: List })
     }
 
-    valueChangeHandler = () => {
+    checkSimilar = (json, element) => {
+        const values = Object.values(json)
+        // console.log(element)
+        if (values.indexOf(element) !== -1) {
+            return true
+        } else {
+            return false
+        }
+    }
 
+    valueChangeHandler = (e) => {
+        // console.log(e.target.value)
+        const id = e.target.value
+        var selectedFeatures = this.state.SelectedFeatures
+        const features_list = this.state.SafetyFeatures
+        if (!this.checkSimilar(selectedFeatures, features_list[id].id)) {
+            selectedFeatures.push(features_list[id].id)
+        }
+        else {
+            const index = selectedFeatures.indexOf(features_list[id].id);
+            if (index > -1) {
+                selectedFeatures.splice(index, 1);
+            }
+        }
+        this.setState({ SelectedFeatures: selectedFeatures })
     }
 
     submitHandler = () => {
+        const selected = this.state.SelectedFeatures
+        const url = '/safety_feature/business_safety_features/'
+        for (var i = 0; i < selected.length; i++) {
+            var data = new FormData();
+            data.append('business', this.state.business_id);
+            data.append('safety_features', selected[i]);
+            Axios.post(url, data)
+                .then((res) => {
+                    console.log(res)
+                    this.props.toggleLoading(false)
+
+                })
+                .catch((e) => {
+                    console.log(e.response)
+                    this.props.toggleLoading(false)
+                })
+        }
         this.props.toggleLoading(true)
 
         setTimeout(() => {
@@ -58,7 +112,7 @@ class SafetyFeatures extends Component {
     render() {
         return (
             <div className="container" style={styles.screen}>
-                <div class="list text-left" style={{ width: '100%', height: window.innerHeight / 2,overflowX:'hidden' }}>
+                <div class="list text-left" style={{ width: '100%', height: window.innerHeight / 2, overflowX: 'hidden' }}>
                     {this.state.List}
                 </div>
                 <div className="submitButton text-right">
@@ -79,7 +133,13 @@ const styles = {
     }
 }
 
-export default SafetyFeatures
+const mapStateToProps = (state) => ({
+    // user_id : state.user_id,
+    business_id : state.business_id
+})
+
+
+export default connect(mapStateToProps, null)(SafetyFeatures)
 
 
 

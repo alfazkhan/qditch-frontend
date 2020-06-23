@@ -4,19 +4,29 @@ import { Button } from '@material-ui/core'
 import Colors from '../../../../Constants/Colors'
 import { withRouter } from 'react-router-dom'
 import ImageUploader from 'react-images-upload';
-
 import Axios from '../../../../Axios'
+import { connect } from 'react-redux'
+
+var FormData = require('form-data');
+
 
 
 class UploadImages extends Component {
 
     state = {
         inputFields: [],
-        Pictures:[]
+        Pictures: [],
+        profile_image: null,
+        Mode: '',
+        business_id: 6,
+        user_id: null
     }
 
-    componentDidMount() {
-        const mode = this.props.match.params.mode
+    componentDidMount=()=>{
+        console.log(this.props.mode)
+        const mode = this.props.mode
+        // this.setState({business_id:this.props.business_id,user_id:this.props.user_id})
+ 
         let imageCount = 0
         if (mode === 'User') {
             imageCount = 1
@@ -27,50 +37,79 @@ class UploadImages extends Component {
         const inputFields = this.state.inputFields
         for (var i = 0; i < imageCount; i++) {
             inputFields.push(<form key={i}>
-                <div className="form-group">
-                    {/* <label for="exampleFormControlFile1">Example file input</label> */}
+                <div class="form-group">
                     <ImageUploader
                         withIcon={false}
-                        withPreview={true}
-                        buttonText='Choose Image'
+                        buttonText={'Select Image'}
                         onChange={this.valueChangeHandler}
-                        imgExtension={['.jpg', '.gif', '.png', '.gif','.jpeg']}
-                        maxFileSize={5242880}
-                        withLabel={false}
-                        className="col-md"
                         singleImage={true}
+                        withPreview={true}
+                        withLabel={false}
+                        imgExtension={['.jpg', '.gif', '.png', '.gif']}
+                        maxFileSize={5242880}
                     />
                 </div>
             </form>)
         }
-        this.setState({ inputFields: inputFields })
+        this.setState({ inputFields: inputFields, Mode: mode })
     }
 
 
     valueChangeHandler = (picture) => {
-        const pictures = this.state.Pictures
-        pictures.concat(picture)
-        this.setState({Pictures:pictures});
+        // console.log(picture[0])
+        if (this.state.Mode === 'Business') {
+            const pictures = this.state.Pictures
+            pictures.push(picture[0])
+            this.setState({ Pictures: pictures })
+        } else {
+            const pro_picture = picture[0]
+            this.setState({ profile_image: pro_picture });
+        }
     }
 
     submitHandler = () => {
-        console.table(this.state.Pictures)
-
+        // console.table(this.state.Pictures)
+        let url = ''
         this.props.toggleLoading(true)
-        Axios.post('/images/business_image/',{
-            "business": "2",
-            "cover": "false",
-            "blob_data": this.state.Pictures[0]
-        })
-        .then((res)=>{
-            console.log(res)
-            this.props.toggleLoading(false)
+        if (this.state.Mode === 'Business') {
+            url = '/images/business_image/'
+            const pictures = this.state.Pictures
+            console.log(pictures[0])
+            for (var i = 0; i < pictures.length; i++) {
+                var data = new FormData();
+                data.append('blob_data', pictures[i]);
+                data.append('business', '12');
+                data.append('cover', i==0?'true':'false');
+                Axios.post(url, data)
+                    .then((res) => {
+                        console.log(res)
+                        this.props.toggleLoading(false)
 
-        })
-        .catch((e)=>{
-            console.log(e)
-            this.props.toggleLoading(false)
-        })
+                    })
+                    .catch((e) => {
+                        console.log(e.response.data)
+                        this.props.toggleLoading(false)
+                    })
+            }
+
+        } else if (this.state.Mode) {
+            url = '/images/profile_image/'
+            var data = new FormData();
+            data.append('blob_data', this.state.profile_image);
+            data.append('user', this.props.user_id);
+            data.append('cover', 'false');
+            Axios.post(url, data)
+                .then((res) => {
+                    console.log(res)
+                    this.props.toggleLoading(false)
+    
+                })
+                .catch((e) => {
+                    console.log(e.response.data)
+                    this.props.toggleLoading(false)
+                })
+        }
+
         // setTimeout(() => {
         //     const mode = this.props.mode
         //     const progress = mode === 'User' ? 50 : 100
@@ -105,7 +144,13 @@ const styles = {
     }
 }
 
-export default withRouter(UploadImages)
+const mapStateToProps = (state) => ({
+    // user_id : state.user_id,
+    // business_id : state.business_id
+})
+
+
+export default connect(mapStateToProps, null)(UploadImages)
 
 
 

@@ -119,21 +119,21 @@ class CategorySelect extends Component {
             }
         }
         console.log(this.state.success)
-        if (this.state.success) {
-            this.props.toggleLoading(false)
-            const progress = 100 * 4 / 8
-            this.props.changeProgress(progress)
-            this.props.nextScreen('ServiceSelect')
-        } else {
-            this.props.toggleLoading(false)
-        }
-        // setTimeout(() => {
-        //     const mode = this.props.mode
-        //     const progress = mode === 'User' ? 50 : 100 * 4 / 8
-        //     this.props.changeProgress(progress)
+        // if (this.state.success) {
         //     this.props.toggleLoading(false)
+        //     const progress = 100 * 4 / 8
+        //     this.props.changeProgress(progress)
         //     this.props.nextScreen('ServiceSelect')
-        // }, 1000)
+        // } else {
+        //     this.props.toggleLoading(false)
+        // }
+        setTimeout(() => {
+            const mode = this.props.mode
+            const progress = mode === 'User' ? 50 : 100 * 4 / 8
+            this.props.changeProgress(progress)
+            this.props.toggleLoading(false)
+            this.props.nextScreen('ServiceSelect')
+        }, 1000)
     }
 
 
