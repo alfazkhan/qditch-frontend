@@ -18,6 +18,11 @@ const reducer = (state = initialState, action) => {
             ...state,
             business_id : action.business_id
         }
+        case actionTypes.UPDATE_TOKEN:
+        return{
+            ...state,
+            token : action.token
+        }
     }
 }
 

@@ -3,22 +3,33 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import {BrowserRouter} from "react-router-dom"
-import {createStore} from 'redux'
-import {Provider} from 'react-redux'
+import { BrowserRouter } from "react-router-dom"
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
 import Reducer from './store/Reducers/Reducer'
+import { persistStore, persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
+import { PersistGate } from 'redux-persist/integration/react'
 
-const store = createStore(Reducer)
-var cors = require('cors')
+
+const persistConfig = {
+  key: 'root',
+  storage,
+}
+const persistedReducer = persistReducer(persistConfig, Reducer)
+let store = createStore(persistedReducer)
+let persistor = persistStore(store)
 
 
 ReactDOM.render(
   <Provider store={store}>
-  <BrowserRouter>
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-  </BrowserRouter>
+    <PersistGate loading={null} persistor={persistor}>
+      <BrowserRouter>
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>
+      </BrowserRouter>
+    </PersistGate>
   </Provider>,
   document.getElementById('root')
 );

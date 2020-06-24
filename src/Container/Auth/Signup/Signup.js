@@ -1,17 +1,17 @@
-import React, { Component } from 'react'
-import './Signup.css'
-import BasicDetails from './BasicDetails/BasicDetails'
-import LinearProgress from '@material-ui/core/LinearProgress';
-import { Box } from '@material-ui/core'
-import { withRouter } from 'react-router-dom';
+import { Box } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import SaloonInfoForm from './SaloonInfoForm/SaloonInfoForm';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
+import BasicDetails from './BasicDetails/BasicDetails';
 import CategorySelect from './CategorySelect/CategorySelect';
-import ServiceSelect from './ServiceSelect/ServiceSelect'
-import StylistSelect from './StylistSelect/StylistSelect';
 import SafetyFeatures from './SafetyFeatures/SafetyFeatures';
-import UploadImages from './UploadImages/UploadImages';
+import SaloonInfoForm from './SaloonInfoForm/SaloonInfoForm';
+import ServiceSelect from './ServiceSelect/ServiceSelect';
 import SetTimings from './SetTimings/SetTimings';
+import './Signup.css';
+import StylistSelect from './StylistSelect/StylistSelect';
+import UploadImages from './UploadImages/UploadImages';
 
 
 class Signup extends Component {

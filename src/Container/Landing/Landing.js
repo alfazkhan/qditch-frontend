@@ -1,13 +1,19 @@
 import React, { Component } from 'react'
+import Slideshow from '../../Components/SlideShow/Slideshow'
+
+
 
 class Landing extends Component {
     render() {
         return (
-            <div style={{backgroundColor:'pink',height:100}}>
-                <h1>HomePage</h1>
+            <div>
+                <Slideshow/>
             </div>
         )
     }
 }
+
+
+
 
 export default Landing

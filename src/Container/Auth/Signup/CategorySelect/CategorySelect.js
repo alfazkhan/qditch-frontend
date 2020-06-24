@@ -1,10 +1,10 @@
+import { Button, Checkbox, FormControlLabel, InputLabel, MenuItem, Select } from '@material-ui/core'
 import React, { Component } from 'react'
-import './CategorySelect.css'
-import { Button, FormControlLabel, Checkbox, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
-import Colors from '../../../../Constants/Colors'
 import { connect } from 'react-redux'
-
 import Axios from '../../../../Axios'
+import Colors from '../../../../Constants/Colors'
+import './CategorySelect.css'
+
 
 
 class CategorySelect extends Component {
