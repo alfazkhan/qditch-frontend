@@ -19,16 +19,16 @@ const Slideshow = () => {
                     </ol>
                     <div className="carousel-inner">
                         <div className="carousel-item active">
-                            <img className="d-block w-100" src={Slide1} style={styles.thumbpost} alt="First slide" />
+                            <img className="d-block w-100" src={Slide1} style={styles.thumbpost_up} alt="First slide" />
                         </div>
                         <div className="carousel-item">
-                            <img className="d-block w-100" src={Slide2} style={styles.thumbpost} alt="First slide" />
+                            <img className="d-block w-100" src={Slide2} style={styles.thumbpost_center} alt="First slide" />
                         </div>
                         <div className="carousel-item">
-                            <img className="d-block w-100" src={Slide3} style={styles.thumbpost} alt="First slide" />
+                            <img className="d-block w-100" src={Slide3} style={styles.thumbpost_center} alt="First slide" />
                         </div>
                         <div className="carousel-item">
-                            <img className="d-block w-100" src={Slide4} style={styles.thumbpost} alt="First slide" />
+                            <img className="d-block w-100" src={Slide4} style={styles.thumbpost_center} alt="First slide" />
                         </div>
                         
                     </div>
@@ -46,7 +46,7 @@ const Slideshow = () => {
 }
 
 const styles = {
-    thumbpost: {
+    thumbpost_up: {
         objectFit: 'cover',
         objectPosition: 'top',
         width: window.innerWidth,
@@ -55,7 +55,28 @@ const styles = {
         overFlow: 'hidden',
         top: 1000
         // marginBottom: '1rem',
-    }
+    },
+    thumbpost_down: {
+        objectFit: 'cover',
+        objectPosition: 'bottom',
+        width: window.innerWidth,
+        maxHeight: 550,
+        position: 'sticky',
+        overFlow: 'hidden',
+        top: 1000
+        // marginBottom: '1rem',
+    },
+    thumbpost_center: {
+        objectFit: 'cover',
+        objectPosition: 'center',
+        width: window.innerWidth,
+        maxHeight: 550,
+        position: 'sticky',
+        overFlow: 'hidden',
+        top: 1000
+        // marginBottom: '1rem',
+    },
+
 }
 
 
