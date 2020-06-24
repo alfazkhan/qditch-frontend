@@ -1,18 +1,18 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import {
-    Switch,
-    Route,
-    Link,
-    withRouter,
+    Link, Route, Switch,
+
+
+    withRouter
 } from "react-router-dom";
-import Landing from '../Landing/Landing';
-import Results from '../Results/Results'
-import BusinessInfo from '../BusinessInfo/BusinessInfo'
-import Colors from '../../Constants/Colors'
-import './Navigator.css'
+import Colors from '../../Constants/Colors';
 import Login from '../Auth/Login/Login';
 import Signup from '../Auth/Signup/Signup';
+import BusinessInfo from '../BusinessInfo/BusinessInfo';
 import Dashboard from '../Dashboard/Dashboard';
+import Landing from '../Landing/Landing';
+import Results from '../Results/Results';
+import './Navigator.css';
 
 
 
@@ -59,12 +59,12 @@ class Navigator extends Component {
                                 <li className="nav-item">
                                     <Link to='/Login' className="nav-link mx-auto" style={styles.navlink} onClick={() => this.routeChangeHandler('/Login')}>Login</Link>
                                 </li>
-                                <li className="nav-item">
+                                {/* <li className="nav-item">
                                     <Link to='/Register/User' className="nav-link mx-auto" style={styles.navlink} onClick={() => this.routeChangeHandler('/Register/User')}>User Signup</Link>
                                 </li>
                                 <li className="nav-item">
                                     <Link to='/Register/Business' className="nav-link mx-auto" style={styles.navlink} onClick={() => this.routeChangeHandler('/Register/Business')}>Business Signup</Link>
-                                </li>
+                                </li> */}
                                 <li className="nav-item">
                                     <Link to='/admin/dashboard' className="nav-link mx-auto" style={styles.navlink} onClick={() => this.routeChangeHandler('/admin/dashboard')}>Admin Dashboard</Link>
                                 </li>
