@@ -59,7 +59,7 @@ export class Login extends Component {
       "email": this.state.values.email,
       "password": this.state.values.password
     })
-    const url = 'http://13.234.31.245:8000/custom/login/'
+    const url = 'https://13.234.31.245:8000/custom/login/'
     Axios.post(url, data)
       .then(res => {
         console.log(res.data)
