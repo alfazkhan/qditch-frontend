@@ -87,7 +87,7 @@ class Signup extends Component {
 const styles = {
     container: {
         marginTop: window.innerHeight / 6,
-        width: window.innerWidth < 768 ? '100%' : '50%'
+        width: window.innerWidth < 768 ? '100%' : '50%',
     },
     Loader:{
         marginTop: '40px'

@@ -18,21 +18,24 @@ class UploadImages extends Component {
         Pictures: [],
         profile_image: null,
         Mode: '',
-        business_id: 6,
+        business_id: null,
         user_id: null
     }
 
-    componentDidMount=()=>{
-        console.log(this.props.mode)
+    componentDidMount = () => {
+        // console.log(this.props.mode)
         const mode = this.props.mode
-        // this.setState({business_id:this.props.business_id,user_id:this.props.user_id})
- 
+
+
+
         let imageCount = 0
         if (mode === 'User') {
             imageCount = 1
+            this.setState({ user_id: this.props.user_id })
         }
         else {
             imageCount = 5
+            this.setState({ business_id: this.props.business_id, user_id: this.props.user_id })
         }
         const inputFields = this.state.inputFields
         for (var i = 0; i < imageCount; i++) {
@@ -51,7 +54,9 @@ class UploadImages extends Component {
                 </div>
             </form>)
         }
-        this.setState({ inputFields: inputFields, Mode: mode })
+        this.setState({ inputFields: inputFields, Mode: mode }, () => {
+            console.log(this.state)
+        })
     }
 
 
@@ -67,6 +72,19 @@ class UploadImages extends Component {
         }
     }
 
+    pageChangeHandler = () => {
+        const mode = this.props.mode
+        const progress =  100
+        this.props.changeProgress(progress)
+        this.props.toggleLoading(false)
+
+        mode === 'User' 
+        ? this.props.history.push('/')
+        : this.props.history.push('/admin/dashboard')
+        
+
+    }
+
     submitHandler = () => {
         // console.table(this.state.Pictures)
         let url = ''
@@ -78,12 +96,15 @@ class UploadImages extends Component {
             for (var i = 0; i < pictures.length; i++) {
                 var data = new FormData();
                 data.append('blob_data', pictures[i]);
-                data.append('business', '12');
-                data.append('cover', i==0?'true':'false');
+                data.append('business', this.state.business_id);
+                data.append('cover', i == 0 ? 'true' : 'false');
                 Axios.post(url, data)
                     .then((res) => {
                         console.log(res)
                         this.props.toggleLoading(false)
+                        if(i === pictures.length){
+                            this.pageChangeHandler()
+                        }
 
                     })
                     .catch((e) => {
@@ -102,7 +123,7 @@ class UploadImages extends Component {
                 .then((res) => {
                     console.log(res)
                     this.props.toggleLoading(false)
-    
+                    this.pageChangeHandler()
                 })
                 .catch((e) => {
                     console.log(e.response.data)
@@ -110,13 +131,7 @@ class UploadImages extends Component {
                 })
         }
 
-        // setTimeout(() => {
-        //     const mode = this.props.mode
-        //     const progress = mode === 'User' ? 50 : 100
-        //     this.props.changeProgress(progress)
-        //     this.props.toggleLoading(false)
-        //     this.props.nextScreen('BasicInfo')
-        // }, 1000)
+
     }
 
 
@@ -145,12 +160,12 @@ const styles = {
 }
 
 const mapStateToProps = (state) => ({
-    // user_id : state.user_id,
-    // business_id : state.business_id
+    user_id: state.user_id,
+    business_id: state.business_id
 })
 
 
-export default connect(mapStateToProps, null)(UploadImages)
+export default connect(mapStateToProps, null)(withRouter(UploadImages))
 
 
 

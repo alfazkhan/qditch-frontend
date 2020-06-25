@@ -20,6 +20,7 @@ import Services from './Services/Services';
 import Stylists from './Stylists/Stylists';
 import Images from './Images/Images';
 import Timings from './Timings/Timings';
+import { withRouter } from 'react-router-dom';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -66,87 +67,96 @@ class Dashboard extends Component {
 
   state = {
     value: 0,
-    business_id: 18,
+    business_id: null,
     Loading: false,
     Data: null,
     elements: [],
   }
 
   componentWillMount() {
-    
+
     this.setState({ Loading: true })
-    this.setState({ business_id: 18 }, () => {
-      Axios.get('/users/business/' + this.state.business_id + '/')
+    if (typeof this.props.business_id === 'undefined') {
+      this.props.history.push({
+        pathname: '/',
+      })
+    }
+
+    const business_id = this.props.match.params.id
+
+    this.setState({ business_id: this.props.business_id }, () => {
+      Axios.get('/users/business/' + this.props.business_id + '/')
         .then((response) => {
-          // console.log(response.data)
+          console.log(response.data)
           this.setState({ Data: response.data }, () => {
             this.responseValuesHandler()
-            this.setState({Loading:false})
+            this.setState({ Loading: false })
           })
         })
         .catch((err) => {
           console.log(err)
         })
     })
-  }
-
-  responseValuesHandler=()=>{
 
   }
 
-  handleChange=(e,newValue)=>{
-    this.setState({value:newValue})
+  responseValuesHandler = () => {
+
+  }
+
+  handleChange = (e, newValue) => {
+    this.setState({ value: newValue })
   }
 
 
   render() {
     return (
       <div>
-        {this.state.Loading ? <CircularProgress /> 
-        :
-        <div style={styles.root} className="text-center">
-          <AppBar position="relative" color="default">
-            <Tabs
-              value={this.state.value}
-              onChange={this.handleChange}
-              variant="scrollable"
-              scrollButtons="on"
-              indicatorColor="primary"
-              textColor="primary"
-              aria-label="scrollable force tabs example"
-              className="text-center ml-auto mr-auto"
-            >
-              <Tab label="My Business" icon={<BusinessIcon />} {...a11yProps(0)} />
-              <Tab label="Appointments" icon={<ListAltIcon />} {...a11yProps(1)} />
-              <Tab label="Services" icon={<AmpStoriesIcon />} {...a11yProps(2)} />
-              <Tab label="Stylists" icon={<FaceIcon />} {...a11yProps(3)} />
-              <Tab label="Timings" icon={<AccessTimeIcon />} {...a11yProps(4)} />
-              <Tab label="Images" icon={<ImageIcon />} {...a11yProps(5)} />
-              <Tab label="Edit Profile" icon={<PersonPinIcon />} {...a11yProps(6)} />
-            </Tabs>
-          </AppBar>
-          <TabPanel value={this.state.value} index={0}>
-            <MyBusiness data={this.state.Data} />
+        {this.state.Loading ? <CircularProgress />
+          :
+          <div style={styles.root} className="text-center">
+            <AppBar position="relative" color="default">
+              <Tabs
+                value={this.state.value}
+                onChange={this.handleChange}
+                variant="scrollable"
+                scrollButtons="on"
+                indicatorColor="primary"
+                textColor="primary"
+                aria-label="scrollable force tabs example"
+                className="text-center ml-auto mr-auto"
+              >
+                <Tab label="My Business" icon={<BusinessIcon />} {...a11yProps(0)} />
+                <Tab label="Appointments" icon={<ListAltIcon />} {...a11yProps(1)} />
+                <Tab label="Services" icon={<AmpStoriesIcon />} {...a11yProps(2)} />
+                <Tab label="Stylists" icon={<FaceIcon />} {...a11yProps(3)} />
+                <Tab label="Timings" icon={<AccessTimeIcon />} {...a11yProps(4)} />
+                <Tab label="Images" icon={<ImageIcon />} {...a11yProps(5)} />
+                <Tab label="Edit Profile" icon={<PersonPinIcon />} {...a11yProps(6)} />
+              </Tabs>
+            </AppBar>
+            <TabPanel value={this.state.value} index={0}>
+              <MyBusiness data={this.state.Data} />
+            </TabPanel>
+            <TabPanel value={this.state.value} index={1}>
+              Appointments
           </TabPanel>
-          <TabPanel value={this.state.value} index={1}>
-            Appointments
-          </TabPanel>
-          <TabPanel value={this.state.value} index={2}>
-            <Services data={this.state.Data} />
-          </TabPanel>
-          <TabPanel value={this.state.value} index={3}>
-            <Stylists data={this.state.Data} />
+            <TabPanel value={this.state.value} index={2}>
+              <Services data={this.state.Data} />
+            </TabPanel>
+            <TabPanel value={this.state.value} index={3}>
+              <Stylists data={this.state.Data} />
+            </TabPanel>
+            <TabPanel value={this.state.value} index={4}>
+              <Timings data={this.state.Data} />
+            </TabPanel>
+            <TabPanel value={this.state.value} index={5}>
+              <Images data={this.state.Data} />
+            </TabPanel>
+            <TabPanel value={this.state.value} index={6}>
+              Edit Data
         </TabPanel>
-          <TabPanel value={this.state.value} index={4}>
-            <Timings data={this.state.Data} />
-        </TabPanel>
-          <TabPanel value={this.state.value} index={5}>
-            <Images data={this.state.Data} />
-        </TabPanel>
-          <TabPanel value={this.state.value} index={6}>
-            Edit Data
-        </TabPanel>
-        </div>}
+          </div>}
       </div>
     )
   }
@@ -160,7 +170,7 @@ const mapDispatchToProps = {
 
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Dashboard))
 
 
 

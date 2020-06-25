@@ -144,6 +144,13 @@ class ServiceSelect extends Component {
         }
     }
 
+    pageChangeHandler = () =>{
+        const progress =  100 * 5 / 8
+        this.props.changeProgress(progress)
+        this.props.toggleLoading(false)
+        this.props.nextScreen('StylistSelect')
+    }
+
     submitHandler = () => {
         // console.log(this.state)
         this.props.toggleLoading(true)
@@ -154,7 +161,6 @@ class ServiceSelect extends Component {
         const duration = this.state.durations
         const buffer = this.state.buffers
         const ServiceList = this.state.Services
-        let success = 0
         for(var i=0;i<selectedService.length;i++){
             const data= JSON.stringify({
                 "business":this.state.business_id,
@@ -167,21 +173,18 @@ class ServiceSelect extends Component {
             // console.log(data)
             Axios.post(url,data,{Headers:{"Content-Type": "application/x-www-form-urlencoded"}})
             .then(res=>{
-                success = 1
                 console.log(res.data)
+                if(i === selectedService.length){
+                    this.pageChangeHandler()
+                }
             })
             .catch(e=>{
-                success = 0
                 console.log(e.response)
             })
            
         }
-        console.log(success)
 
-            const progress =  100 * 5 / 8
-            this.props.changeProgress(progress)
-            this.props.toggleLoading(false)
-            this.props.nextScreen('StylistSelect')
+            
     }
 
 

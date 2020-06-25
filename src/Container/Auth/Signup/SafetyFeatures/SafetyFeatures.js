@@ -14,12 +14,12 @@ class SafetyFeatures extends Component {
         SafetyFeatures: {},
         List: [],
         SelectedFeatures: [],
-        business_id:null
+        business_id:1
     }
 
     componentDidMount() {
         //getCategories from server
-        this.setState({business_id:this.props.business_id})
+        // this.setState({business_id:this.props.business_id})
         Axios.get('/safety_feature/safety_features/')
             .then(res => {
                 let saf_fec = this.setState.SafetyFeatures
@@ -79,17 +79,31 @@ class SafetyFeatures extends Component {
         this.setState({ SelectedFeatures: selectedFeatures })
     }
 
+    pageChangeHandler = () =>{
+        const mode = this.props.mode
+        const progress = 100*7/8
+        this.props.changeProgress(progress)
+        this.props.toggleLoading(false)
+        this.props.nextScreen('UploadImages')
+    }
+
     submitHandler = () => {
         const selected = this.state.SelectedFeatures
         const url = '/safety_feature/business_safety_features/'
+        this.props.toggleLoading(true)
+        console.log(selected)
         for (var i = 0; i < selected.length; i++) {
-            var data = new FormData();
-            data.append('business', this.state.business_id);
-            data.append('safety_features', selected[i]);
+            const data = {
+                "business" : this.state.business_id,
+                safety_features: selected[i]
+            }
             Axios.post(url, data)
                 .then((res) => {
                     console.log(res)
                     this.props.toggleLoading(false)
+                    if(i === selected.length){
+                        this.pageChangeHandler()
+                    }
 
                 })
                 .catch((e) => {
@@ -97,15 +111,8 @@ class SafetyFeatures extends Component {
                     this.props.toggleLoading(false)
                 })
         }
-        this.props.toggleLoading(true)
 
-        setTimeout(() => {
-            const mode = this.props.mode
-            const progress = mode === 'User' ? 50 : 100*7/8
-            this.props.changeProgress(progress)
-            this.props.toggleLoading(false)
-            this.props.nextScreen('UploadImages')
-        }, 1000)
+            
     }
 
 

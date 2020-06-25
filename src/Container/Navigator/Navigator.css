@@ -1,3 +1,11 @@
 .navigation-bar{
     padding-bottom: 50%;
 }
+
+.nav-item{
+    margin: 10px;
+    padding-top: auto;
+}
+.navbar-link{
+    /* padding-top: 30px; */
+}

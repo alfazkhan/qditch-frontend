@@ -56,19 +56,33 @@ class StylistSelect extends Component {
         this.setState({Stylists:stylists})
     }
 
+    pageChangeHandler = () =>{
+        const mode = this.props.mode
+        const progress = mode === 'User' ? 50 : 100 * 6 / 8
+        this.props.changeProgress(progress)
+        this.props.toggleLoading(false)
+        this.props.nextScreen('SafetyFeatures')
+    }
+
     submitHandler = () => {
+        // console.log(this.state)
+        this.props.toggleLoading(true)
         const stylists = this.state.Stylists
         const url = '/stylist/stylist_details/'
-        console.log(stylists)
+        // console.log(stylists)
         for (var i = 0; i < stylists.length; i++) {
-            var data = new FormData();
-            data.append('business', this.state.business_id);
-            data.append('name', stylists[i]);
+           
+            const data = {
+                "business" : this.state.business_id,
+                "name" : stylists[i]
+            }
             console.log(data)
             Axios.post(url, data)
                 .then((res) => {
                     console.log(res)
-                    this.props.toggleLoading(false)
+                    if(i === stylists.length){
+                        this.pageChangeHandler()
+                    }
 
                 })
                 .catch((e) => {
@@ -76,15 +90,8 @@ class StylistSelect extends Component {
                     this.props.toggleLoading(false)
                 })
         }
-        this.props.toggleLoading(true)
 
-        setTimeout(() => {
-            const mode = this.props.mode
-            const progress = mode === 'User' ? 50 : 100 * 6 / 8
-            this.props.changeProgress(progress)
-            this.props.toggleLoading(false)
-            this.props.nextScreen('SafetyFeatures')
-        }, 1000)
+            
     }
 
 

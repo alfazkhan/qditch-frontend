@@ -22,13 +22,14 @@ class BasicDetails extends Component {
             password: '',
         },
         Mode: '',
-        confirmPassword: false
+        confirmPassword: false,
+        Request: 'register'
     }
 
     componentDidMount() {
         const mode = this.props.mode
         const role = mode === 'Business' ? '1' : '0'
-        this.setState({ Mode: mode })
+        this.setState({ Mode: mode, role: role })
     }
 
     valueChangeHandler = (event, param = "null") => {
@@ -47,6 +48,12 @@ class BasicDetails extends Component {
 
     }
 
+    changeScreen = () => {
+        const progress = this.props.Mode === 'User' ? 50 : 100 / 8
+        this.props.changeProgress(progress)
+        this.props.nextScreen(this.state.Mode === 'Business' ? 'SaloonInfoForm' : 'UploadImages')
+    }
+
     submitHandler = () => {
         const url = 'users/user/'
         const gender = this.state.values.gender === 'Male' ? 'M' : 'F'
@@ -61,20 +68,23 @@ class BasicDetails extends Component {
         });
 
         this.props.toggleLoading(true)
-
-        Axios.post(url, data)
-            .then((response)=>{
-                console.table(response.data);
-                this.props.onResponseRecieve(response.data.id)
-                this.props.toggleLoading(false)
-                const progress = this.props.Mode === 'User' ? 50 : 100 / 8
-                this.props.changeProgress(progress)
-                this.props.nextScreen(this.state.Mode === 'Business' ? 'SaloonInfoForm' : 'UploadImages')
-            })
-            .catch((error)=>{
-                this.props.toggleLoading(false)
-                console.log(error.response);
-            });
+        if (this.state.Request === 'register') {
+            Axios.post(url, data)
+                .then((response) => {
+                    // console.table(response.data);
+                    this.props.onTokenRecieve(response.data.token)
+                    this.props.onUserRegister(response.data.user)
+                    if (this.props.Mode === 'Business') {
+                        this.props.onBusinessRegister(response.data.user)
+                    }
+                    this.props.toggleLoading(false)
+                    this.changeScreen()
+                })
+                .catch((error) => {
+                    this.props.toggleLoading(false)
+                    console.log(error.response);
+                });
+        }
 
     }
 
@@ -90,7 +100,8 @@ class BasicDetails extends Component {
                         id="first_name"
                         label="First Name"
                         name="fname"
-                        autoComplete="firstName"
+                        value={this.state.values.first_name}
+                        autoComplete="fname"
                         className="col-md"
                         onChange={(e) => { this.valueChangeHandler(e) }}
 
@@ -103,7 +114,8 @@ class BasicDetails extends Component {
                         id="last_name"
                         label="Last Name"
                         name="lname"
-                        autoComplete="lastName"
+                        value={this.state.values.last_name}
+                        autoComplete="lname"
                         className="col-md"
                         onChange={(e) => { this.valueChangeHandler(e) }}
 
@@ -117,6 +129,7 @@ class BasicDetails extends Component {
                         id="email"
                         label="Email"
                         name="email"
+                        value={this.state.values.email}
                         autoComplete="email"
                         className="col-md"
                         onChange={(e) => { this.valueChangeHandler(e) }}
@@ -130,6 +143,7 @@ class BasicDetails extends Component {
                         id="mobile_number"
                         label="Phone(+91)"
                         name="PhoneNumber"
+                        value={this.state.values.mobile_number}
                         autoComplete="phone"
                         className="col-md"
                         onChange={(e) => { this.valueChangeHandler(e) }}
@@ -141,7 +155,7 @@ class BasicDetails extends Component {
                         <Select
                             // value={age}
                             id="gender"
-
+                            value={this.state.values.gender}
                             onChange={(e) => { this.valueChangeHandler(e, 'gender') }}
                             label="Age"
                         >
@@ -208,9 +222,17 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onResponseRecieve: (data) => dispatch({
+        onTokenRecieve: (data) => dispatch({
+            type: actionTypes.UPDATE_TOKEN,
+            token: data
+        }),
+        onUserRegister: (data) => dispatch({
             type: actionTypes.UPDATE_USER_ID,
             user_id: data
+        }),
+        onBusinessRegister: (data) => dispatch({
+            type: actionTypes.UPDATE_USER_ID,
+            business_id: data
         })
     }
 }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { CircularProgress } from '@material-ui/core'
+import Axios from '../../../Axios'
 
 class MyBusiness extends Component {
 
@@ -9,7 +10,9 @@ class MyBusiness extends Component {
         saloonType: '',
         safetyFeatures: [],
         Loading: false,
-        safetyFeatures_id:[]
+        safetyFeatures_id: [],
+        safetyList: [],
+        num:1
     }
 
     componentDidMount() {
@@ -17,11 +20,42 @@ class MyBusiness extends Component {
             saloonName: this.state.data['business_name'],
             saloonType: this.state.data['business_type'].toUpperCase()
         })
-    
-        this.setState({safetyFeatures_id:this.props.data['business_safety_features']},()=>{
-            // this.state.safetyFeatures_id
+
+        this.setState({ safetyFeatures_id: this.props.data['business_safety_features'] }, () => {
+            const ids = this.state.safetyFeatures_id
+            const safetyList = this.state.safetyList
+            for (var i in ids) {
+                Axios.get('safety_feature/safety_features/' + ids[i] + '/')
+                    .then(res => {
+                        safetyList.push(
+                            <tr>
+                                <th scope="row">{this.state.num}</th>
+                                <td>{res.data.safety_feature}</td>
+                            </tr>
+                        )
+                        const n = this.state.num + 1
+                        this.setState({ safetyList: safetyList, num : n }, () => {
+                            this.setTable()
+                        })
+                    })
+                    .catch(e => {
+                        console.log(e.response)
+                    })
+
+            }
+
         })
     }
+    onlyUnique = (value, index, self) => {
+        return self.indexOf(value) === index;
+    }
+
+    setTable = () => {
+       
+        this.setState({  Loading: false })
+
+    }
+
 
     render() {
         return (
@@ -40,7 +74,7 @@ class MyBusiness extends Component {
                                 </tr>
                             </thead>
                             <tbody>
-                                {this.state.imageList}
+                                {this.state.safetyList}
                             </tbody>
                         </table>
 

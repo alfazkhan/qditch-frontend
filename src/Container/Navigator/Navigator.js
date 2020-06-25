@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
+
+
+
+import React, { useState, useEffect } from 'react'
 import {
     Link, Route, Switch,
-
-
     withRouter
 } from "react-router-dom";
 import Colors from '../../Constants/Colors';
@@ -13,63 +14,91 @@ import Dashboard from '../Dashboard/Dashboard';
 import Landing from '../Landing/Landing';
 import Results from '../Results/Results';
 import './Navigator.css';
-
-
+import MenuRoundedIcon from '@material-ui/icons/MenuRounded';
+import Button from '@material-ui/core/Button';
+import { useSelector, useDispatch } from 'react-redux'
+import * as actionTypes from '../../store/Action/Action'
+import { Logout } from '../Auth/Login/Logout';
 
 const styles = {
-    navlink:{
-        color: 'black'
-    }
+    navlink: {
+        color: Colors.LinksColor
+    },
+    status: false
 }
 
-class Navigator extends Component {
 
-    state={
-        navShow: true
-    }
+const Navigator = (props) => {
 
-    componentDidMount() {
-    }
-    routeChangeHandler = (param) => {
-        console.log(window.location.href)
-        this.props.history.push({
-            pathname: param,
-        })
-        if (window.innerWidth < 768 || param === '/Register/User' || param === '/Register/Business') {
-            this.props.history.go(param)
-            console.log('true')
-        }
-    }
+    const [userLoggedIn, setuserLoggedIn] = useState(false)
+    const [businessUser, setBusinessUser] = useState(false)
 
+    const [status, setStatus] = useState(true)
+
+
+    const dispatch = useDispatch()
+    const logout = async () => {
+        this.props.history.push('/logout')
+      };
     
-    render() {
-        return (
+
+    const st = useSelector(state => state.userLoggedIn)
+    useEffect(() => {
+
+        if (st) {
+
+            setuserLoggedIn(!userLoggedIn)
+            setBusinessUser(!businessUser)
+        }
+    }, [status, useSelector(state => state.userLoggedIn)])
+
+
+
+    return (
+        <div>
             <div className={"navigation-bar"}>
                 <div>
-                    <nav className="navbar navbar-expand-lg navbar-light" style={{ backgroundColor: Colors.primary }}>
+                    <nav className="navbar navbar-expand-lg" style={{ backgroundColor: Colors.primary }}>
                         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-                            <span className="navbar-toggler-icon"></span>
+                            {/* <span className="navbar-toggler-icon" style={{color:'white'}}></span>*/}
+                            <MenuRoundedIcon style={styles.navlink} />
                         </button>
-                        <Link to='/' className="navbar-brand mx-auto" onClick={() => this.routeChangeHandler('/')}>
+                        <Link to='/' className={"navbar-brand "} >
                             <img src="https://getbootstrap.com/docs/4.5/assets/brand/bootstrap-solid.svg" width="30" height="30" alt="Qditch" loading="lazy" />
                         </Link>
-
                         <div className="collapse navbar-collapse" id="navbarTogglerDemo03">
-                            <ul className="navbar-nav mx-auto mt-2 mt-lg-0">
-                                <li className="nav-item">
-                                    <Link to='/Login' className="nav-link mx-auto" style={styles.navlink} onClick={() => this.routeChangeHandler('/Login')}>Login</Link>
-                                </li>
-                                {/* <li className="nav-item">
-                                    <Link to='/Register/User' className="nav-link mx-auto" style={styles.navlink} onClick={() => this.routeChangeHandler('/Register/User')}>User Signup</Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link to='/Register/Business' className="nav-link mx-auto" style={styles.navlink} onClick={() => this.routeChangeHandler('/Register/Business')}>Business Signup</Link>
-                                </li> */}
-                                <li className="nav-item">
-                                    <Link to='/admin/dashboard' className="nav-link mx-auto" style={styles.navlink} onClick={() => this.routeChangeHandler('/admin/dashboard')}>Admin Dashboard</Link>
-                                </li>
+                            {userLoggedIn
+                                ?
+                                <ul className="navbar-nav ml-auto mt-lg-0">
+                                    {businessUser
+                                        ?
+                                        <li className="nav-item">
+                                            <Button variant="contained" size="small" color="primary">
+                                                <Link to='/admin/dashboard' className={"navbar-link "} style={styles.navlink}>Admin Dashboard</Link>
+                                            </Button>
+                                        </li>
+                                        : null
+                                    }
+                                    <li className="nav-item">
+                                        <Button variant="contained" size="small" color="secondary" >
+                                            <Link to='/' className={"navbar-link "} onClick={props.logout} style={styles.navlink}>Logout</Link>
+                                        </Button>
+                                    </li>
+                                </ul>
+                                :
+                                <ul className="navbar-nav ml-auto mt-lg-0">
+                                    <li className="nav-item">
+                                        <Link to='/Login' className={"navbar-link "} style={styles.navlink} >Login</Link>
+                                    </li>
+                                    <li className="nav-item">
+                                        {/* <Button variant="contained" size="small" color="primary"> */}
+                                            <Link to='/Register/Business' className={" "} style={styles.navlink} >Business Signup</Link>
+                                        {/* </Button> */}
+                                    </li>
+                                </ul>
+                            }
 
-                            </ul>
+
                         </div>
                     </nav>
                     <Switch>
@@ -78,14 +107,13 @@ class Navigator extends Component {
                         <Route path="/businessinfo" exact children={<BusinessInfo />} />
                         <Route path="/Login" exact children={<Login />} />
                         <Route path="/Register/:mode" exact children={<Signup />} />
-                        <Route path="/admin/dashboard" exact children={<Dashboard/>} />
+                        <Route path="/admin/dashboard/" exact children={<Dashboard />} />
+                        <Route path='/logout' exact children={<Logout/>} />
                     </Switch>
-                <div>
-                </div>
                 </div>
             </div>
-        )
-    }
-}
+        </div>
+    )
 
+}
 export default withRouter(Navigator)

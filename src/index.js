@@ -20,7 +20,27 @@ const persistedReducer = persistReducer(persistConfig, Reducer)
 let store = createStore(persistedReducer)
 let persistor = persistStore(store)
 
+function select(state) {
+  return state.some.deep.property
+}
 
+let currentValue
+function handleChange() {
+  let previousValue = currentValue
+  currentValue = select(store.getState())
+
+  if (previousValue !== currentValue) {
+    console.log(
+      'Some deep nested property changed from',
+      previousValue,
+      'to',
+      currentValue
+    )
+  }
+}
+
+const unsubscribe = store.subscribe(handleChange)
+unsubscribe()
 ReactDOM.render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>

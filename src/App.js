@@ -1,14 +1,39 @@
-import React from 'react';
-import './App.css';
-import Navigator from './Container/Navigator/Navigator'
 
-function App() {
-  return (
-    <div className="App">
-      <Navigator/>
-      
-    </div>
-  );
+
+
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import Navigator from './Container/Navigator/Navigator'
+import * as actionTypes from './store/Action/Action'
+import { withRouter } from 'react-router-dom'
+export class App extends Component {
+
+  logoutHandler = () =>{
+    this.props.onLogout()
+    this.props.history.go('/')
 }
 
-export default App;
+  render() {
+    return (
+      <div>
+      <Navigator logout={this.logoutHandler} />
+      </div>
+    )
+  }
+}
+
+const mapStateToProps = (state) => ({
+  
+})
+
+const mapDispatchToProps = dispatch => {
+
+  return {
+      onLogout: () => dispatch({
+          type: actionTypes.USER_LOGOUT
+      })
+  }
+
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(App))

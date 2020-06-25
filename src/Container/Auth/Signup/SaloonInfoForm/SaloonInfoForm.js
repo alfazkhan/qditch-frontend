@@ -41,6 +41,13 @@ class SaloonInfoForm extends Component {
 
     }
 
+    pageChangeHandler=()=>{
+        this.props.toggleLoading(false)
+        const progress = 100*2 / 8
+        this.props.changeProgress(progress)
+        this.props.nextScreen('SetTimings')
+    }
+
     submitHandler = () => {
         const url = 'users/business/'
         var data = JSON.stringify({
@@ -56,10 +63,7 @@ class SaloonInfoForm extends Component {
             .then((response)=>{
                 console.log(JSON.stringify(response.data));
                 this.props.onResponseRecieve(response.data.id)
-                this.props.toggleLoading(false)
-                const progress = 100*2 / 8
-                this.props.changeProgress(progress)
-                this.props.nextScreen('SetTimings')
+                this.pageChangeHandler()
             })
             .catch((error)=>{
                 this.props.toggleLoading(false)

@@ -37,7 +37,7 @@ class SetTimings extends Component {
     }
 
     componentDidMount() {
-        this.setState({business_id:this.props.business_id,user_id:this.state.user_id})
+        this.setState({business_id:this.props.business_id,user_id:this.state.user_id},()=>{console.log(this.props.business_id)})
         this.initialTimeValues()
         this.initialValueHandler()
     }
@@ -136,6 +136,13 @@ class SetTimings extends Component {
         })
     }
 
+    changePageHandler=()=>{
+        this.props.toggleLoading(false)
+        const progress = 100*3 / 8
+        this.props.changeProgress(progress)
+        this.props.nextScreen('CategorySelect')
+    }
+
     submitHandler = () => {
         const url = 'availability/timing/'
         const start = Object.values(this.state.startTimings)
@@ -162,10 +169,8 @@ class SetTimings extends Component {
             .then((response)=>{
                 console.log(JSON.stringify(response.data));
                 // this.props.onResponseRecieve(response.data.id)
-                this.props.toggleLoading(false)
-                const progress = 100*3 / 8
-                this.props.changeProgress(progress)
-                this.props.nextScreen('CategorySelect')
+                this.changePageHandler()
+                
             })
             .catch((error)=>{
                 this.props.toggleLoading(false)

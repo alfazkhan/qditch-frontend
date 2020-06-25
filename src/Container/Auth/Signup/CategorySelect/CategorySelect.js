@@ -12,12 +12,12 @@ class CategorySelect extends Component {
     state = {
         CategoryList: [],
         List: [],
+        categoryIDs:[],
         selectedCategoryList: [],
         selectedCategory: [],
         values: [],
         mainCategory: false,
-        business_id: '3',
-        success: true
+        business_id: null,
     }
 
     componentDidMount() {
@@ -26,13 +26,16 @@ class CategorySelect extends Component {
         Axios.get('category/categories/')
             .then(res => {
                 const data = res.data
+                console.log(data)
                 const CatList = this.state.CategoryList
                 const checkValues = this.state.values
+                const ids = this.state.categoryIDs
                 for (var key in data) {
                     checkValues.push(false)
+                    ids.push(data[key].id)
                     CatList.push(data[key].name)
                 }
-                this.setState({ CategoryList: CatList }, () => {
+                this.setState({ CategoryList: CatList,values: checkValues,categoryIDs:ids }, () => {
                     this.initialValuesHandler();
                 })
                 this.props.toggleLoading(false)
@@ -90,9 +93,16 @@ class CategorySelect extends Component {
         this.setState({ mainCategory: e.target.value })
     }
 
+    changePageHandler = () =>{
+        this.props.toggleLoading(false)
+        const progress = 100 * 4 / 8
+        this.props.changeProgress(progress)
+        this.props.nextScreen('ServiceSelect')
+    }
+
     submitHandler = () => {
         this.props.toggleLoading(true)
-        // console.log(this.state)
+        console.log(this.state)
         const url = 'category/business_categories/'
         const catList = this.state.CategoryList
         const values = this.state.values
@@ -101,7 +111,7 @@ class CategorySelect extends Component {
             if (values[i]) {
                 const data = {
                     "business": this.state.business_id,
-                    "category": (i + 1).toString(),
+                    "category": this.state.categoryIDs[i],
                     "super_category": catList[i] === superCat ? "true" : "false"
                 }
                 Axios.post(url, data)
@@ -109,31 +119,19 @@ class CategorySelect extends Component {
                         this.setState({success: true})
                         console.log(JSON.stringify(response.data));
                         // this.props.onResponseRecieve(response.data.id)
+                        if(i === catList.length){
+                            this.changePageHandler()
+                        }
 
                     })
                     .catch((error) => {
-                        this.setState({success: false})
+                        this.props.toggleLoading(false)
                         console.log(error.response);
                     });
 
             }
         }
-        console.log(this.state.success)
-        // if (this.state.success) {
-        //     this.props.toggleLoading(false)
-        //     const progress = 100 * 4 / 8
-        //     this.props.changeProgress(progress)
-        //     this.props.nextScreen('ServiceSelect')
-        // } else {
-        //     this.props.toggleLoading(false)
-        // }
-        setTimeout(() => {
-            const mode = this.props.mode
-            const progress = mode === 'User' ? 50 : 100 * 4 / 8
-            this.props.changeProgress(progress)
-            this.props.toggleLoading(false)
-            this.props.nextScreen('ServiceSelect')
-        }, 1000)
+        
     }
 
 
