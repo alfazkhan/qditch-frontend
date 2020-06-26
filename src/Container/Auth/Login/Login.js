@@ -109,7 +109,7 @@ export class Login extends Component {
 
         })
         .catch(e=>{
-          const messages = this.state.messages
+          const messages = []
           messages.push("Incorrect Email/Password")
           this.setState({messages:messages,errors:true})
           
