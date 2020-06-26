@@ -85,7 +85,7 @@ class Dashboard extends Component {
     const business_id = this.props.match.params.id
 
     this.setState({ business_id: this.props.business_id }, () => {
-      Axios.get('/users/business/' + this.props.business_id + '/')
+      Axios.get('api/users/business/' + this.props.business_id + '/')
         .then((response) => {
           console.log(response.data)
           this.setState({ Data: response.data }, () => {
@@ -126,23 +126,24 @@ class Dashboard extends Component {
                 aria-label="scrollable force tabs example"
                 className="text-center ml-auto mr-auto"
               >
-                <Tab label="My Business" icon={<BusinessIcon />} {...a11yProps(0)} />
+                <Tab label="Services" icon={<AmpStoriesIcon />} {...a11yProps(0)} />
                 <Tab label="Appointments" icon={<ListAltIcon />} {...a11yProps(1)} />
-                <Tab label="Services" icon={<AmpStoriesIcon />} {...a11yProps(2)} />
+                <Tab label="My Business" icon={<BusinessIcon />} {...a11yProps(2)} />
                 <Tab label="Stylists" icon={<FaceIcon />} {...a11yProps(3)} />
                 <Tab label="Timings" icon={<AccessTimeIcon />} {...a11yProps(4)} />
                 <Tab label="Images" icon={<ImageIcon />} {...a11yProps(5)} />
                 <Tab label="Edit Profile" icon={<PersonPinIcon />} {...a11yProps(6)} />
               </Tabs>
             </AppBar>
+
             <TabPanel value={this.state.value} index={0}>
-              <MyBusiness data={this.state.Data} />
+              <Services data={this.state.Data} />
             </TabPanel>
             <TabPanel value={this.state.value} index={1}>
               Appointments
           </TabPanel>
             <TabPanel value={this.state.value} index={2}>
-              <Services data={this.state.Data} />
+              <MyBusiness data={this.state.Data} />
             </TabPanel>
             <TabPanel value={this.state.value} index={3}>
               <Stylists data={this.state.Data} />

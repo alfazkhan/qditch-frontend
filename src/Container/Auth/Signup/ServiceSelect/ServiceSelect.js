@@ -26,7 +26,7 @@ class ServiceSelect extends Component {
     componentDidMount() {
         //getServices from server
         this.setState({business_id:this.props.business_id})
-        Axios.get('/service/services/')
+        Axios.get('api/service/services/')
             .then(res => {
                 const data = res.data
                 const newServiceList = this.state.ServiceList
@@ -155,7 +155,7 @@ class ServiceSelect extends Component {
         // console.log(this.state)
         this.props.toggleLoading(true)
 
-        const url = '/service/business_services/'
+        const url = 'api/service/business_services/'
         const selectedService = this.state.selectedServices
         const price = this.state.prices
         const duration = this.state.durations
@@ -171,7 +171,7 @@ class ServiceSelect extends Component {
                 "disable":"False"
             })
             // console.log(data)
-            Axios.post(url,data,{Headers:{"Content-Type": "application/x-www-form-urlencoded"}})
+            Axios.post(url,data)
             .then(res=>{
                 console.log(res.data)
                 if(i === selectedService.length){

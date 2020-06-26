@@ -49,13 +49,16 @@ class BasicDetails extends Component {
     }
 
     changeScreen = () => {
-        const progress = this.props.Mode === 'User' ? 50 : 100 / 8
+        const progress = this.props.Mode === 'User' ? 100 : 100 / 8
         this.props.changeProgress(progress)
-        this.props.nextScreen(this.state.Mode === 'Business' ? 'SaloonInfoForm' : 'UploadImages')
+        this.state.Mode === 'Business'
+        ? this.props.nextScreen('SaloonInfoForm')
+        : this.props.history.push('/')
+        // this.props.nextScreen(this.state.Mode === 'Business' ? 'SaloonInfoForm' : this.props.history.push('/'))
     }
 
     submitHandler = () => {
-        const url = 'users/user/'
+        const url = 'api/users/user/'
         const gender = this.state.values.gender === 'Male' ? 'M' : 'F'
         var data = JSON.stringify({
             "first_name": this.state.values.first_name.toString(),

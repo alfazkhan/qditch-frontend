@@ -19,8 +19,8 @@ class SafetyFeatures extends Component {
 
     componentDidMount() {
         //getCategories from server
-        // this.setState({business_id:this.props.business_id})
-        Axios.get('/safety_feature/safety_features/')
+        this.setState({business_id:this.props.business_id})
+        Axios.get('api/safety_feature/safety_features/')
             .then(res => {
                 let saf_fec = this.setState.SafetyFeatures
                 saf_fec = { ...res.data }
@@ -89,7 +89,7 @@ class SafetyFeatures extends Component {
 
     submitHandler = () => {
         const selected = this.state.SelectedFeatures
-        const url = '/safety_feature/business_safety_features/'
+        const url = 'api/safety_feature/business_safety_features/'
         this.props.toggleLoading(true)
         console.log(selected)
         for (var i = 0; i < selected.length; i++) {

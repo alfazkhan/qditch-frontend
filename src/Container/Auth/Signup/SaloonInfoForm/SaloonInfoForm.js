@@ -49,7 +49,7 @@ class SaloonInfoForm extends Component {
     }
 
     submitHandler = () => {
-        const url = 'users/business/'
+        const url = 'api/users/business/'
         var data = JSON.stringify({
             "business_name": this.state.values.business_name,
             "business_type": this.state.values.business_type,

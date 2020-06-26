@@ -23,7 +23,7 @@ class CategorySelect extends Component {
     componentDidMount() {
         //getCategories from server
         this.setState({business_id:this.props.business_id})
-        Axios.get('category/categories/')
+        Axios.get('api/category/categories/')
             .then(res => {
                 const data = res.data
                 console.log(data)
@@ -103,7 +103,7 @@ class CategorySelect extends Component {
     submitHandler = () => {
         this.props.toggleLoading(true)
         console.log(this.state)
-        const url = 'category/business_categories/'
+        const url = 'api/category/business_categories/'
         const catList = this.state.CategoryList
         const values = this.state.values
         const superCat = this.state.mainCategory

@@ -144,7 +144,7 @@ class SetTimings extends Component {
     }
 
     submitHandler = () => {
-        const url = 'availability/timing/'
+        const url = 'api/availability/timing/'
         const start = Object.values(this.state.startTimings)
         const end = Object.values(this.state.endTimings)
         const Days = Object.values(this.state.Days)

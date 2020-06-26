@@ -16,7 +16,7 @@ export class Stylists extends Component {
         this.setState({ stylists: stylist }, () => {
             const names = this.state.names
             for (var key in stylist) {
-                Axios.get('/stylist/stylist_details/' + stylist[key] + '/')
+                Axios.get('api/stylist/stylist_details/' + stylist[key] + '/')
                     .then(response => {
                         console.log(response.data)
                         names.push(response.data.name)

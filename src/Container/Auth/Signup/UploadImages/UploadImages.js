@@ -74,14 +74,14 @@ class UploadImages extends Component {
 
     pageChangeHandler = () => {
         const mode = this.props.mode
-        const progress =  100
+        const progress = 100
         this.props.changeProgress(progress)
         this.props.toggleLoading(false)
 
-        mode === 'User' 
-        ? this.props.history.push('/')
-        : this.props.history.push('/admin/dashboard')
-        
+        mode === 'User'
+            ? this.props.history.push('/')
+            : this.props.history.push('/admin/dashboard')
+
 
     }
 
@@ -90,7 +90,7 @@ class UploadImages extends Component {
         let url = ''
         this.props.toggleLoading(true)
         if (this.state.Mode === 'Business') {
-            url = '/images/business_image/'
+            url = 'api/images/business_image/'
             const pictures = this.state.Pictures
             console.log(pictures[0])
             for (var i = 0; i < pictures.length; i++) {
@@ -102,7 +102,7 @@ class UploadImages extends Component {
                     .then((res) => {
                         console.log(res)
                         this.props.toggleLoading(false)
-                        if(i === pictures.length){
+                        if (i === pictures.length) {
                             this.pageChangeHandler()
                         }
 
@@ -113,25 +113,26 @@ class UploadImages extends Component {
                     })
             }
 
-        } else if (this.state.Mode) {
-            url = '/images/profile_image/'
-            var data = new FormData();
-            data.append('blob_data', this.state.profile_image);
-            data.append('user', this.props.user_id);
-            data.append('cover', 'false');
-            Axios.post(url, data)
-                .then((res) => {
-                    console.log(res)
-                    this.props.toggleLoading(false)
-                    this.pageChangeHandler()
-                })
-                .catch((e) => {
-                    console.log(e.response.data)
-                    this.props.toggleLoading(false)
-                })
+            // } else if (this.state.Mode) {
+            //     url = '/images/profile_image/'
+            //     var data = new FormData();
+            //     data.append('blob_data', this.state.profile_image);
+            //     data.append('user', this.props.user_id);
+            //     data.append('cover', 'false');
+            //     Axios.post(url, data)
+            //         .then((res) => {
+            //             console.log(res)
+            //             this.props.toggleLoading(false)
+            //             this.pageChangeHandler()
+            //         })
+            //         .catch((e) => {
+            //             console.log(e.response.data)
+            //             this.props.toggleLoading(false)
+            //         })
+            // }
+
+
         }
-
-
     }
 
 

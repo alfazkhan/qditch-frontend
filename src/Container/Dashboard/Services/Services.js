@@ -20,16 +20,16 @@ export class Services extends Component {
     componentDidMount() {
         const service_id = this.state.data['business_services']
         for (var key in service_id) {
-            Axios.get('/service/business_services/' + service_id[key] + '/')
+            Axios.get('api/service/business_services/' + service_id[key] + '/')
                 .then(res1 => {
-                    Axios.get('/service/services/' + res1.data.service + '/')
+                    Axios.get('api/service/services/' + res1.data.service + '/')
                         .then((res2) => {
                             const response = this.state.response
                             const services = this.state.services
                             const duration = this.state.durations
                             const price = this.state.prices
                             const buffer = this.state.buffers
-                            // console.log(res.data)
+                            console.log(res2.data)
                             services.push(res2.data.name)
                             duration.push(res1.data.business_service_duration)
                             price.push(res1.data.business_service_price)

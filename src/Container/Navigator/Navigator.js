@@ -30,27 +30,30 @@ const styles = {
 
 const Navigator = (props) => {
 
-    const [userLoggedIn, setuserLoggedIn] = useState(false)
-    const [businessUser, setBusinessUser] = useState(false)
+    const [userLoggedIn, setuserLoggedIn] = useState(true)
+    const [businessUser, setBusinessUser] = useState(true)
+    
+    const [businessID,setBusinessID] = useState(useSelector(state => state.businessID))
 
-    const [status, setStatus] = useState(true)
 
 
-    const dispatch = useDispatch()
-    const logout = async () => {
-        this.props.history.push('/logout')
-      };
+    // const dispatch = useDispatch()
+    // const logout = async () => {
+    //     this.props.history.push('/logout')
+    //   };
+
+
+    useEffect(() => {
+        setuserLoggedIn(!userLoggedIn)
+        
+        console.log("updated")
+    }, [useSelector(state => state.userLoggedIn)])
+
+    if (typeof businessID !== 'undefined') {
+        console.log("Business Updated===="+businessID)
+      }
     
 
-    const st = useSelector(state => state.userLoggedIn)
-    useEffect(() => {
-
-        if (st) {
-
-            setuserLoggedIn(!userLoggedIn)
-            setBusinessUser(!businessUser)
-        }
-    }, [status, useSelector(state => state.userLoggedIn)])
 
 
 
@@ -70,7 +73,7 @@ const Navigator = (props) => {
                             {userLoggedIn
                                 ?
                                 <ul className="navbar-nav ml-auto mt-lg-0">
-                                    {businessUser
+                                    {/* {useSelector(state => state.businessUser)
                                         ?
                                         <li className="nav-item">
                                             <Button variant="contained" size="small" color="primary">
@@ -78,7 +81,7 @@ const Navigator = (props) => {
                                             </Button>
                                         </li>
                                         : null
-                                    }
+                                    } */}
                                     <li className="nav-item">
                                         <Button variant="contained" size="small" color="secondary" >
                                             <Link to='/' className={"navbar-link "} onClick={props.logout} style={styles.navlink}>Logout</Link>
@@ -92,7 +95,7 @@ const Navigator = (props) => {
                                     </li>
                                     <li className="nav-item">
                                         {/* <Button variant="contained" size="small" color="primary"> */}
-                                            <Link to='/Register/Business' className={" "} style={styles.navlink} >Business Signup</Link>
+                                        <Link to='/Register/Business' className={" "} style={styles.navlink} >Business Signup</Link>
                                         {/* </Button> */}
                                     </li>
                                 </ul>
@@ -108,7 +111,7 @@ const Navigator = (props) => {
                         <Route path="/Login" exact children={<Login />} />
                         <Route path="/Register/:mode" exact children={<Signup />} />
                         <Route path="/admin/dashboard/" exact children={<Dashboard />} />
-                        <Route path='/logout' exact children={<Logout/>} />
+                        <Route path='/logout' exact children={<Logout />} />
                     </Switch>
                 </div>
             </div>

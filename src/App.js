@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import Navigator from './Container/Navigator/Navigator'
 import * as actionTypes from './store/Action/Action'
 import { withRouter } from 'react-router-dom'
+import './App.css'
 export class App extends Component {
 
   logoutHandler = () =>{
@@ -15,7 +16,7 @@ export class App extends Component {
 
   render() {
     return (
-      <div>
+      <div className="App">
       <Navigator logout={this.logoutHandler} />
       </div>
     )

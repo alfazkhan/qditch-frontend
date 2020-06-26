@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const Axios = axios.create({
-  baseURL: `http://13.234.31.245:8000/api/`,
+  baseURL: `http://api.qditch.com`,
   headers:{
     'Access-Control-Allow-Origin' : '*',
     'Access-Control-Allow-Methods' : 'GET,PUT,POST,DELETE,PATCH,OPTIONS',

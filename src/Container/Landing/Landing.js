@@ -11,7 +11,7 @@ export class Landing extends Component {
 
     componentDidMount() {
         if (this.props.loggedIn) {
-            Axios.get('users/user/' + 20 + '/')
+            Axios.get('api/users/user/' + 20 + '/')
                 .then(res => {
                     this.setState({ username: res.data.first_name, show: true })
                 })

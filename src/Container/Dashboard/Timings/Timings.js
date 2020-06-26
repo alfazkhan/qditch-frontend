@@ -14,7 +14,7 @@ class Timings extends Component {
     componentDidMount() {
         console.log(this.props.data['business_timings'])
         const id = this.props.data['business_timings'][0]
-        Axios.get('availability/timing/' + id + '/')
+        Axios.get('api/availability/timing/' + id + '/')
             .then(res => {
 
                 const Timings = {

@@ -68,7 +68,7 @@ class StylistSelect extends Component {
         // console.log(this.state)
         this.props.toggleLoading(true)
         const stylists = this.state.Stylists
-        const url = '/stylist/stylist_details/'
+        const url = 'api/stylist/stylist_details/'
         // console.log(stylists)
         for (var i = 0; i < stylists.length; i++) {
            

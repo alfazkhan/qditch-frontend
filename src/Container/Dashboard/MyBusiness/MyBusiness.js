@@ -25,7 +25,7 @@ class MyBusiness extends Component {
             const ids = this.state.safetyFeatures_id
             const safetyList = this.state.safetyList
             for (var i in ids) {
-                Axios.get('safety_feature/safety_features/' + ids[i] + '/')
+                Axios.get('api/safety_feature/safety_features/' + ids[i] + '/')
                     .then(res => {
                         safetyList.push(
                             <tr>

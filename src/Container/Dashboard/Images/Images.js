@@ -16,7 +16,7 @@ export class Images extends Component {
             const imageData = this.state.imageData
             const images = this.state.images
             for (var key in imageData) {
-                Axios.get('/images/business_image/' + imageData[key] + '/')
+                Axios.get('api/images/business_image/' + imageData[key] + '/')
                     .then(res => {
                         images.push({
                             url: res.data.blob_data,

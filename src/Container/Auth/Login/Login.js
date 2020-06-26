@@ -52,6 +52,7 @@ export class Login extends Component {
 
 
   }
+  
 
   submitHandler = () => {
     console.table(this.state.values)
@@ -59,7 +60,7 @@ export class Login extends Component {
       "email": this.state.values.email,
       "password": this.state.values.password
     })
-    const url = 'http://13.234.31.245:8000/custom/login/'
+    const url = 'http://api.qditch.com/custom/login/'
     Axios.post(url, data)
       .then(res => {
         console.log(res.data)
@@ -124,7 +125,7 @@ export class Login extends Component {
               <Grid container className="mt-5">
                 <Grid item>
                   <Link href="/Register/User" variant="body2">
-                    {"Don't have an account? Sign Up"}
+                    {"New Customer? Sign Up"}
                   </Link>
                 </Grid>
               </Grid>
