@@ -1,6 +1,3 @@
-
-
-
 import React, { useState, useEffect } from 'react'
 import {
     Link, Route, Switch,
@@ -19,7 +16,9 @@ import Button from '@material-ui/core/Button';
 import { useSelector, useDispatch } from 'react-redux'
 import * as actionTypes from '../../store/Action/Action'
 import { Logout } from '../Auth/Login/Logout';
-
+import Logo from '../../Assets/Logo.png'
+import { Profile } from '../Profile/Profile';
+import FaceIcon from '@material-ui/icons/Face';
 const styles = {
     navlink: {
         color: Colors.LinksColor
@@ -31,9 +30,9 @@ const styles = {
 const Navigator = (props) => {
 
     const [userLoggedIn, setuserLoggedIn] = useState(true)
-    const [businessUser, setBusinessUser] = useState(true)
+    // const [businessUser, setBusinessUser] = useState(true)
     
-    const [businessID,setBusinessID] = useState(useSelector(state => state.businessID))
+    const [userID,setuserID] = useState(useSelector(state => state.user_id))
 
 
 
@@ -49,11 +48,8 @@ const Navigator = (props) => {
         console.log("updated")
     }, [useSelector(state => state.userLoggedIn)])
 
-    if (typeof businessID !== 'undefined') {
-        console.log("Business Updated===="+businessID)
-      }
     
-
+   
 
 
 
@@ -67,7 +63,7 @@ const Navigator = (props) => {
                             <MenuRoundedIcon style={styles.navlink} />
                         </button>
                         <Link to='/' className={"navbar-brand "} >
-                            <img src="https://getbootstrap.com/docs/4.5/assets/brand/bootstrap-solid.svg" width="30" height="30" alt="Qditch" loading="lazy" />
+                            <img src={Logo} width="auto" height="40" alt="Qditch"  />
                         </Link>
                         <div className="collapse navbar-collapse" id="navbarTogglerDemo03">
                             {userLoggedIn
@@ -83,9 +79,7 @@ const Navigator = (props) => {
                                         : null
                                     } */}
                                     <li className="nav-item">
-                                        <Button variant="contained" size="small" color="secondary" >
-                                            <Link to='/' className={"navbar-link "} onClick={props.logout} style={styles.navlink}>Logout</Link>
-                                        </Button>
+                                            <Link to={'/profile'} className={"navbar-link text-bold"} style={styles.navlink}>My Profile </Link>
                                     </li>
                                 </ul>
                                 :
@@ -98,6 +92,7 @@ const Navigator = (props) => {
                                         <Link to='/Register/Business' className={" "} style={styles.navlink} >Business Signup</Link>
                                         {/* </Button> */}
                                     </li>
+                                
                                 </ul>
                             }
 
@@ -112,6 +107,8 @@ const Navigator = (props) => {
                         <Route path="/Register/:mode" exact children={<Signup />} />
                         <Route path="/admin/dashboard/" exact children={<Dashboard />} />
                         <Route path='/logout' exact children={<Logout />} />
+                        <Route path='/profile' exact children={<Profile logout={props.logout}/>} />
+                        
                     </Switch>
                 </div>
             </div>

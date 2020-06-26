@@ -4,6 +4,7 @@ import { Button, FormControlLabel, Checkbox } from '@material-ui/core'
 import Colors from '../../../../Constants/Colors'
 import Axios from '../../../../Axios'
 import { connect } from 'react-redux'
+import Heading from '../../../../Components/Heading/Heading'
 var FormData = require('form-data');
 
 
@@ -119,6 +120,8 @@ class SafetyFeatures extends Component {
     render() {
         return (
             <div className="container" style={styles.screen}>
+                <Heading text="Safety Features" />
+                
                 <div class="list text-left" style={{ width: '100%', height: window.innerHeight / 2, overflowX: 'hidden' }}>
                     {this.state.List}
                 </div>

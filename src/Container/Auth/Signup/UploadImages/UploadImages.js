@@ -6,6 +6,7 @@ import { withRouter } from 'react-router-dom'
 import ImageUploader from 'react-images-upload';
 import Axios from '../../../../Axios'
 import { connect } from 'react-redux'
+import Heading from '../../../../Components/Heading/Heading';
 
 var FormData = require('form-data');
 
@@ -139,6 +140,7 @@ class UploadImages extends Component {
     render() {
         return (
             <div className="container" style={styles.screen}>
+                <Heading text="Upload Salon Images" />
                 <div className="row">
                     {this.state.inputFields}
                 </div>

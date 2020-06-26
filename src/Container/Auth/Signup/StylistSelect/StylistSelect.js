@@ -4,6 +4,7 @@ import { TextField, Button } from '@material-ui/core'
 import Colors from '../../../../Constants/Colors'
 import Axios from '../../../../Axios'
 import { connect } from 'react-redux'
+import Heading from '../../../../Components/Heading/Heading'
 var FormData = require('form-data');
 
 
@@ -99,6 +100,8 @@ class StylistSelect extends Component {
     render() {
         return (
             <div className="container" style={styles.screen}>
+                <Heading text="Enter Stylists Details" />
+                
                 <div className="list" style={{ width: '100%', height: window.innerHeight / 3, overflowX: 'hidden' }}>
                     {this.state.List}
                 </div>

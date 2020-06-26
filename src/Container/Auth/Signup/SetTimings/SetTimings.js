@@ -9,6 +9,7 @@ import { Button } from '@material-ui/core'
 import Colors from '../../../../Constants/Colors'
 import { format } from 'date-fns'
 import Axios from '../../../../Axios'
+import Heading from '../../../../Components/Heading/Heading';
 
 
 
@@ -17,13 +18,13 @@ class SetTimings extends Component {
 
     state = {
         Days: {
-            'Monday': false,
-            'Tuesday': false,
-            'Wednesday': false,
-            'Thursday': false,
-            'Friday': false,
-            'Saturday': false,
-            'Sunday': false
+            'Monday': true,
+            'Tuesday': true,
+            'Wednesday': true,
+            'Thursday': true,
+            'Friday': true,
+            'Saturday': true,
+            'Sunday': true
         },
         scheduleList: [],
         startTimings: {
@@ -92,14 +93,18 @@ class SetTimings extends Component {
 
     }
 
+    // https://developers.google.com/web/tools/chrome-devtools/security
+    // https://meet.google.com/linkredirect?authuser=0&dest=https%3A%2F%2Fdocs.aws.amazon.com%2Fcloudhsm%2Flatest%2Fuserguide%2Fssl-offload-enable-traffic-and-verify-certificate.html
+
     initialTimeValues = () => {
         const Days = Object.keys(this.state.Days)
         const startTimings = this.state.startTimings
         const endTimings = this.state.endTimings
-        const initialTime = format(new Date(2014, 1, 11), 'HH:mm')
+        var startTime = format(new Date(2010, 12, 11, 10, 0, 0, 0), 'HH:mm') 
+        var endTime = format(new Date(2010, 12, 11, 22, 0, 0, 0), 'HH:mm') 
         for (var i in Days) {
-            startTimings[Days[i]] = initialTime
-            endTimings[Days[i]] = initialTime
+            startTimings[Days[i]] = startTime
+            endTimings[Days[i]] = endTime
         }
         this.setState({ startTimings: startTimings, endTimings: endTimings })
     }
@@ -182,6 +187,7 @@ class SetTimings extends Component {
     render() {
         return (
             <div className="container" style={styles.screen}>
+                <Heading text="Timings" />
                 <div className="table-responsive-sm">
                     <table className="table table-borderless table-sm">
                         <thead>

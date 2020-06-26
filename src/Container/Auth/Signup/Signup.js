@@ -12,6 +12,7 @@ import SetTimings from './SetTimings/SetTimings';
 import './Signup.css';
 import StylistSelect from './StylistSelect/StylistSelect';
 import UploadImages from './UploadImages/UploadImages';
+import Fade from '@material-ui/core/Fade';
 
 
 class Signup extends Component {
@@ -20,7 +21,8 @@ class Signup extends Component {
         Mode: '',
         Progress: 0,
         screen: null,
-        Loading: false
+        Loading: false,
+        fade : false
     }
 
     componentDidMount() {
@@ -28,6 +30,9 @@ class Signup extends Component {
         const Mode = this.props.match.params.mode
         this.setState({ Mode: Mode })
         this.screenHandler('BasicDetails') 
+       setTimeout(()=>{
+           this.setState({fade: true})
+       })
     }
 
     toggleLoadingHandler = (value) => {
@@ -76,7 +81,7 @@ class Signup extends Component {
         return (
             <div className="container mx-auto" style={styles.container}>
                 <Box className="signup-box">
-                    <LinearProgress variant="determinate" value={this.state.Progress} />
+                    <LinearProgress variant="determinate" value={this.state.Progress} style={{height:20}} color="primary" />
                     {this.state.Loading ? <CircularProgress style={styles.Loader} /> : this.state.screen}
                 </Box>
             </div>

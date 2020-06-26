@@ -60,7 +60,7 @@ export class Login extends Component {
       "email": this.state.values.email,
       "password": this.state.values.password
     })
-    const url = 'http://api.qditch.com/custom/login/'
+    const url = 'https://master.qditch.com/custom/login/'
     Axios.post(url, data)
       .then(res => {
         console.log(res.data)

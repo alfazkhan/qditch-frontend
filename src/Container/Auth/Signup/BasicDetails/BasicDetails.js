@@ -8,6 +8,7 @@ import { withRouter } from 'react-router-dom'
 import { Select, MenuItem, FormControl, InputLabel } from '@material-ui/core';
 import * as actionTypes from '../../../../store/Action/Action'
 import Axios from '../../../../Axios'
+import Heading from '../../../../Components/Heading/Heading'
 
 class BasicDetails extends Component {
 
@@ -59,29 +60,48 @@ class BasicDetails extends Component {
 
     submitHandler = () => {
         const url = 'api/users/user/'
+        const url2 = 'api/users/user_details/'
         const gender = this.state.values.gender === 'Male' ? 'M' : 'F'
         var data = JSON.stringify({
-            "first_name": this.state.values.first_name.toString(),
-            "last_name": this.state.values.last_name.toString(),
+            
             "email": this.state.values.email.toString(),
             "mobile_number": this.state.values.mobile_number.toString(),
-            "gender": gender,
+            "role": this.state.values.role.toString(),
+
             "password": this.state.values.password,
-            "role": this.state.values.role.toString()
         });
+
+       
 
         this.props.toggleLoading(true)
         if (this.state.Request === 'register') {
             Axios.post(url, data)
                 .then((response) => {
                     // console.table(response.data);
-                    this.props.onTokenRecieve(response.data.token)
-                    this.props.onUserRegister(response.data.user)
-                    if (this.props.Mode === 'Business') {
-                        this.props.onBusinessRegister(response.data.user)
-                    }
-                    this.props.toggleLoading(false)
-                    this.changeScreen()
+                    var data2 = JSON.stringify({
+                        "first_name": this.state.values.first_name.toString(),
+                        "last_name": this.state.values.last_name.toString(),
+                        "mobile_number": this.state.values.mobile_number.toString(),
+                        "gender": gender,
+                        "role": this.state.values.role.toString(),
+                        "users": response.data.user.toString()
+                    })
+                    Axios.post(url2,data2)
+                    .then(response2=>{
+                        console.log(response2.data)
+                        this.props.onTokenRecieve(response.data.token)
+                        this.props.onUserRegister(response.data.user)
+                        this.props.onUserDetailId(response2.data.id)
+                        if (this.props.Mode === 'Business') {
+                            this.props.onBusinessRegister(response.data.user)
+                        }
+                        this.props.toggleLoading(false)
+                        this.changeScreen()
+                    })
+                    .catch((error) => {
+                        this.props.toggleLoading(false)
+                        console.log(error.response);
+                    });
                 })
                 .catch((error) => {
                     this.props.toggleLoading(false)
@@ -95,6 +115,7 @@ class BasicDetails extends Component {
     render() {
         return (
             <div className="container" style={styles.screen}>
+                <Heading text="User Details" />
                 <div className="row">
                     <TextField
                         variant="outlined"
@@ -236,6 +257,10 @@ const mapDispatchToProps = dispatch => {
         onBusinessRegister: (data) => dispatch({
             type: actionTypes.UPDATE_USER_ID,
             business_id: data
+        }),
+        onUserDetailId : (data) => dispatch({
+            type: actionTypes.USER_DETAIL_ID,
+            user_details_id : data
         })
     }
 }

@@ -5,7 +5,8 @@ const initialState = {
     business_id: null,
     token: null,
     userLoggedIn: false,
-    businessUser: false
+    businessUser: false,
+    user_details_id : null
 }
 
 const reducer = (state = initialState, action) => {
@@ -37,6 +38,12 @@ const reducer = (state = initialState, action) => {
                 businessUser: false,
                 business_id: null,
                 userLoggedIn: false
+            }
+        case actionTypes.USER_DETAIL_ID:
+            console.log(action.user_details_id)
+            return {
+                ...state,
+                user_details_id : action.user_details_id
             }
     }
 }

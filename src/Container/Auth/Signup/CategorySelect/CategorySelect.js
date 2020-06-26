@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import Axios from '../../../../Axios'
 import Colors from '../../../../Constants/Colors'
 import './CategorySelect.css'
+import Heading from '../../../../Components/Heading/Heading'
 
 
 
@@ -138,6 +139,8 @@ class CategorySelect extends Component {
     render() {
         return (
             <div className="container" style={styles.screen}>
+                <Heading text="Select Categories" />
+                
                 <div className="list" style={{ width: '100%', height: window.innerHeight / 3, overflowX: 'hidden' }}>
                     {this.state.List}
                 </div>

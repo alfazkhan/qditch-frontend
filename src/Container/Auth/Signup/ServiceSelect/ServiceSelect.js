@@ -4,6 +4,7 @@ import { TextField, Button, FormControl, InputLabel, Select, MenuItem } from '@m
 import Colors from '../../../../Constants/Colors'
 import Axios from '../../../../Axios'
 import { connect } from 'react-redux'
+import Heading from '../../../../Components/Heading/Heading'
 
 
 
@@ -89,7 +90,7 @@ class ServiceSelect extends Component {
                     autoComplete=""
                     className="col-sm"
                 />
-                <TextField
+                {/* <TextField
                     variant="outlined"
                     // margin="normal"
                     required
@@ -99,7 +100,7 @@ class ServiceSelect extends Component {
                     name="sal-name"
                     autoComplete=""
                     className="col-sm"
-                />
+                /> */}
 
             </div>)
             List.push(serviceItem)
@@ -167,7 +168,7 @@ class ServiceSelect extends Component {
                 "service": this.findIndex(selectedService[i],ServiceList)+1,
                 "business_service_price": price[i],
                 "business_service_duration": duration[i],
-                "buffer_time":buffer[i],
+                "buffer_time":"null",
                 "disable":"False"
             })
             // console.log(data)
@@ -191,6 +192,7 @@ class ServiceSelect extends Component {
     render() {
         return (
             <div className="container" style={styles.screen}>
+                <Heading text="Select Services" />
                 <div className="list" style={{ width: '100%', height: window.innerHeight / 3, overflowX: 'hidden' }}>
                     {this.state.List}
                 </div>

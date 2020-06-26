@@ -6,6 +6,7 @@ import Colors from '../../../../Constants/Colors'
 import {connect} from 'react-redux'
 import Axios from '../../../../Axios'
 import * as actionTypes from '../../../../store/Action/Action'
+import Heading from '../../../../Components/Heading/Heading'
 
 
 class SaloonInfoForm extends Component {
@@ -75,6 +76,8 @@ class SaloonInfoForm extends Component {
     render() {
         return (
             <div className="container" style={styles.screen}>
+                <Heading text="Salon Info" />
+                
                 <div className="row">
                     <TextField
                         variant="outlined"
@@ -82,13 +85,13 @@ class SaloonInfoForm extends Component {
                         required
                         id="business_name"
                         onChange={this.valueChangeHandler}
-                        label="Saloon Name"
+                        label="Salon Name"
                         name="sal-name"
                         autoComplete=""
                         className="col-md"
                     />
                     <FormControl variant="outlined" className="col-md">
-                        <InputLabel>Saloon Type</InputLabel>
+                        <InputLabel>Salon Type</InputLabel>
                         <Select
                             // value={age}
                             onChange={(e)=>this.valueChangeHandler(e,'business_type')}
