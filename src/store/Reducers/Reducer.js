@@ -6,7 +6,8 @@ const initialState = {
     token: null,
     userLoggedIn: false,
     businessUser: false,
-    user_details_id : null
+    user_details_id : null,
+    errorMessages:[]
 }
 
 const reducer = (state = initialState, action) => {
@@ -45,6 +46,13 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 user_details_id : action.user_details_id
             }
+        case actionTypes.ERROR_MESSAGES:
+            // console.log(action.user_details_id)
+            return {
+                ...state,
+                errorMessages : action.errors
+            }
+
     }
 }
 

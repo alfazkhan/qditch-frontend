@@ -55,12 +55,14 @@ class ServiceSelect extends Component {
         this.setState({ elementNumber: elementNumber }, () => {
             const List = this.state.List
             const serviceItem = (<div className="row mt-3" key={new Date()}>
+                {/* <div className="col-md pr-5"></div> */}
                 <FormControl variant="outlined" className="col-sm">
                     <InputLabel>Select Service</InputLabel>
                     <Select
                         name='selectedServices'
                         onChange={this.valueChangeHandler}
-                        label="Age"
+                        label="Select Service"
+                        className="col-md"
                     >
 
                         {this.state.Services.map((value,index)=>{
@@ -77,7 +79,7 @@ class ServiceSelect extends Component {
                     label="Price (&#x20b9;)"
                     name="sal-name"
                     autoComplete=""
-                    className="col-sm"
+                    className="col-md"
                 />
                 <TextField
                     variant="outlined"
@@ -88,7 +90,7 @@ class ServiceSelect extends Component {
                     label={"Duration(Min)"}
                     name="sal-name"
                     autoComplete=""
-                    className="col-sm"
+                    className="col-md"
                 />
                 {/* <TextField
                     variant="outlined"
@@ -217,7 +219,7 @@ class ServiceSelect extends Component {
 const styles = {
     screen: {
         marginTop: 40
-    }
+    },
 }
 
 const mapStateToProps = (state) => ({

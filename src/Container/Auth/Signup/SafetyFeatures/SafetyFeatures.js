@@ -122,7 +122,7 @@ class SafetyFeatures extends Component {
             <div className="container" style={styles.screen}>
                 <Heading text="Safety Features" />
                 
-                <div class="list text-left" style={{ width: '100%', height: window.innerHeight / 2, overflowX: 'hidden' }}>
+                <div class="text-left" style={{ width: '100%', height: window.innerHeight / 2, overflowX: 'hidden' }}>
                     {this.state.List}
                 </div>
                 <div className="submitButton text-right">
