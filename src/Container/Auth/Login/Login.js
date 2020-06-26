@@ -52,7 +52,7 @@ export class Login extends Component {
 
 
   }
-  
+
 
   submitHandler = () => {
     console.table(this.state.values)
@@ -66,20 +66,21 @@ export class Login extends Component {
         console.log(res.data)
         this.props.onTokenRecieve(res.data.key)
         this.props.onUserRegister(res.data.user)
-        if(res.data.business != null){
+        this.props.onUserDetailId(res.data.user_details)
+        if (res.data.business != null) {
           this.props.onBusinessRegister(res.data.business)
           this.props.history.push({
-            pathname : '/admin/dashboard/',
+            pathname: '/admin/dashboard/',
           })
-        }else{
+        } else {
           this.props.history.push({
-            pathname : '/',
+            pathname: '/',
           })
         }
-        
-        
+
+
       })
-      
+
   }
 
   render() {
@@ -147,15 +148,19 @@ const mapDispatchToProps = dispatch => {
     onTokenRecieve: (data) => dispatch({
       type: actionTypes.UPDATE_TOKEN,
       token: data
-  }),
-  onUserRegister: (data) => dispatch({
+    }),
+    onUserRegister: (data) => dispatch({
       type: actionTypes.UPDATE_USER_ID,
       user_id: data
-  }),
-  onBusinessRegister: (data) => dispatch({
+    }),
+    onBusinessRegister: (data) => dispatch({
       type: actionTypes.UPDATE_BUSINESS_ID,
       business_id: data
-  })
+    }),
+    onUserDetailId: (data) => dispatch({
+      type: actionTypes.USER_DETAIL_ID,
+      user_details_id: data
+    })
   }
 
 }

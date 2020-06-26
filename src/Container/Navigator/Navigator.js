@@ -17,7 +17,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import * as actionTypes from '../../store/Action/Action'
 import { Logout } from '../Auth/Login/Logout';
 import Logo from '../../Assets/Logo.png'
-import { Profile } from '../Profile/Profile';
+import  Profile  from '../Profile/Profile';
 import FaceIcon from '@material-ui/icons/Face';
 const styles = {
     navlink: {

@@ -18,6 +18,7 @@ export class Images extends Component {
             for (var key in imageData) {
                 Axios.get('api/images/business_image/' + imageData[key] + '/')
                     .then(res => {
+                        
                         images.push({
                             url: res.data.blob_data,
                             cover: res.data.cover
@@ -37,11 +38,12 @@ export class Images extends Component {
         const imageList = []
         const images = this.state.images
         for (var key in images) {
+            console.log(images[key].url.split('//')[1])
             imageList.push(
                 <tr>
                     <th scope="row">{parseInt(key) + 1}</th>
                     <td>{images[key].cover.toString().toUpperCase()}</td>
-                    <td><img src={images[key].url} width="100" height="100" /></td>
+                    <td><img src={"https://"+images[key].url.split('//')[1]} width="100" height="100" /></td>
                 </tr>
             )
         }

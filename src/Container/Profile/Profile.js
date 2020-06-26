@@ -20,7 +20,7 @@ const styles = {
 
 
 
-export class Profile extends Component {
+class Profile extends Component {
 
     state = {
         name: "",
@@ -30,9 +30,14 @@ export class Profile extends Component {
         const DetailID = this.props.user_detail_id
         const business_id = this.props.business_id
 
+        if(!this.props.loggedIn){
+
+            this.props.history.push('/')
+        }
         
 
-        console.log(this.props)
+        console.log(this.props.user_detail_id)
+        console.log(this.props.user_id)
         // const DetailID = 4
 
         // console.log(ID)
@@ -80,15 +85,13 @@ export class Profile extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    user_detail_id: state.user_details_id,
     user_id: state.user_id,
     business_id: state.business_id,
-    business_user: state.business_user,
-    loggedIn: state.userLoggedIn
+    business_user: state.businessUser,
+    loggedIn: state.userLoggedIn,
+    user_detail_id: state.user_details_id
 })
 
-const mapDispatchToProps = {
 
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Profile))
+export default connect(mapStateToProps, null)(withRouter(Profile))
