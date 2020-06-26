@@ -65,8 +65,8 @@ class BasicDetails extends Component {
         var data = JSON.stringify({
             
             "email": this.state.values.email.toString(),
-            "mobile_number": this.state.values.mobile_number.toString(),
-            "role": this.state.values.role.toString(),
+            // "mobile_number": this.state.values.mobile_number.toString(),
+            // "role": this.state.values.role.toString(),
 
             "password": this.state.values.password,
         });
@@ -82,7 +82,7 @@ class BasicDetails extends Component {
                         "first_name": this.state.values.first_name.toString(),
                         "last_name": this.state.values.last_name.toString(),
                         "mobile_number": this.state.values.mobile_number.toString(),
-                        "gender": gender,
+                        "gender": gender.toString(),
                         "role": this.state.values.role.toString(),
                         "users": response.data.user.toString()
                     })
