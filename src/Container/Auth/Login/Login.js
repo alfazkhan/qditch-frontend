@@ -85,7 +85,7 @@ export class Login extends Component {
     if (this.validateData()) {
       // console.table(this.state.values)
       const data = JSON.stringify({
-        "email": this.state.values.email,
+        "email": this.state.values.email.toUpperCase(),
         "password": this.state.values.password
       })
       const url = 'https://master.qditch.com/custom/login/'
