@@ -25,6 +25,20 @@ class UploadImages extends Component {
         errors: false
     }
 
+    ordinal = (number) => {
+        const english_ordinal_rules = new Intl.PluralRules("en", {
+            type: "ordinal"
+        });
+        const suffixes = {
+            one: "st",
+            two: "nd",
+            few: "rd",
+            other: "th"
+        }
+        const suffix = suffixes[english_ordinal_rules.select(number)];
+        return (number + suffix);
+    }
+
     componentDidMount = () => {
         // console.log(this.props.mode)
         const mode = this.props.mode
@@ -43,36 +57,37 @@ class UploadImages extends Component {
         const inputFields = this.state.inputFields
         for (var i = 0; i < imageCount; i++) {
             inputFields.push(<form key={i}>
-                <div class="form-group">
-                    <ImageUploader
+                <div class="form-group col-md">
+                    {/* <ImageUploader
                         withIcon={false}
                         buttonText={'Select Image'}
                         onChange={this.valueChangeHandler}
                         singleImage={true}
                         withPreview={true}
                         withLabel={false}
-                        imgExtension={['.jpg', '.gif', '.png', '.gif', '.jpeg']}
+                        // imgExtension={['.jpg', '.gif', '.png', '.gif', '.jpeg']}
                         maxFileSize={5242880}
-                    />
+                    /> */}
+                    <div class="row">
+                        <label for="exampleFormControlFile1">{"Select Image"}</label>
+                        <input type="file" class="form-control-file" id="exampleFormControlFile1" onChange={this.valueChangeHandler} />
+                    </div>
                 </div>
             </form>)
         }
         this.setState({ inputFields: inputFields, Mode: mode }, () => {
-            console.log(this.state)
+            // console.log(this.state)
         })
     }
 
 
     valueChangeHandler = (picture) => {
-        // console.log(picture[0])
-        if (this.state.Mode === 'Business') {
-            const pictures = this.state.Pictures
-            pictures.push(picture[0])
-            this.setState({ Pictures: pictures })
-        } else {
-            const pro_picture = picture[0]
-            this.setState({ profile_image: pro_picture });
-        }
+        console.log(picture.target.files[0])
+
+        const pictures = this.state.Pictures
+        pictures.push(picture.target.files[0])
+        this.setState({ Pictures: pictures })
+
     }
 
     pageChangeHandler = () => {
@@ -112,17 +127,18 @@ class UploadImages extends Component {
             if (this.state.Mode === 'Business') {
                 url = 'api/images/business_image/'
                 const pictures = this.state.Pictures
-                console.log(pictures[0])
+                // console.log(pictures[0])
                 for (var i = 0; i < pictures.length; i++) {
-                    // var data = new FormData();
-                    // data.append('blob_data', pictures[i]);
-                    // data.append('business', this.state.business_id);
-                    // data.append('cover', i == 0 ? 'true' : 'false');
-                    const data = {
-                        "blob_data": pictures[i],
-                        "business": this.state.business_id,
-                        "cover": i == 0 ? 'true' : 'false'
-                    }
+                    var data = new FormData();
+                    data.append('blob_data', pictures[i]);
+                    data.append('business', this.state.business_id);
+                    data.append('cover', i == 0 ? 'true' : 'false');
+                    // const data = {
+                    //     // "blob_data": pictures[i],
+                    //     "business": this.state.business_id,
+                    //     "cover": i == 0 ? 'true' : 'false',
+                    //     ...form
+                    // }
                     Axios.post(url, data)
                         .then((res) => {
                             console.log(res)
@@ -137,24 +153,6 @@ class UploadImages extends Component {
                             this.props.toggleLoading(false)
                         })
                 }
-
-                // } else if (this.state.Mode) {
-                //     url = '/images/profile_image/'
-                //     var data = new FormData();
-                //     data.append('blob_data', this.state.profile_image);
-                //     data.append('user', this.props.user_id);
-                //     data.append('cover', 'false');
-                //     Axios.post(url, data)
-                //         .then((res) => {
-                //             console.log(res)
-                //             this.props.toggleLoading(false)
-                //             this.pageChangeHandler()
-                //         })
-                //         .catch((e) => {
-                //             console.log(e.response.data)
-                //             this.props.toggleLoading(false)
-                //         })
-                // }
 
 
             }
