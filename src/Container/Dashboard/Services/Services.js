@@ -71,7 +71,6 @@ export class Services extends Component {
                     <td>{services[key]}</td>
                     <td> {duration[key]} </td>
                     <td>{price[key]} </td>
-                    <td>{buffer[key]} </td>
                 </tr>
             )
 
@@ -95,7 +94,6 @@ export class Services extends Component {
                                 <th scope="col">Service</th>
                                 <th scope="col">Duration</th>
                                 <th scope="col">Price</th>
-                                <th scope="col">Buffer</th>
                             </tr>
                         </thead>
                         <tbody>

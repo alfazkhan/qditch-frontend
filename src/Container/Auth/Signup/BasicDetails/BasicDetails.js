@@ -107,7 +107,8 @@ class BasicDetails extends Component {
             values['email'] = values['email'].toLowerCase()
             Validator.equalValues(values['email'], emails[key]) ? messages.push("Email Already Associated with a User") : console.log()
         }
-
+        //Gender
+        !Validator.isPresent(values['gender']) ? messages.push("Gender Can't be Empty"):console.log()
 
         //Phone
         !Validator.isPresent(values['mobile_number']) ? messages.push("Mobile Number Field is Empty")
@@ -182,7 +183,9 @@ class BasicDetails extends Component {
                     .catch((error) => {
                         this.props.toggleLoading(false)
                         // console.log(error.response.data);
-                        this.errorHandler(error.response.data)
+                        const messages = []
+                        messages.push(error.response.data)
+                        this.setState({messages:messages,errors:true})
                     });
             }
 
@@ -211,7 +214,7 @@ class BasicDetails extends Component {
                     : null
                 }
 
-                <Heading text="User Details" />
+                <Heading text={this.state.Mode === 'User'?"User Details":"Business Owner Info"} />
                 <div className="row">
                     <TextField
                         variant="outlined"
@@ -280,12 +283,11 @@ class BasicDetails extends Component {
                             onChange={(e) => { this.valueChangeHandler(e, 'gender') }}
                             label="Gender"
                         >
-                            <MenuItem value="None">
+                            <MenuItem value="None" disabled>
                                 <em>None</em>
                             </MenuItem>
                             <MenuItem value={'Male'}>Male</MenuItem>
                             <MenuItem value={'Female'}>Female</MenuItem>
-                            <MenuItem value={'Other'}>Other</MenuItem>
                         </Select>
                     </FormControl>
                 </div>

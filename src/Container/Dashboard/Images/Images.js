@@ -15,21 +15,26 @@ export class Images extends Component {
         this.setState({ imageData: this.props.data['business_images'] }, () => {
             const imageData = this.state.imageData
             const images = this.state.images
-            for (var key in imageData) {
-                Axios.get('api/images/business_image/' + imageData[key] + '/')
-                    .then(res => {
-                        
-                        images.push({
-                            url: res.data.blob_data,
-                            cover: res.data.cover
+            if (imageData.length === 0) {
+                this.setState({ Loading: false })
+            }
+            else {
+                for (var key in imageData) {
+                    Axios.get('api/images/business_image/' + imageData[key] + '/')
+                        .then(res => {
+                            console.log(res.data)
+                            images.push({
+                                url: res.data.blob_data,
+                                cover: res.data.cover
+                            })
+                            this.setState({ images: images }, () => {
+                                this.setTableValues()
+                            })
                         })
-                        this.setState({ images: images }, () => {
-                            this.setTableValues()
+                        .catch(e => {
+                            console.log(e.response)
                         })
-                    })
-                    .catch(e => {
-                        console.log(e.response)
-                    })
+                }
             }
         })
     }

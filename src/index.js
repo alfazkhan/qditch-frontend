@@ -10,7 +10,7 @@ import Reducer from './store/Reducers/Reducer'
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import { PersistGate } from 'redux-persist/integration/react'
-import CircularProgress from '@material-ui/core/CircularProgress';
+import { Loader } from './Components/Loader/Loader';
 
 
 const persistConfig = {
@@ -26,7 +26,7 @@ console.log(storage)
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
-      <PersistGate loading={<CircularProgress/>} persistor={persistor}>
+      <PersistGate loading={<Loader/>} persistor={persistor}>
         <App />
       </PersistGate>
     </BrowserRouter>

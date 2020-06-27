@@ -49,7 +49,7 @@ class UploadImages extends Component {
                         singleImage={true}
                         withPreview={true}
                         withLabel={false}
-                        imgExtension={['.jpg', '.gif', '.png', '.gif']}
+                        imgExtension={['.jpg', '.gif', '.png', '.gif', '.jpeg']}
                         maxFileSize={5242880}
                     />
                 </div>
@@ -109,7 +109,7 @@ class UploadImages extends Component {
 
                     })
                     .catch((e) => {
-                        console.log(e.response.data)
+                        console.log(e.response)
                         this.props.toggleLoading(false)
                     })
             }

@@ -7,6 +7,7 @@ import {connect} from 'react-redux'
 import Axios from '../../../../Axios'
 import * as actionTypes from '../../../../store/Action/Action'
 import Heading from '../../../../Components/Heading/Heading'
+import * as Validator from '../../../../Validator'
 
 
 class SaloonInfoForm extends Component {
@@ -17,7 +18,9 @@ class SaloonInfoForm extends Component {
             business_type:'',
             map_url:''
         },
-        user_id: null
+        user_id: null,
+        errors: false,
+        messages: []
     }
 
     componentDidMount() {
@@ -49,27 +52,53 @@ class SaloonInfoForm extends Component {
         this.props.nextScreen('SetTimings')
     }
 
+
+    validateData = () => {
+        const values = this.state.values
+        const messages = []
+        
+
+        //Saloon Name
+        !Validator.isPresent(values['business_name']) ? messages.push("Business Name is Empty") : console.log()
+        //Saloon type
+        !Validator.isPresent(values['business_type']) ? messages.push("Business Type is Empty") : console.log()
+
+
+
+
+        if (messages.length !== 0) {
+            this.setState({ messages: messages, errors: true })
+            return false
+        }
+        this.setState({ errors: false })
+        return true
+
+    }
+
     submitHandler = () => {
-        const url = 'api/users/business/'
-        var data = JSON.stringify({
-            "business_name": this.state.values.business_name,
-            "business_type": this.state.values.business_type,
-            "user": this.state.user_id,
-            "stylist_available": 0
-        });
-
-        this.props.toggleLoading(true)
-
-        Axios.post(url, data)
-            .then((response)=>{
-                console.log(JSON.stringify(response.data));
-                this.props.onResponseRecieve(response.data.id)
-                this.pageChangeHandler()
-            })
-            .catch((error)=>{
-                this.props.toggleLoading(false)
-                console.log(error.response);
+        if(this.validateData()){
+            const url = 'api/users/business/'
+            var data = JSON.stringify({
+                "business_name": this.state.values.business_name,
+                "business_type": this.state.values.business_type,
+                "user": this.state.user_id,
+                "stylist_available": 0
             });
+    
+            this.props.toggleLoading(true)
+    
+            Axios.post(url, data)
+                .then((response)=>{
+                    console.log(JSON.stringify(response.data));
+                    this.props.onResponseRecieve(response.data.id)
+                    this.pageChangeHandler()
+                })
+                .catch((error)=>{
+                    this.props.toggleLoading(false)
+                    console.log(error.response);
+                });
+        }
+        
     }
 
 
@@ -77,6 +106,21 @@ class SaloonInfoForm extends Component {
         return (
             <div className="container" style={styles.screen}>
                 <Heading text="Salon Info" />
+                {this.state.errors
+                    ? <div class="alert alert-danger alert-dismissible fade show text-left" role="alert">
+                        {this.state.messages.map(function (item, i) {
+
+                            return <li key={i}>{item}</li>
+                        })}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true" onClick={()=>{
+                                const error = !this.state.errors
+                                this.setState({errors:error})
+                            }}>&times;</span>
+                        </button>
+                    </div>
+                    : null
+                }
                 
                 <div className="row">
                     <TextField
@@ -95,9 +139,9 @@ class SaloonInfoForm extends Component {
                         <Select
                             // value={age}
                             onChange={(e)=>this.valueChangeHandler(e,'business_type')}
-                            label="Age"
+                            label="Saloon Type"
                         >
-                            <MenuItem value="">
+                            <MenuItem value="" disabled>
                                 <em>None</em>
                             </MenuItem>
                             <MenuItem value={'male'}>Male</MenuItem>

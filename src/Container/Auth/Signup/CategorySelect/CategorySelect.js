@@ -141,7 +141,7 @@ class CategorySelect extends Component {
             <div className="container" style={styles.screen}>
                 <Heading text="Select Categories" />
                 
-                <div className="list" style={{ width: '100%', height: window.innerHeight / 3, overflowX: 'hidden' }}>
+                <div className="" style={{ width: '100%', height: window.innerHeight / 3, overflowY: 'scroll', overflowX: 'hidden' }}>
                     {this.state.List}
                 </div>
                 <div className="row" >

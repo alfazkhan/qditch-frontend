@@ -7,6 +7,7 @@ import Navigator from './Container/Navigator/Navigator'
 import * as actionTypes from './store/Action/Action'
 import { withRouter } from 'react-router-dom'
 import './App.css'
+import { Loader } from './Components/Loader/Loader'
 export class App extends Component {
 
   logoutHandler = () =>{
@@ -18,6 +19,7 @@ export class App extends Component {
     return (
       <div className="App">
       <Navigator logout={this.logoutHandler} />
+      {/* <Loader/> */}
       </div>
     )
   }

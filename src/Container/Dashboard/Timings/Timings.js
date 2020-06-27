@@ -46,7 +46,6 @@ class Timings extends Component {
 
             list.push(
                 <tr>
-                    <th scope="row">{num}</th>
                     <td>{key}</td>
                     <td>{SE[0]}</td>
                     <td>{SE[1]}</td>
@@ -64,7 +63,6 @@ class Timings extends Component {
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col">#</th>
                                 <th scope="col">Day</th>
                                 <th scope="col">Opening</th>
                                 <th scope="col">Closing</th>
