@@ -5,8 +5,7 @@ import Colors from '../../../../Constants/Colors'
 import Axios from '../../../../Axios'
 import { connect } from 'react-redux'
 import Heading from '../../../../Components/Heading/Heading'
-var FormData = require('form-data');
-
+import * as Validator from '../../../../Validator'
 
 
 class StylistSelect extends Component {
@@ -15,36 +14,45 @@ class StylistSelect extends Component {
         Stylists: [],
         List: [],
         currentNumber: 0,
-        business_id: null
+        business_id: null,
+        messages: [],
+        errors: false
     }
 
     componentDidMount() {
         //getServices from server
-        this.setState({business_id:this.props.business_id})
+        this.setState({ business_id: this.props.business_id })
         this.addNewStylistField()
     }
 
     addNewStylistField = () => {
-        const List = this.state.List
-        const currentNumber = this.state.currentNumber + 1
-        this.setState({ currentNumber: currentNumber }, () => {
-            const newStylist = <div className="row mt-3">
-                <TextField
-                    variant="outlined"
-                    // margin="normal"
-                    onChange={this.valueChangeHandler}
-                    required
-                    id={this.state.currentNumber}
-                    label={"Stylist Name"}
-                    name="sal-name"
-                    autoComplete=""
-                    className="col ml-5 mr-5"
-                />
-
-            </div>
-            List.push(newStylist)
-            this.setState({ List: List })
-        })
+        if(this.state.Stylists.length < this.state.List.length){
+            const messages = this.state.messages
+            messages.push("Enter Values in Exsisting Fields")
+            this.setState({messages:messages,errors:true})
+        }else{
+            const List = this.state.List
+            const currentNumber = this.state.currentNumber + 1
+            this.setState({ currentNumber: currentNumber }, () => {
+                const newStylist = <div className="row mt-3">
+                    <TextField
+                        variant="outlined"
+                        // margin="normal"
+                        onChange={this.valueChangeHandler}
+                        required
+                        id={this.state.currentNumber}
+                        label={"Stylist Name"}
+                        name="sal-name"
+                        autoComplete=""
+                        className="col ml-5 mr-5"
+                    />
+    
+                </div>
+                List.push(newStylist)
+                this.setState({ List: List })
+            })
+        }
+        
 
 
     }
@@ -52,12 +60,12 @@ class StylistSelect extends Component {
     valueChangeHandler = (e) => {
         const id = e.target.id
         const value = e.target.value
-        const stylists=this.state.Stylists
-        stylists[id-1] = value
-        this.setState({Stylists:stylists})
+        const stylists = this.state.Stylists
+        stylists[id - 1] = value
+        this.setState({ Stylists: stylists })
     }
 
-    pageChangeHandler = () =>{
+    pageChangeHandler = () => {
         const mode = this.props.mode
         const progress = mode === 'User' ? 50 : 100 * 6 / 8
         this.props.changeProgress(progress)
@@ -65,34 +73,85 @@ class StylistSelect extends Component {
         this.props.nextScreen('SafetyFeatures')
     }
 
-    submitHandler = () => {
-        // console.log(this.state)
-        this.props.toggleLoading(true)
-        const stylists = this.state.Stylists
-        const url = 'api/stylist/stylist_details/'
-        // console.log(stylists)
-        for (var i = 0; i < stylists.length; i++) {
-           
-            const data = {
-                "business" : this.state.business_id,
-                "name" : stylists[i]
-            }
-            console.log(data)
-            Axios.post(url, data)
-                .then((res) => {
-                    console.log(res)
-                    if(i === stylists.length){
-                        this.pageChangeHandler()
-                    }
+    ordinal=(number)=> {
+        const english_ordinal_rules = new Intl.PluralRules("en", {
+            type: "ordinal"
+        });
+        const suffixes = {
+            one: "st",
+            two: "nd",
+            few: "rd",
+            other: "th"
+        }
+        const suffix = suffixes[english_ordinal_rules.select(number)];
+        return (number + suffix);
+    }
+    validateData = () => {
 
-                })
-                .catch((e) => {
-                    console.log(e.response)
-                    this.props.toggleLoading(false)
-                })
+        const messages = []
+        const stylists = this.state.Stylists
+        //Counts
+        !Validator.isPresent(this.state.Stylists) ? messages.push("Add Atleast One Stylist") : console.log()
+        //Names
+        for (var key in this.state.currentNumber) {
+            console.log(stylists[key])
+            if(!stylists[key]){
+                console.log("Not")
+            }
+            stylists[key] === null ? messages.push("Error: Empty Name of Stylist") : console.log()
         }
 
-            
+        for (var key in this.state.Stylists){
+            if(stylists[key]===""){
+                messages.push("Error: Empty Field")
+            }
+        }
+
+        if(stylists.length < this.state.List.length){
+            messages.push("Error: Empty Field")
+        }
+
+        if (messages.length !== 0) {
+            this.setState({ messages: messages, errors: true })
+            return false
+        }
+        this.setState({ errors: false })
+        return true
+
+    }
+
+
+    submitHandler = () => {
+        console.log(this.state)
+        if (this.validateData()) {
+            this.props.toggleLoading(true)
+            const stylists = this.state.Stylists
+            const url = 'api/stylist/stylist_details/'
+            // console.log(stylists)
+            for (var i = 0; i < stylists.length; i++) {
+
+                const data = {
+                    "business": this.state.business_id,
+                    "name": stylists[i]
+                }
+                console.log(data)
+                Axios.post(url, data)
+                    .then((res) => {
+                        console.log(res)
+                        if (i === stylists.length) {
+                            this.pageChangeHandler()
+                        }
+
+                    })
+                    .catch((e) => {
+                        console.log(e.response)
+                        this.props.toggleLoading(false)
+                    })
+            }
+        }
+
+
+
     }
 
 
@@ -101,7 +160,23 @@ class StylistSelect extends Component {
         return (
             <div className="container" style={styles.screen}>
                 <Heading text="Enter Stylists Details" />
-                
+
+                {this.state.errors
+                    ? <div class="alert alert-danger alert-dismissible fade show text-left" role="alert">
+                        {this.state.messages.map(function (item, i) {
+
+                            return <li key={i}>{item}</li>
+                        })}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true" onClick={() => {
+                                const error = !this.state.errors
+                                this.setState({ errors: error })
+                            }}>&times;</span>
+                        </button>
+                    </div>
+                    : null
+                }
+
                 <div className="list" style={{ width: '100%', height: window.innerHeight / 3, overflowX: 'hidden' }}>
                     {this.state.List}
                 </div>
@@ -131,7 +206,7 @@ const styles = {
 
 const mapStateToProps = (state) => ({
     // user_id : state.user_id,
-    business_id : state.business_id
+    business_id: state.business_id
 })
 
 

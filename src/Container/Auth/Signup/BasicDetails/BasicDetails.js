@@ -116,7 +116,7 @@ class BasicDetails extends Component {
 
         //Password
         !Validator.isPresent(values['password']) ? messages.push("Password Field is Empty")
-            : !Validator.validLength(values['password'], 6) ? messages.push("Password should be atleast 6 Characters")
+            : !Validator.validAtleastLength(values['password'], 6) ? messages.push("Password should be atleast 6 Characters")
                 : !Validator.equalValues(values['confirm_password'], values['password']) ? messages.push("Password and Confirm Password Should be Same") : console.log()
 
         //ConfirmPassword

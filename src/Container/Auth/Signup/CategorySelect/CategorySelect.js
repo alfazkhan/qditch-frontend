@@ -5,7 +5,7 @@ import Axios from '../../../../Axios'
 import Colors from '../../../../Constants/Colors'
 import './CategorySelect.css'
 import Heading from '../../../../Components/Heading/Heading'
-
+import * as Validator from '../../../../Validator'
 
 
 class CategorySelect extends Component {
@@ -13,17 +13,19 @@ class CategorySelect extends Component {
     state = {
         CategoryList: [],
         List: [],
-        categoryIDs:[],
+        categoryIDs: [],
         selectedCategoryList: [],
         selectedCategory: [],
         values: [],
         mainCategory: false,
         business_id: null,
+        messages: [],
+        errors: false
     }
 
     componentDidMount() {
         //getCategories from server
-        this.setState({business_id:this.props.business_id})
+        this.setState({ business_id: this.props.business_id })
         Axios.get('api/category/categories/')
             .then(res => {
                 const data = res.data
@@ -36,7 +38,7 @@ class CategorySelect extends Component {
                     ids.push(data[key].id)
                     CatList.push(data[key].name)
                 }
-                this.setState({ CategoryList: CatList,values: checkValues,categoryIDs:ids }, () => {
+                this.setState({ CategoryList: CatList, values: checkValues, categoryIDs: ids }, () => {
                     this.initialValuesHandler();
                 })
                 this.props.toggleLoading(false)
@@ -94,45 +96,73 @@ class CategorySelect extends Component {
         this.setState({ mainCategory: e.target.value })
     }
 
-    changePageHandler = () =>{
+    changePageHandler = () => {
         this.props.toggleLoading(false)
         const progress = 100 * 4 / 8
         this.props.changeProgress(progress)
         this.props.nextScreen('ServiceSelect')
     }
 
+
+
+    validateData = () => {
+        // const values = this.state.values
+        const messages = []
+
+
+        //Main Category
+        !this.state.mainCategory ? messages.push("Select Main Category") : console.log()
+        //Category
+        !Validator.isPresent(this.state.selectedCategory)? messages.push("Select Atleast 1 Category") : console.log()
+        
+
+
+        if (messages.length !== 0) {
+            this.setState({ messages: messages, errors: true })
+            return false
+        }
+        this.setState({ errors: false })
+        return true
+
+    }
+
+
     submitHandler = () => {
-        this.props.toggleLoading(true)
-        console.log(this.state)
-        const url = 'api/category/business_categories/'
-        const catList = this.state.CategoryList
-        const values = this.state.values
-        const superCat = this.state.mainCategory
-        for (var i = 0; i < catList.length; i++) {
-            if (values[i]) {
-                const data = {
-                    "business": this.state.business_id,
-                    "category": this.state.categoryIDs[i],
-                    "super_category": catList[i] === superCat ? "true" : "false"
+
+        if (this.validateData()) {
+            this.props.toggleLoading(true)
+            console.log(this.state)
+            const url = 'api/category/business_categories/'
+            const catList = this.state.CategoryList
+            const values = this.state.values
+            const superCat = this.state.mainCategory
+            for (var i = 0; i < catList.length; i++) {
+                if (values[i]) {
+                    const data = {
+                        "business": this.state.business_id,
+                        "category": this.state.categoryIDs[i],
+                        "super_category": catList[i] === superCat ? "true" : "false"
+                    }
+                    Axios.post(url, data)
+                        .then((response) => {
+                            this.setState({ success: true })
+                            console.log(JSON.stringify(response.data));
+                            // this.props.onResponseRecieve(response.data.id)
+                            if (i === catList.length) {
+                                this.changePageHandler()
+                            }
+
+                        })
+                        .catch((error) => {
+                            this.props.toggleLoading(false)
+                            console.log(error.response);
+                        });
+
                 }
-                Axios.post(url, data)
-                    .then((response) => {
-                        this.setState({success: true})
-                        console.log(JSON.stringify(response.data));
-                        // this.props.onResponseRecieve(response.data.id)
-                        if(i === catList.length){
-                            this.changePageHandler()
-                        }
-
-                    })
-                    .catch((error) => {
-                        this.props.toggleLoading(false)
-                        console.log(error.response);
-                    });
-
             }
         }
-        
+
+
     }
 
 
@@ -140,7 +170,23 @@ class CategorySelect extends Component {
         return (
             <div className="container" style={styles.screen}>
                 <Heading text="Select Categories" />
-                
+
+                {this.state.errors
+                    ? <div class="alert alert-danger alert-dismissible fade show text-left" role="alert">
+                        {this.state.messages.map(function (item, i) {
+
+                            return <li key={i}>{item}</li>
+                        })}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true" onClick={() => {
+                                const error = !this.state.errors
+                                this.setState({ errors: error })
+                            }}>&times;</span>
+                        </button>
+                    </div>
+                    : null
+                }
+
                 <div className="" style={{ width: '100%', height: window.innerHeight / 3, overflowY: 'scroll', overflowX: 'hidden' }}>
                     {this.state.List}
                 </div>
@@ -180,7 +226,7 @@ const styles = {
 
 const mapStateToProps = (state) => ({
     // user_id : state.user_id,
-    business_id : state.business_id
+    business_id: state.business_id
 })
 
 

@@ -7,7 +7,7 @@ import ImageUploader from 'react-images-upload';
 import Axios from '../../../../Axios'
 import { connect } from 'react-redux'
 import Heading from '../../../../Components/Heading/Heading';
-
+import * as Validator from '../../../../Validator'
 var FormData = require('form-data');
 
 
@@ -20,7 +20,9 @@ class UploadImages extends Component {
         profile_image: null,
         Mode: '',
         business_id: null,
-        user_id: null
+        user_id: null,
+        messages: [],
+        errors: false
     }
 
     componentDidMount = () => {
@@ -86,54 +88,78 @@ class UploadImages extends Component {
 
     }
 
-    submitHandler = () => {
-        // console.table(this.state.Pictures)
-        let url = ''
-        this.props.toggleLoading(true)
-        if (this.state.Mode === 'Business') {
-            url = 'api/images/business_image/'
-            const pictures = this.state.Pictures
-            console.log(pictures[0])
-            for (var i = 0; i < pictures.length; i++) {
-                var data = new FormData();
-                data.append('blob_data', pictures[i]);
-                data.append('business', this.state.business_id);
-                data.append('cover', i == 0 ? 'true' : 'false');
-                Axios.post(url, data)
-                    .then((res) => {
-                        console.log(res)
-                        this.props.toggleLoading(false)
-                        if (i === pictures.length) {
-                            this.pageChangeHandler()
-                        }
+    validateData = () => {
 
-                    })
-                    .catch((e) => {
-                        console.log(e.response)
-                        this.props.toggleLoading(false)
-                    })
-            }
+        const messages = []
 
-            // } else if (this.state.Mode) {
-            //     url = '/images/profile_image/'
-            //     var data = new FormData();
-            //     data.append('blob_data', this.state.profile_image);
-            //     data.append('user', this.props.user_id);
-            //     data.append('cover', 'false');
-            //     Axios.post(url, data)
-            //         .then((res) => {
-            //             console.log(res)
-            //             this.props.toggleLoading(false)
-            //             this.pageChangeHandler()
-            //         })
-            //         .catch((e) => {
-            //             console.log(e.response.data)
-            //             this.props.toggleLoading(false)
-            //         })
-            // }
+        !Validator.isPresent(this.state.Pictures) ? messages.push("Add Atleast One Image") : console.log()
 
-
+        if (messages.length !== 0) {
+            this.setState({ messages: messages, errors: true })
+            return false
         }
+        this.setState({ errors: false })
+        return true
+
+    }
+
+
+    submitHandler = () => {
+        console.table(this.state.Pictures)
+        let url = ''
+        if (this.validateData()) {
+            this.props.toggleLoading(true)
+            if (this.state.Mode === 'Business') {
+                url = 'api/images/business_image/'
+                const pictures = this.state.Pictures
+                console.log(pictures[0])
+                for (var i = 0; i < pictures.length; i++) {
+                    // var data = new FormData();
+                    // data.append('blob_data', pictures[i]);
+                    // data.append('business', this.state.business_id);
+                    // data.append('cover', i == 0 ? 'true' : 'false');
+                    const data = {
+                        "blob_data": pictures[i],
+                        "business": this.state.business_id,
+                        "cover": i == 0 ? 'true' : 'false'
+                    }
+                    Axios.post(url, data)
+                        .then((res) => {
+                            console.log(res)
+                            this.props.toggleLoading(false)
+                            if (i === pictures.length) {
+                                this.pageChangeHandler()
+                            }
+
+                        })
+                        .catch((e) => {
+                            console.log(e.response)
+                            this.props.toggleLoading(false)
+                        })
+                }
+
+                // } else if (this.state.Mode) {
+                //     url = '/images/profile_image/'
+                //     var data = new FormData();
+                //     data.append('blob_data', this.state.profile_image);
+                //     data.append('user', this.props.user_id);
+                //     data.append('cover', 'false');
+                //     Axios.post(url, data)
+                //         .then((res) => {
+                //             console.log(res)
+                //             this.props.toggleLoading(false)
+                //             this.pageChangeHandler()
+                //         })
+                //         .catch((e) => {
+                //             console.log(e.response.data)
+                //             this.props.toggleLoading(false)
+                //         })
+                // }
+
+
+            }
+        }
+
     }
 
 
@@ -141,6 +167,21 @@ class UploadImages extends Component {
         return (
             <div className="container" style={styles.screen}>
                 <Heading text="Upload Salon Images" />
+                {this.state.errors
+                    ? <div class="alert alert-danger alert-dismissible fade show text-left" role="alert">
+                        {this.state.messages.map(function (item, i) {
+
+                            return <li key={i}>{item}</li>
+                        })}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true" onClick={() => {
+                                const error = !this.state.errors
+                                this.setState({ errors: error })
+                            }}>&times;</span>
+                        </button>
+                    </div>
+                    : null
+                }
                 <div className="row">
                     {this.state.inputFields}
                 </div>

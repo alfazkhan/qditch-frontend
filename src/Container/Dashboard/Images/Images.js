@@ -46,8 +46,6 @@ export class Images extends Component {
             console.log(images[key].url.split('//')[1])
             imageList.push(
                 <tr>
-                    <th scope="row">{parseInt(key) + 1}</th>
-                    <td>{images[key].cover.toString().toUpperCase()}</td>
                     <td><img src={"https://"+images[key].url.split('//')[1]} width="100" height="100" /></td>
                 </tr>
             )
@@ -62,8 +60,6 @@ export class Images extends Component {
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Cover</th>
                                 <th scope="col">Image</th>
                             </tr>
                         </thead>

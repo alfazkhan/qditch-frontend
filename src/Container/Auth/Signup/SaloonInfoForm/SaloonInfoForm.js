@@ -16,7 +16,8 @@ class SaloonInfoForm extends Component {
         values:{
             business_name:'',
             business_type:'',
-            map_url:''
+            map_url:'',
+            address: ''
         },
         user_id: null,
         errors: false,
@@ -62,8 +63,8 @@ class SaloonInfoForm extends Component {
         !Validator.isPresent(values['business_name']) ? messages.push("Business Name is Empty") : console.log()
         //Saloon type
         !Validator.isPresent(values['business_type']) ? messages.push("Business Type is Empty") : console.log()
-
-
+        //Address
+        !Validator.isPresent(values['address']) ? messages.push("Address is Empty") : console.log()
 
 
         if (messages.length !== 0) {
@@ -71,18 +72,20 @@ class SaloonInfoForm extends Component {
             return false
         }
         this.setState({ errors: false })
-        return true
+        return true 
 
     }
 
     submitHandler = () => {
+        console.table(this.state.values)
         if(this.validateData()){
             const url = 'api/users/business/'
             var data = JSON.stringify({
                 "business_name": this.state.values.business_name,
                 "business_type": this.state.values.business_type,
                 "user": this.state.user_id,
-                "stylist_available": 0
+                "stylist_available": 0,
+                "address" : this.state.values.address
             });
     
             this.props.toggleLoading(true)
@@ -152,6 +155,18 @@ class SaloonInfoForm extends Component {
                 </div>
                 <div className="row">
                     <TextField
+                        label="Address"
+                        multiline
+                        id="address"
+                        onChange={this.valueChangeHandler}
+                        rows={4}
+                        variant="outlined"
+                        className="col-md"
+                        margin="normal"
+                    />
+                </div>
+                {/* <div className="row">
+                    <TextField
                         label="Google Map URL"
                         multiline
                         id="map_url"
@@ -161,7 +176,7 @@ class SaloonInfoForm extends Component {
                         className="col-md"
                         margin="normal"
                     />
-                </div>
+                </div> */}
                 <div className="submitButton text-right">
                     <Button variant="contained" size="large" style={{ backgroundColor: Colors.success, color: 'white' }} onClick={this.submitHandler}>
                         Next

@@ -47,8 +47,8 @@ class Timings extends Component {
             list.push(
                 <tr>
                     <td>{key}</td>
-                    <td>{SE[0]}</td>
-                    <td>{SE[1]}</td>
+                    <td>{SE[0]?SE[0]:"Closed"}</td>
+                    <td>{SE[0]?SE[1]:"Closed"}</td>
                 </tr>
             )
             num+=1
