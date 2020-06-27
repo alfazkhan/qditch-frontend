@@ -43,12 +43,12 @@ class Timings extends Component {
         let num = 1
         for(var key in timings){
             const SE=timings[key].split('/')
-
+            console.log(SE[0]==="false")
             list.push(
                 <tr>
                     <td>{key}</td>
-                    <td>{SE[0]?SE[0]:"Closed"}</td>
-                    <td>{SE[0]?SE[1]:"Closed"}</td>
+                    <td>{SE[0]==="false"?"Closed":SE[0]}</td>
+                    <td>{SE[0]==="false"?"Closed":SE[1]}</td>
                 </tr>
             )
             num+=1
