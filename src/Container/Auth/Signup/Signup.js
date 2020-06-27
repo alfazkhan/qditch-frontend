@@ -29,7 +29,7 @@ class Signup extends Component {
 
         const Mode = this.props.match.params.mode
         this.setState({ Mode: Mode })
-        this.screenHandler('UploadImages') 
+        this.screenHandler('BasicDetails') 
        setTimeout(()=>{
            this.setState({fade: true})
        })
