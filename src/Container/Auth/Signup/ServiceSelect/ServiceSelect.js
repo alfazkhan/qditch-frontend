@@ -34,9 +34,9 @@ class ServiceSelect extends Component {
                 const services = this.state.Services
                 for (var key in data) {
                     services.push(data[key].name)
-                    // newServiceList.push(
-                    //     <MenuItem key={key} name={this.state.elementNumber + ':choice'} value={key}>{data[key].name}</MenuItem>
-                    // )
+                    newServiceList.push(
+                        <MenuItem key={key} name={this.state.elementNumber + ':choice'} value={key}>{data[key].name}</MenuItem>
+                    )
                 }
                 this.setState({ ServiceList: newServiceList, Services: services }, () => {
                     this.addServiceField()
@@ -155,7 +155,7 @@ class ServiceSelect extends Component {
     }
 
     submitHandler = () => {
-        // console.log(this.state)
+        console.log(this.state)
         this.props.toggleLoading(true)
 
         const url = 'api/service/business_services/'
@@ -195,7 +195,7 @@ class ServiceSelect extends Component {
         return (
             <div className="container" style={styles.screen}>
                 <Heading text="Select Services" />
-                <div className="" style={{ width: '100%', height: window.innerHeight / 3}}>
+                <div className="list" style={{ width: '100%', height: window.innerHeight / 3,overflowY:"scroll"}}>
                     {this.state.List}
                 </div>
                 <div>
