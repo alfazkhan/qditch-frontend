@@ -52,6 +52,7 @@ class BasicDetails extends Component {
     valueChangeHandler = (event, param = "null") => {
         const field = param === 'gender' ? event.target.value : event.target.id
         const newValues = this.state.values
+        // console.log(event.target.value[event.target.value.length-1])
         if (param === 'gender') {
             newValues.gender = field
         } else if (event.target.id === "mobile_number") {
@@ -61,6 +62,8 @@ class BasicDetails extends Component {
                     ? newValues.mobile_number = event.target.value
                     : newValues.mobile_number=  event.target.value.slice(0, -1)
             }
+        }else if(event.target.value[event.target.value.length-1] === " "){
+            // console.log("Yes")
         }
         else {
             newValues[field] = event.target.value

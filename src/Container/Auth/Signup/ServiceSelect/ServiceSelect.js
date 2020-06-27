@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TextField, Button, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
+import { TextField, Button, FormControl, InputLabel, Select, MenuItem, Box } from '@material-ui/core'
 // import './CategorySelect.css'
 import Colors from '../../../../Constants/Colors'
 import Axios from '../../../../Axios'
@@ -22,6 +22,8 @@ class ServiceSelect extends Component {
         elementNumber: 0,
         Services: [],
         business_id: '',
+        category_names: [],
+        selectedCategories: [],
         messages: [],
         errors: false
     }
@@ -32,13 +34,27 @@ class ServiceSelect extends Component {
         Axios.get('api/service/services/')
             .then(res => {
                 const data = res.data
+                console.log(res.data)
                 const newServiceList = this.state.ServiceList
                 const services = this.state.Services
+                const catNames = this.state.category_names
                 for (var key in data) {
+                    Axios.get('api/category/categories/' + data[key].categories + '/')
+                        .then(response => {
+                            catNames.push(response.data.name)
+                            this.setState({
+                                category_names: catNames
+                            })
+                        })
+                }
+                for (var key in data) {
+                    // console.log(response.data)
+
                     services.push(data[key].name)
                     newServiceList.push(
                         <MenuItem key={key} name={this.state.elementNumber + ':choice'} value={key}>{data[key].name}</MenuItem>
                     )
+
                 }
                 this.setState({ ServiceList: newServiceList, Services: services }, () => {
                     this.addServiceField()
@@ -53,48 +69,51 @@ class ServiceSelect extends Component {
     }
 
     addServiceField = () => {
+        const catNames = this.state.category_names
         const elementNumber = this.state.elementNumber + 1
         this.setState({ elementNumber: elementNumber }, () => {
             const List = this.state.List
-            const serviceItem = (<div className="row mt-3" key={new Date()}>
-                {/* <div className="col-md pr-5"></div> */}
-                <FormControl variant="outlined" className="col-sm">
-                    <InputLabel>Select Service</InputLabel>
-                    <Select
-                        name='selectedServices'
-                        onChange={this.valueChangeHandler}
-                        label="Select Service"
-                        className="col-md"
-                    >
+            const serviceItem = (
+                <Box>
+                    <div className="row mt-3" key={new Date()}>
+                        {/* <div className="col-md pr-5"></div> */}
+                        <FormControl variant="outlined" className="col-sm">
+                            <InputLabel>Select Service</InputLabel>
+                            <Select
+                                name='selectedServices'
+                                onChange={this.valueChangeHandler}
+                                label="Select Service"
+                                className="col-md"
+                            >
 
-                        {this.state.Services.map((value, index) => {
-                            return <MenuItem key={index} name={this.state.elementNumber + ':choice'} value={[index, this.state.elementNumber]}>{value}</MenuItem>
-                        })}
-                    </Select>
-                </FormControl>
-                <TextField
-                    variant="outlined"
-                    // margin="normal"
-                    required
-                    id={this.state.elementNumber + ':prices'}
-                    onChange={this.valueChangeHandler}
-                    label="Price (&#x20b9;)"
-                    name="sal-name"
-                    autoComplete=""
-                    className="col-md"
-                />
-                <TextField
-                    variant="outlined"
-                    // margin="normal"
-                    required
-                    id={this.state.elementNumber + ':durations'}
-                    onChange={this.valueChangeHandler}
-                    label={"Duration(Min)"}
-                    name="sal-name"
-                    autoComplete=""
-                    className="col-md"
-                />
-                {/* <TextField
+                                {this.state.Services.map((value, index) => {
+                                    return <MenuItem key={index} name={this.state.elementNumber + ':choice'} value={[index, this.state.elementNumber]}>{value}</MenuItem>
+                                })}
+                            </Select>
+                        </FormControl>
+                        <TextField
+                            variant="outlined"
+                            // margin="normal"
+                            required
+                            id={this.state.elementNumber + ':prices'}
+                            onChange={this.valueChangeHandler}
+                            label="Price (&#x20b9;)"
+                            name="sal-name"
+                            autoComplete=""
+                            className="col-md"
+                        />
+                        <TextField
+                            variant="outlined"
+                            // margin="normal"
+                            required
+                            id={this.state.elementNumber + ':durations'}
+                            onChange={this.valueChangeHandler}
+                            label={"Duration(Min)"}
+                            name="sal-name"
+                            autoComplete=""
+                            className="col-md"
+                        />
+                        {/* <TextField
                     variant="outlined"
                     // margin="normal"
                     required
@@ -105,15 +124,19 @@ class ServiceSelect extends Component {
                     autoComplete=""
                     className="col-sm"
                 /> */}
-
-            </div>)
+                    </div>
+                    {/* <div className="text-left">
+                        {this.state.category_names[this.state.elementNumber]}
+                    </div> */}
+                </Box>
+            )
             List.push(serviceItem)
             this.setState({ List: List })
 
         })
     }
 
-    ordinal=(number)=> {
+    ordinal = (number) => {
         const english_ordinal_rules = new Intl.PluralRules("en", {
             type: "ordinal"
         });
@@ -136,13 +159,13 @@ class ServiceSelect extends Component {
         !Validator.isPresent(this.state.selectedServices) ? messages.push("Select Atleast One Service") : console.log()
         //Prices
         !Validator.isPresent(this.state.prices) ? messages.push("Invalid Price") : console.log()
-        for(var key in prices){
-            !Validator.isNumber(prices[key]) ? messages.push("Invalid Price Value of "+this.ordinal(parseInt(key+1))+" Service Selected"): console.log()    
+        for (var key in prices) {
+            !parseInt(prices[key]) ? messages.push("Invalid Price Value of " + this.ordinal(parseInt(key) + 1) + " Service Selected") : console.log()
         }
         //Duration
         !Validator.isPresent(this.state.durations) ? messages.push("Invalid Duration") : console.log()
-        for(var key in durations){
-            !Validator.isNumber(prices[key]) ? messages.push("Invalid Time Value of "+this.ordinal(parseInt(key+1))+" Service Selected"): console.log()    
+        for (var key in durations) {
+            !parseInt(durations[key]) ? messages.push("Invalid Time Value of " + this.ordinal(parseInt(key) + 1) + " Service Selected") : console.log()
         }
 
         if (messages.length !== 0) {
@@ -154,6 +177,10 @@ class ServiceSelect extends Component {
 
     }
 
+    isLetter = (str) => {
+        return str.length === 1 && str.match(/[a-z]/i);
+    }
+
     valueChangeHandler = (e) => {
         let value, index, name
         const services = this.state.Services
@@ -162,14 +189,23 @@ class ServiceSelect extends Component {
             const id = e.target.value[0]
             index = e.target.value[1]
             value = services[id]
-        } else {
+            // eslint-disable-next-line no-restricted-globals
+        } else if (this.isLetter(event.target.value[event.target.value.length - 1])) {
+            console.log("Yes")
+            // eslint-disable-next-line no-restricted-globals
+            event.target.value = ""
+            return null
+        }
+        else {
             value = e.target.value
             const info = e.target.id.split(':')
             index = info[0]
             name = info[1]
         }
+
         const newValue = this.state[name]
         newValue[index - 1] = value
+        console.log(value, index, name)
         switch (name) {
             case 'selectedServices':
                 this.setState({ selectedServices: newValue }); break;

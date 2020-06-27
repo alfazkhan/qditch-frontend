@@ -14,11 +14,13 @@ export class Services extends Component {
         lists: [],
         buffers: [],
         data: { ...this.props.data },
-        Loading: true
+        Loading: true,
+        categoriesName: []
     }
 
     componentDidMount() {
         const service_id = this.state.data['business_services']
+        const catNames = this.state.categoriesName
         for (var key in service_id) {
             Axios.get('api/service/business_services/' + service_id[key] + '/')
                 .then(res1 => {
@@ -34,20 +36,29 @@ export class Services extends Component {
                             duration.push(res1.data.business_service_duration)
                             price.push(res1.data.business_service_price)
                             buffer.push(res1.data.buffer_time)
-                            this.setState({
-                                services: services,
-                                durations: duration,
-                                prices: price,
-                                buffers: buffer
-                            }, () => {
-                                this.setServiceTable()
-                            })
+                            Axios.get('api/category/categories/' + res2.data.categories + '/')
+                                .then(res3 => {
+                                    console.log(res3.data.name)
+                                    catNames.push(res3.data.name)
+                                    this.setState({
+                                        services: services,
+                                        durations: duration,
+                                        prices: price,
+                                        buffers: buffer,
+                                        categoriesName: catNames
+                                    }, () => {
+                                        this.setServiceTable()
+                                    })
+                                })
+                                .catch(e => {
+                                    console.log(e.response)
+                                })
                         })
-                        .catch(e=>{
+                        .catch(e => {
                             console.log(e.response)
                         })
                 })
-                .catch(e=>{
+                .catch(e => {
                     console.log(e.response)
                 })
         }
@@ -67,8 +78,9 @@ export class Services extends Component {
         for (var key = 0; key < services.length; key++) {
             List.push(
                 <tr>
-                    <th scope="row">{key+1}</th>
+                    <th scope="row">{key + 1}</th>
                     <td>{services[key]}</td>
+                    <td>{this.state.categoriesName[key]}</td>
                     <td> {duration[key]} </td>
                     <td>{price[key]} </td>
                 </tr>
@@ -92,6 +104,7 @@ export class Services extends Component {
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Service</th>
+                                <th scope="col">Category</th>
                                 <th scope="col">Duration</th>
                                 <th scope="col">Price</th>
                             </tr>

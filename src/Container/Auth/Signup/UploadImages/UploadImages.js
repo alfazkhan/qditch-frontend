@@ -5,6 +5,7 @@ import Colors from '../../../../Constants/Colors'
 import { withRouter } from 'react-router-dom'
 import ImageUploader from 'react-images-upload';
 import Axios from '../../../../Axios'
+
 import { connect } from 'react-redux'
 import Heading from '../../../../Components/Heading/Heading';
 import * as Validator from '../../../../Validator'
@@ -117,8 +118,7 @@ class UploadImages extends Component {
         return true
 
     }
-
-
+        
     submitHandler = () => {
         console.table(this.state.Pictures)
         let url = ''
@@ -129,22 +129,23 @@ class UploadImages extends Component {
                 const pictures = this.state.Pictures
                 // console.log(pictures[0])
                 for (var i = 0; i < pictures.length; i++) {
+                    
                     var data = new FormData();
-                    data.append('blob_data', pictures[i]);
+                    data.append('blob_data', pictures[i],pictures[i].name);
                     data.append('business', this.state.business_id);
                     data.append('cover', i == 0 ? 'true' : 'false');
                     // const data = {
-                    //     // "blob_data": pictures[i],
+                    //     "blob_data": await toBase64(pictures[i]),
                     //     "business": this.state.business_id,
                     //     "cover": i == 0 ? 'true' : 'false',
-                    //     ...form
                     // }
+                    
                     Axios.post(url, data)
                         .then((res) => {
                             console.log(res)
                             this.props.toggleLoading(false)
                             if (i === pictures.length) {
-                                this.pageChangeHandler()
+                                // this.pageChangeHandler()
                             }
 
                         })
