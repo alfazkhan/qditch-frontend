@@ -24,30 +24,41 @@ class Profile extends Component {
 
     state = {
         name: "",
+        number: "",
+        email: ""
     }
 
     componentDidMount() {
         const DetailID = this.props.user_detail_id
         const business_id = this.props.business_id
-
+        const user_id = this.props.user_id
         if(!this.props.loggedIn){
 
-            this.props.history.push('/')
+            this.props.history.push('/') 
         }
-        
 
-        console.log(this.props.user_detail_id)
-        console.log(this.props.user_id)
+
+        // console.log(this.props.user_detail_id)
+        // console.log(this.props.user_id)
         // const DetailID = 4
 
         // console.log(ID)
-        Axios.get('/api/users/user_details/' + DetailID + '/')
+        Axios.get('/api/users/user_details/' + business_id + '/')
             .then(res => {
+                console.log(res.data)
                 this.setState({
                     name: res.data.first_name + ' ' + res.data.last_name,
-
+                    number: res.data.mobile_number
                 })
             })
+
+        Axios.get('/api/users/user/'+user_id+'/')
+        .then(res=>{
+            console.log(res.data)
+            this.setState({
+                email: res.data.email
+            })
+        })
     }
 
 
@@ -63,6 +74,12 @@ class Profile extends Component {
                         </div>
                         <div className="row" >
                             <Heading text={this.state.name} />
+                        </div>
+                        <div className="row">
+                            {this.state.number}
+                        </div>
+                        <div className="row">
+                            {this.state.email}
                         </div>
                         <div className="row mt-5">
                             <Button variant="contained" size="small" color="secondary" onClick={this.props.logout} >
