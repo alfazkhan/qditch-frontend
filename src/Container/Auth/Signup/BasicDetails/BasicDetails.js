@@ -26,7 +26,7 @@ class BasicDetails extends Component {
             confirm_password: ''
         },
         Mode: '',
-        emails:[],
+        emails: [],
         Request: 'register',
         errors: false,
         messages: []
@@ -38,25 +38,30 @@ class BasicDetails extends Component {
         this.setState({ Mode: mode, role: role })
 
         Axios.get('/api/users/user/')
-        .then(res=>{
-            const data = res.data
-            const emails=[]
-            for(var key in data){
-                emails.push(data[key].email.toUpperCase())
-            }
-            this.setState({emails:emails})
-        })
+            .then(res => {
+                const data = res.data
+                const emails = []
+                for (var key in data) {
+                    emails.push(data[key].email.toLowerCase())
+                }
+                this.setState({ emails: emails })
+            })
     }
 
-   
+
     valueChangeHandler = (event, param = "null") => {
         const field = param === 'gender' ? event.target.value : event.target.id
         const newValues = this.state.values
         if (param === 'gender') {
             newValues.gender = field
-        }else if(event.target.id === "email"){
-            newValues.email = event.target.value
-        } 
+        } else if (event.target.id === "mobile_number") {
+            
+            if (this.state.values.mobile_number.length >= 0) {
+                Validator.isNumber(event.target.value)
+                    ? newValues.mobile_number = event.target.value
+                    : newValues.mobile_number=  event.target.value.slice(0, -1)
+            }
+        }
         else {
             newValues[field] = event.target.value
         }
@@ -90,51 +95,51 @@ class BasicDetails extends Component {
         const messages = []
         const emails = this.state.emails
         // const emailValues = this.state.values.email
-        
+
         //First Name
         !Validator.isPresent(values['first_name']) ? messages.push("First Name is Empty") : console.log()
         //Last Name
         !Validator.isPresent(values['last_name']) ? messages.push("Last Name is Empty") : console.log()
         //Email
-        !Validator.isPresent(values['email']) ? messages.push("Email Field is Empty") 
-        : !Validator.emailFormat(values['email'])? messages.push("Wrong Email Format") : console.log()
-        for(var key in emails){
-            values['email']=values['email'].toUpperCase()
-            Validator.equalValues(values['email'],emails[key]) ? messages.push("Email Already Associated with a User") : console.log()
+        !Validator.isPresent(values['email']) ? messages.push("Email Field is Empty")
+            : !Validator.validEmailFormat(values['email']) ? messages.push("Wrong Email Format") : console.log()
+        for (var key in emails) {
+            values['email'] = values['email'].toLowerCase()
+            Validator.equalValues(values['email'], emails[key]) ? messages.push("Email Already Associated with a User") : console.log()
         }
-        
+
 
         //Phone
-        !Validator.isPresent(values['mobile_number']) ? messages.push("Mobile Number Field is Empty") 
-        : !Validator.validLength(values['mobile_number'],10) ? messages.push("Mobile Number should be of 10 Digits") : console.log()
-        
+        !Validator.isPresent(values['mobile_number']) ? messages.push("Mobile Number Field is Empty")
+            : !Validator.validLength(values['mobile_number'], 10) ? messages.push("Mobile Number should be of 10 Digits") : console.log()
+
         //Password
-        !Validator.isPresent(values['password']) ? messages.push("Password Field is Empty") 
-        : !Validator.validLength(values['password'],6) ? messages.push("Password should be of 6 Characters") 
-        : !Validator.equalValues(values['confirm_password'],values['password']) ? messages.push("Password and Confirm Password Should be Same") : console.log()
-        
+        !Validator.isPresent(values['password']) ? messages.push("Password Field is Empty")
+            : !Validator.validLength(values['password'], 6) ? messages.push("Password should be of 6 Characters")
+                : !Validator.equalValues(values['confirm_password'], values['password']) ? messages.push("Password and Confirm Password Should be Same") : console.log()
+
         //ConfirmPassword
-        
 
 
 
-        if(messages.length !== 0){
+
+        if (messages.length !== 0) {
             this.setState({ messages: messages, errors: true })
             return false
         }
-        this.setState({errors:false})
+        this.setState({ errors: false })
         return true
 
     }
 
-    errorHandler=()=>{
+    errorHandler = () => {
 
     }
 
     submitHandler = () => {
         console.table(this.state.values)
-        if(this.validateData()){
-            
+        if (this.validateData()) {
+
             const url = 'api/users/user/'
             const url2 = 'api/users/user_details/'
             const gender = this.state.values.gender === 'Male' ? 'M' : 'F'
@@ -171,7 +176,7 @@ class BasicDetails extends Component {
                                 this.props.toggleLoading(false)
                                 console.log(error.response.data);
                                 // const error = error.response.data
-    
+
                             });
                     })
                     .catch((error) => {
@@ -180,9 +185,9 @@ class BasicDetails extends Component {
                         this.errorHandler(error.response.data)
                     });
             }
-    
+
         }
-        
+
     }
 
 

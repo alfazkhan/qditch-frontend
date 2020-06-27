@@ -20,11 +20,15 @@ export const equalValues = (param1,param2)=>{
     return true
 }
 
-export const emailFormat=(mail)=> 
+export const validEmailFormat=(mail)=> 
 {
  if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail))
   {
     return (true)
   }
     return (false)
+}
+
+export const isNumber = (n) =>{
+    return /^-?[\d.]+(?:e-?\d+)?$/.test(n);
 }

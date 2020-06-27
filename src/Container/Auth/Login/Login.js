@@ -53,8 +53,9 @@ export class Login extends Component {
     // const emailValues = this.state.values.email
 
     //Email
-    !Validator.isPresent(values['email']) ? messages.push("Email Field is Empty") : console.log()
-    !Validator.emailFormat(values['email'])? messages.push("Wrong Email Format") : console.log()
+    !Validator.isPresent(values['email']) ? messages.push("Email Field is Empty") 
+    : !Validator.validEmailFormat(values['email'])? messages.push("Wrong Email Format") : console.log()
+    
 
     //Password
     !Validator.isPresent(values['password']) ? messages.push("Password Field is Empty") : console.log()
@@ -85,7 +86,7 @@ export class Login extends Component {
     if (this.validateData()) {
       // console.table(this.state.values)
       const data = JSON.stringify({
-        "email": this.state.values.email.toUpperCase(),
+        "email": this.state.values.email.toLowerCase(),
         "password": this.state.values.password
       })
       const url = 'https://master.qditch.com/custom/login/'
