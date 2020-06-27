@@ -10,44 +10,26 @@ import Reducer from './store/Reducers/Reducer'
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import { PersistGate } from 'redux-persist/integration/react'
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 
 const persistConfig = {
   key: 'root',
-  storage,
+  storage
 }
 const persistedReducer = persistReducer(persistConfig, Reducer)
 let store = createStore(persistedReducer)
 let persistor = persistStore(store)
+console.log(storage)
 
-function select(state) {
-  return state.some.deep.property
-}
 
-let currentValue
-function handleChange() {
-  let previousValue = currentValue
-  currentValue = select(store.getState())
-
-  if (previousValue !== currentValue) {
-    console.log(
-      'Some deep nested property changed from',
-      previousValue,
-      'to',
-      currentValue
-    )
-  }
-}
-
-const unsubscribe = store.subscribe(handleChange)
-unsubscribe()
 ReactDOM.render(
   <Provider store={store}>
-    <PersistGate loading={null} persistor={persistor}>
-      <BrowserRouter>
-          <App />
-      </BrowserRouter>
-    </PersistGate>
+    <BrowserRouter>
+      <PersistGate loading={<CircularProgress/>} persistor={persistor}>
+        <App />
+      </PersistGate>
+    </BrowserRouter>
   </Provider>,
   document.getElementById('root')
 );

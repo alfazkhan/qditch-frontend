@@ -7,7 +7,7 @@ export const isPresent = (param) => {
 }
 
 export const validLength = (param,length)=>{
-    if(param.length !== length){
+    if(param.length < length){
         return false
     }
     return true

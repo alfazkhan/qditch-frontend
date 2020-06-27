@@ -195,7 +195,7 @@ class ServiceSelect extends Component {
         return (
             <div className="container" style={styles.screen}>
                 <Heading text="Select Services" />
-                <div className="list" style={{ width: '100%', height: window.innerHeight / 3, overflowX: 'hidden' }}>
+                <div className="" style={{ width: '100%', height: window.innerHeight / 3}}>
                     {this.state.List}
                 </div>
                 <div>

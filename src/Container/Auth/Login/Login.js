@@ -53,9 +53,9 @@ export class Login extends Component {
     // const emailValues = this.state.values.email
 
     //Email
-    !Validator.isPresent(values['email']) ? messages.push("Email Field is Empty") 
-    : !Validator.validEmailFormat(values['email'])? messages.push("Wrong Email Format") : console.log()
-    
+    !Validator.isPresent(values['email']) ? messages.push("Email Field is Empty")
+      : !Validator.validEmailFormat(values['email']) ? messages.push("Wrong Email Format") : console.log()
+
 
     //Password
     !Validator.isPresent(values['password']) ? messages.push("Password Field is Empty") : console.log()
@@ -109,11 +109,11 @@ export class Login extends Component {
 
 
         })
-        .catch(e=>{
+        .catch(e => {
           const messages = []
           messages.push("Incorrect Email/Password")
-          this.setState({messages:messages,errors:true})
-          
+          this.setState({ messages: messages, errors: true })
+
         })
 
     }
@@ -134,7 +134,10 @@ export class Login extends Component {
                   return <li key={i}>{item}</li>
                 })}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
+                  <span aria-hidden="true" onClick={() => {
+                    const error = !this.state.errors
+                    this.setState({ errors: error })
+                  }}>&times;</span>
                 </button>
               </div>
               : null

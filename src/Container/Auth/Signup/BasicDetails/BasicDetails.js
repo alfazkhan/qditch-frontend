@@ -115,7 +115,7 @@ class BasicDetails extends Component {
 
         //Password
         !Validator.isPresent(values['password']) ? messages.push("Password Field is Empty")
-            : !Validator.validLength(values['password'], 6) ? messages.push("Password should be of 6 Characters")
+            : !Validator.validLength(values['password'], 6) ? messages.push("Password should be atleast 6 Characters")
                 : !Validator.equalValues(values['confirm_password'], values['password']) ? messages.push("Password and Confirm Password Should be Same") : console.log()
 
         //ConfirmPassword
@@ -202,7 +202,10 @@ class BasicDetails extends Component {
                             return <li key={i}>{item}</li>
                         })}
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
+                            <span aria-hidden="true" onClick={()=>{
+                                const error = !this.state.errors
+                                this.setState({errors:error})
+                            }}>&times;</span>
                         </button>
                     </div>
                     : null
@@ -256,6 +259,7 @@ class BasicDetails extends Component {
                         variant="outlined"
                         margin="normal"
                         required
+                        type="number"
                         rowsMax={2}
                         id="mobile_number"
                         label="Phone(+91)"
