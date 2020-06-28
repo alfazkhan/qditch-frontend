@@ -132,15 +132,20 @@ class UploadImages extends Component {
                     
                     var data = new FormData();
                     data.append('blob_data', pictures[i],pictures[i].name);
-                    data.append('business', this.state.business_id);
+                    data.append('business', 3);
                     data.append('cover', i == 0 ? 'true' : 'false');
                     // const data = {
-                    //     "blob_data": await toBase64(pictures[i]),
-                    //     "business": this.state.business_id,
+                    //     "blob_data": pictures[i],
+                    //     "business": 3,
                     //     "cover": i == 0 ? 'true' : 'false',
                     // }
+                    const config = {
+                        headers: {
+                            'content-type': 'multipart/form-data'
+                        }
+                    }
                     
-                    Axios.post(url, data)
+                    Axios.post(url, data,config)
                         .then((res) => {
                             console.log(res)
                             this.props.toggleLoading(false)
