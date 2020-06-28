@@ -239,7 +239,7 @@ class ServiceSelect extends Component {
     }
 
     submitHandler = () => {
-        // console.log(!this.validateData())
+        console.log(this.state.customServices)
         if (this.validateData()) {
             this.props.toggleLoading(true)
             let url = 'api/service/business_services/'
@@ -259,7 +259,7 @@ class ServiceSelect extends Component {
                     "buffer_time": "null"
 
                 })
-               promises[i]= Axios.post(url, data)
+                promises[i] = Axios.post(url, data)
                     .then(res => {
                         console.log(res.data)
                     })
@@ -267,7 +267,7 @@ class ServiceSelect extends Component {
                         console.log(e.response)
                     })
             }
-            for(var key in customServices){
+            for (var key in customServices) {
                 console.log(customServices[key])
                 url = 'api/service/custom_business_services/'
                 const data = {
@@ -275,25 +275,26 @@ class ServiceSelect extends Component {
                     "service_name": customServices[key].name,
                     "business_service_price": parseInt(customServices[key].prices),
                     "business_service_duration": customServices[key].durations,
+                    "category": customServices[key].category
                 }
                 promises.push(
-                    Axios.post(url,data)
-                    .then(res=>{
-                        console.log(res.data)
-                    })
-                    .catch(e => {
-                        console.log(e.response)
-                    })
+                    Axios.post(url, data)
+                        .then(res => {
+                            console.log(res.data)
+                        })
+                        .catch(e => {
+                            console.log(e.response)
+                        })
                 )
             }
 
             Promise.allSettled(promises)
-            .then(res=>{
-                this.props.toggleLoading(false)
-                console.log("All Data Sent")
-                this.pageChangeHandler()
+                .then(res => {
+                    this.props.toggleLoading(false)
+                    console.log("All Data Sent")
+                    this.pageChangeHandler()
 
-            })
+                })
 
         }
 
@@ -302,6 +303,12 @@ class ServiceSelect extends Component {
 
     addCustomServiceField = () => {
         const customServicesList = this.state.customServicesList
+        const catNames=this.state.category_names
+        const cats = []
+        for(var key in catNames){
+            console.log(key)
+            cats.push(<MenuItem key={key} name={"categories"} value={[key,this.state.customServiceElementNumber]}>{catNames[key]}</MenuItem>)
+        }
         const serviceItem = (
             <Box>
                 <div className="row mt-3" key={new Date()}>
@@ -316,6 +323,18 @@ class ServiceSelect extends Component {
                         autoComplete=""
                         className="col-md"
                     />
+                    <FormControl variant="outlined" className="col-sm">
+                        <InputLabel>Select Category</InputLabel>
+                        <Select
+                            name='category'
+                            onChange={this.customServicesValueHandler}
+                            label="Select Category"
+                            className="col-md"
+                        >
+                            {cats}
+                            
+                        </Select>
+                    </FormControl>
                     <TextField
                         variant="outlined"
                         // margin="normal"
@@ -364,6 +383,13 @@ class ServiceSelect extends Component {
     }
 
     customServicesValueHandler = (e) => {
+        if(e.target.name === "category"){
+            console.log(e.target.value)
+            const customService = this.state.customServices
+            customService[e.target.value[1]] = {...customService[e.target.value[1]], "category": e.target.value[0] }
+            this.setState({ customServices: customService })
+            return true
+        }
         const customService = this.state.customServices
         const index = e.target.id.split(':')[0]
         const name = e.target.id.split(':')[1]
@@ -392,7 +418,7 @@ class ServiceSelect extends Component {
 
         }
         // console.log(customService)
-        this.setState({customServices: customService})
+        this.setState({ customServices: customService })
     }
 
 

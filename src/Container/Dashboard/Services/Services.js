@@ -13,18 +13,32 @@ export class Services extends Component {
         prices: [],
         durations: [],
         lists: [],
-        buffers: [],
+        ids: [],
         data: { ...this.props.data },
         Loading: true,
-        categoriesName: [],
-        customServices:[],
-        customList:[]
+        categoriesName: {},
+        customServices: [],
+        customList: []
     }
 
     componentDidMount() {
         const service_id = this.state.data['business_services']
         const catNames = this.state.categoriesName
         const customServices = this.state.data.custom_business_services
+        Axios.get('api/category/categories/')
+            .then(response => {
+                // console.log(response.data)
+                for (var key in response.data) {
+                    catNames[response.data[key].id] = response.data[key].name
+                }
+                this.setState({
+                    categoriesName: catNames
+                }, () => {
+                    this.setState({ customServices: customServices }, () => {
+                        this.setcustomServices()
+                    })
+                })
+            })
         for (var key in service_id) {
             Axios.get('api/service/business_services/' + service_id[key] + '/')
                 .then(res1 => {
@@ -34,29 +48,21 @@ export class Services extends Component {
                             const services = this.state.services
                             const duration = this.state.durations
                             const price = this.state.prices
-                            const buffer = this.state.buffers
-                            // console.log(res2.data)
+                            const ids = this.state.ids
+                            // console.log(res2.data.categories)
                             services.push(res2.data.name)
                             duration.push(res1.data.business_service_duration)
                             price.push(res1.data.business_service_price)
-                            buffer.push(res1.data.buffer_time)
-                            Axios.get('api/category/categories/' + res2.data.categories + '/')
-                                .then(res3 => {
-                                    // console.log(res3.data.name)
-                                    catNames.push(res3.data.name)
-                                    this.setState({
-                                        services: services,
-                                        durations: duration,
-                                        prices: price,
-                                        buffers: buffer,
-                                        categoriesName: catNames
-                                    }, () => {
-                                        this.setServiceTable()
-                                    })
-                                })
-                                .catch(e => {
-                                    console.log(e.response)
-                                })
+                            ids.push(res2.data.categories)
+                            this.setState({
+                                services: services,
+                                durations: duration,
+                                prices: price,
+                                ids: ids
+                            }, () => {
+                                this.setServiceTable()
+                            })
+
                         })
                         .catch(e => {
                             console.log(e.response)
@@ -66,21 +72,22 @@ export class Services extends Component {
                     console.log(e.response)
                 })
         }
-        this.setState({customServices: customServices},()=>{
-            this.setcustomServices()
-        })
+
 
     }
 
 
-    setcustomServices=()=>{
+    setcustomServices = () => {
         const List = []
         const customServices = this.state.customServices
+
         for (var key = 0; key < customServices.length; key++) {
+            console.log(this.state.categoriesName[customServices[key].category])
             List.push(
                 <tr>
                     <th scope="row">{key + 1}</th>
                     <td>{customServices[key].service_name}</td>
+                    <td>{this.state.categoriesName[customServices[key].category]}</td>
                     <td> {customServices[key].business_service_duration} </td>
                     <td>{customServices[key].business_service_price} </td>
                 </tr>
@@ -101,13 +108,14 @@ export class Services extends Component {
         const services = this.state.services
         const duration = this.state.durations
         const price = this.state.prices
-        const buffer = this.state.buffers
+        const ids = this.state.ids
+
         for (var key = 0; key < services.length; key++) {
             List.push(
                 <tr>
                     <th scope="row">{key + 1}</th>
                     <td>{services[key]}</td>
-                    <td>{this.state.categoriesName[key]}</td>
+                    <td>{this.state.categoriesName[ids[key]]}</td>
                     <td> {duration[key]} </td>
                     <td>{price[key]} </td>
                 </tr>
@@ -126,36 +134,37 @@ export class Services extends Component {
         return (
             <div className="container">
                 {this.state.Loading ? <CircularProgress /> :
-                <div>
-                    <Heading text = "Saloon Services" />
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Service</th>
-                                <th scope="col">Category</th>
-                                <th scope="col">Duration</th>
-                                <th scope="col">Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {this.state.lists}
-                        </tbody>
-                    </table>
-                    <Heading text = "Saloon Custom Services" />
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Service</th>
-                                <th scope="col">Duration</th>
-                                <th scope="col">Price</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {this.state.customList}
-                        </tbody>
-                    </table>
+                    <div>
+                        <Heading text="Saloon Services" />
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Service</th>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">Duration</th>
+                                    <th scope="col">Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.state.lists}
+                            </tbody>
+                        </table>
+                        <Heading text="Saloon Custom Services" />
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Service</th>
+                                    <th scope="col">Category</th>
+                                    <th scope="col">Duration</th>
+                                    <th scope="col">Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.state.customList}
+                            </tbody>
+                        </table>
                     </div>
                 }
             </div>

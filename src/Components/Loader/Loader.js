@@ -5,12 +5,12 @@ import { Box } from '@material-ui/core';
 
 export const Loader = () => {
     return (
-        <div className="container mx-auto" style={styles.container}>
+        <div className="container" style={styles.screen}>
             <Box>
 
                 <CircularProgress
                     size={100}
-                    className="mx-auto my-5"
+                    className="mx-auto"
                     // style={{marginLeft:window.innerWidth/2}}
                 />
             </Box>
