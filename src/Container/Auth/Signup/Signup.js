@@ -22,17 +22,17 @@ class Signup extends Component {
         Progress: 0,
         screen: null,
         Loading: false,
-        fade : false
+        fade: false
     }
 
     componentDidMount() {
 
         const Mode = this.props.match.params.mode
         this.setState({ Mode: Mode })
-        this.screenHandler('BasicDetails') 
-       setTimeout(()=>{
-           this.setState({fade: true})
-       })
+        this.screenHandler('BasicDetails')
+        setTimeout(() => {
+            this.setState({ fade: true })
+        })
     }
 
     toggleLoadingHandler = (value) => {
@@ -53,22 +53,22 @@ class Signup extends Component {
                 this.setState({ screen: <SaloonInfoForm nextScreen={this.screenHandler} changeProgress={this.changeProgressHandler} toggleLoading={this.toggleLoadingHandler} /> })
                 break;
             case 'SetTimings':
-                this.setState({screen: <SetTimings nextScreen={this.screenHandler} changeProgress={this.changeProgressHandler} toggleLoading={this.toggleLoadingHandler} mode={this.props.match.params.mode} />})
+                this.setState({ screen: <SetTimings nextScreen={this.screenHandler} changeProgress={this.changeProgressHandler} toggleLoading={this.toggleLoadingHandler} mode={this.props.match.params.mode} /> })
                 break;
             case 'CategorySelect':
                 this.setState({ screen: <CategorySelect nextScreen={this.screenHandler} changeProgress={this.changeProgressHandler} toggleLoading={this.toggleLoadingHandler} Loading={this.state.Loading} /> })
                 break;
             case 'ServiceSelect':
-                this.setState({screen: <ServiceSelect nextScreen={this.screenHandler} changeProgress={this.changeProgressHandler} toggleLoading={this.toggleLoadingHandler} />})
+                this.setState({ screen: <ServiceSelect nextScreen={this.screenHandler} changeProgress={this.changeProgressHandler} toggleLoading={this.toggleLoadingHandler} /> })
                 break;
             case 'StylistSelect':
-                this.setState({screen: <StylistSelect nextScreen={this.screenHandler} changeProgress={this.changeProgressHandler} toggleLoading={this.toggleLoadingHandler} />})
+                this.setState({ screen: <StylistSelect nextScreen={this.screenHandler} changeProgress={this.changeProgressHandler} toggleLoading={this.toggleLoadingHandler} /> })
                 break;
             case 'SafetyFeatures':
-                this.setState({screen: <SafetyFeatures nextScreen={this.screenHandler} changeProgress={this.changeProgressHandler} toggleLoading={this.toggleLoadingHandler} />})
+                this.setState({ screen: <SafetyFeatures nextScreen={this.screenHandler} changeProgress={this.changeProgressHandler} toggleLoading={this.toggleLoadingHandler} /> })
                 break;
             case 'UploadImages':
-                this.setState({screen: <UploadImages nextScreen={this.screenHandler} changeProgress={this.changeProgressHandler} toggleLoading={this.toggleLoadingHandler} mode={this.props.match.params.mode} />})
+                this.setState({ screen: <UploadImages nextScreen={this.screenHandler} changeProgress={this.changeProgressHandler} toggleLoading={this.toggleLoadingHandler} mode={this.props.match.params.mode} /> })
                 break;
             default:
                 console.log("Load Failed")
@@ -81,8 +81,17 @@ class Signup extends Component {
         return (
             <div className="container mx-auto" style={styles.container}>
                 <Box className="signup-box">
-                    <LinearProgress variant="determinate" value={this.state.Progress} style={{height:20}} color="primary" />
-                    {this.state.Loading ? <CircularProgress style={styles.Loader} /> : this.state.screen}
+                    <LinearProgress variant="determinate" value={this.state.Progress} style={{ height: 20 }} color="primary" />
+                    {this.state.Loading
+                        ? <div className="mx-auto text-center">
+                            <div className="row">
+                                <CircularProgress className="mx-auto" style={styles.Loader} />
+                            </div>
+                            <div className="row">
+                                <strong className="mx-auto">Processing Data Please Wait... </strong>
+                            </div>
+                        </div>
+                        : this.state.screen}
                 </Box>
             </div>
         )
@@ -94,7 +103,7 @@ const styles = {
         marginTop: window.innerHeight / 6,
         width: window.innerWidth < 768 ? '100%' : '50%',
     },
-    Loader:{
+    Loader: {
         marginTop: '40px'
     }
 }

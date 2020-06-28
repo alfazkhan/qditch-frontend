@@ -5,7 +5,7 @@ import { Box } from '@material-ui/core';
 
 export const Loader = () => {
     return (
-        <div className="container mx-auto" style={styles.container}>
+        <div className="container mx-auto" style={styles.screen}>
             <Box>
 
                 <CircularProgress

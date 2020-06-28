@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TextField, Button } from '@material-ui/core'
+import { TextField, Button, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
 // import './CategorySelect.css'
 import Colors from '../../../../Constants/Colors'
 import Axios from '../../../../Axios'
@@ -16,7 +16,8 @@ class StylistSelect extends Component {
         currentNumber: 0,
         business_id: null,
         messages: [],
-        errors: false
+        errors: false,
+        Titles: []
     }
 
     componentDidMount() {
@@ -26,33 +27,67 @@ class StylistSelect extends Component {
     }
 
     addNewStylistField = () => {
-        if(this.state.Stylists.length < this.state.List.length){
+        if (this.state.Stylists.length < this.state.List.length) {
             const messages = this.state.messages
             messages.push("Enter Values in Exsisting Fields")
-            this.setState({messages:messages,errors:true})
-        }else{
+            this.setState({ messages: messages, errors: true })
+        } else {
             const List = this.state.List
             const currentNumber = this.state.currentNumber + 1
             this.setState({ currentNumber: currentNumber }, () => {
-                const newStylist = <div className="row mt-3">
-                    <TextField
-                        variant="outlined"
-                        // margin="normal"
-                        onChange={this.valueChangeHandler}
-                        required
-                        id={this.state.currentNumber}
-                        label={"Stylist Name"}
-                        name="sal-name"
-                        autoComplete=""
-                        className="col ml-5 mr-5"
-                    />
-    
-                </div>
+                const newStylist = <tr><td className="p-0">
+                    <FormControl variant="outlined" className="col-sm text-center">
+                        <InputLabel>Title</InputLabel>
+                        <Select
+                            name={this.state.currentNumber}
+                            // value={this.state.currentNumber}
+                            onChange={this.titleChangeHandler}
+                            label="Title"
+                            className="col-12 mt-1"
+                            required
+                            placeholder="title"
+                            margin="none"
+                        >
+
+                            {/* <MenuItem key={new Date()} name={"None"} value={"none"} disabled>None</MenuItem> */}
+                            <MenuItem key={new Date()} name={"Mr"} value={"Mr."}>Mr.</MenuItem>
+                            <MenuItem key={new Date()} name={"Mr"} value={"Ms."}>Ms.</MenuItem>
+                            <MenuItem key={new Date()} name={"Mr"} value={"Mrs."}>Mrs.</MenuItem>
+                        </Select>
+                    </FormControl>
+                </td>
+                    <td className="pl-3 ml-2 ">
+                        <TextField
+                            variant="outlined"
+                            margin="none"
+                            onChange={this.valueChangeHandler}
+                            required
+                            id={this.state.currentNumber}
+                            label={"Stylist Name"}
+                            name="sal-name"
+                            autoComplete=""
+                            className="col-12 w-100"
+                        />
+
+                    </td></tr>
                 List.push(newStylist)
                 this.setState({ List: List })
             })
         }
-        
+
+
+
+    }
+
+    titleChangeHandler = (e) => {
+        const value = e.target.value
+        const id = e.target.name
+        const titles = this.state.Titles
+
+        titles[id - 1] = value
+        this.setState({
+            Titles : titles
+        })
 
 
     }
@@ -73,7 +108,7 @@ class StylistSelect extends Component {
         this.props.nextScreen('SafetyFeatures')
     }
 
-    ordinal=(number)=> {
+    ordinal = (number) => {
         const english_ordinal_rules = new Intl.PluralRules("en", {
             type: "ordinal"
         });
@@ -95,19 +130,23 @@ class StylistSelect extends Component {
         //Names
         for (var key in this.state.currentNumber) {
             console.log(stylists[key])
-            if(!stylists[key]){
+            if (!stylists[key]) {
                 console.log("Not")
             }
             stylists[key] === null ? messages.push("Error: Empty Name of Stylist") : console.log()
         }
 
-        for (var key in this.state.Stylists){
-            if(stylists[key]===""){
+        if (this.state.Stylists.length > this.state.Titles.length) {
+            messages.push("Select Title of Stylists")
+        }
+
+        for (var key in this.state.Stylists) {
+            if (stylists[key] === "") {
                 messages.push("Error: Empty Field")
             }
         }
 
-        if(stylists.length < this.state.List.length){
+        if (stylists.length < this.state.List.length) {
             messages.push("Error: Empty Field")
         }
 
@@ -126,13 +165,14 @@ class StylistSelect extends Component {
         if (this.validateData()) {
             this.props.toggleLoading(true)
             const stylists = this.state.Stylists
+            const title = this.state.Titles
             const url = 'api/stylist/stylist_details/'
             // console.log(stylists)
             for (var i = 0; i < stylists.length; i++) {
 
                 const data = {
                     "business": this.state.business_id,
-                    "name": stylists[i]
+                    "name": title[i]+" "+stylists[i]
                 }
                 console.log(data)
                 Axios.post(url, data)
@@ -178,7 +218,17 @@ class StylistSelect extends Component {
                 }
 
                 <div className="list" style={{ width: '100%', height: window.innerHeight / 3, overflowX: 'hidden' }}>
-                    {this.state.List}
+                    <table class="table table-borderless table-sm">
+                        <thead>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {this.state.List}
+                        </tbody>
+                    </table>
                 </div>
                 <div>
                     <Button variant="contained" size="small" color="primary" className="mt-4" onClick={this.addNewStylistField}>

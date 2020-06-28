@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 // import './BasicDetails.css'
-import { Button } from '@material-ui/core'
+import { Button, Box } from '@material-ui/core'
 import Colors from '../../../../Constants/Colors'
 import { withRouter } from 'react-router-dom'
 import ImageUploader from 'react-images-upload';
@@ -23,7 +23,8 @@ class UploadImages extends Component {
         business_id: null,
         user_id: null,
         messages: [],
-        errors: false
+        errors: false,
+        requestNumber: 0
     }
 
     ordinal = (number) => {
@@ -41,52 +42,61 @@ class UploadImages extends Component {
     }
 
     componentDidMount = () => {
-        // console.log(this.props.mode)
-        const mode = this.props.mode
+        // this.props.toggleLoading(true)
+        //     console.log(this.props.mode)
+        //     const mode = this.props.mode
 
 
 
-        let imageCount = 0
-        if (mode === 'User') {
-            imageCount = 1
-            this.setState({ user_id: this.props.user_id })
-        }
-        else {
-            imageCount = 5
-            this.setState({ business_id: this.props.business_id, user_id: this.props.user_id })
-        }
-        const inputFields = this.state.inputFields
-        for (var i = 0; i < imageCount; i++) {
-            inputFields.push(<form key={i}>
-                <div class="form-group col-md">
-                    {/* <ImageUploader
-                        withIcon={false}
-                        buttonText={'Select Image'}
-                        onChange={this.valueChangeHandler}
-                        singleImage={true}
-                        withPreview={true}
-                        withLabel={false}
-                        // imgExtension={['.jpg', '.gif', '.png', '.gif', '.jpeg']}
-                        maxFileSize={5242880}
-                    /> */}
-                    <div class="row">
-                        <label for="exampleFormControlFile1">{"Select Image"}</label>
-                        <input type="file" class="form-control-file" id="exampleFormControlFile1" onChange={this.valueChangeHandler} />
-                    </div>
-                </div>
-            </form>)
-        }
-        this.setState({ inputFields: inputFields, Mode: mode }, () => {
-            // console.log(this.state)
-        })
+        //     let imageCount = 0
+        //     if (mode === 'User') {
+        //         imageCount = 1
+        //         this.setState({ user_id: this.props.user_id })
+        //     }
+        //     else {
+        //         imageCount = 5
+        this.setState({ business_id: this.props.business_id, user_id: this.props.user_id })
+        //     }
+        //     const inputFields = this.state.inputFields
+        //     for (var i = 0; i < imageCount; i++) {
+        //         inputFields.push(
+        //             <div class="row" key={i}>
+        //                 <ImageUploader
+        //                     withIcon={false}
+        //                     buttonText={i === 0 ? "Select Cover Image" : 'Select Sub Image'}
+        //                     className={i === 0 ? "col-12 h-100" : "col-7 h-50" + " mx-auto"}
+        //                     buttonStyles={{ background: 'black' }}
+        //                     fileSizeError={"File Size is To Big Please Select Image Smaller than 5 MB"}
+        //                     fileTypeError={"Sorry! This File Format is Not Supported"}
+        //                     onChange={this.valueChangeHandler}
+        //                     singleImage={true}
+        //                     withPreview={true}
+        //                     withLabel={false}
+        //                     label={"Select Some Beautiful Images of your Saloon to Showcase"}
+        //                     labelStyles={{ fontSize: 20 }}
+        //                     imgExtension={['.jpg', '.gif', '.png', '.gif', '.jpeg']}
+        //                     maxFileSize={5242880}
+        //                 />
+        //                 <div class="row">
+        //                     <label for="exampleFormControlFile1">{"Select Image"}</label>
+        //                     <input type="file" class="form-control-file" id="exampleFormControlFile1" onChange={this.valueChangeHandler} />
+        //                 </div>
+        //             </div>)
+        //     }
+        //     this.setState({ inputFields: inputFields, Mode: mode }, () => {
+        //         console.log(this.state)
+        //     })
     }
 
+    randomColor = () => {
+        return '#' + Math.floor(Math.random() * 16777215).toString(16);
+    }
 
     valueChangeHandler = (picture) => {
-        console.log(picture.target.files[0])
+        console.log(picture[0])
 
         const pictures = this.state.Pictures
-        pictures.push(picture.target.files[0])
+        pictures.push(picture[0])
         this.setState({ Pictures: pictures })
 
     }
@@ -118,50 +128,56 @@ class UploadImages extends Component {
         return true
 
     }
-        
+
     submitHandler = () => {
         console.table(this.state.Pictures)
         let url = ''
         if (this.validateData()) {
             this.props.toggleLoading(true)
-            if (this.state.Mode === 'Business') {
-                url = 'api/images/business_image/'
-                const pictures = this.state.Pictures
-                // console.log(pictures[0])
-                for (var i = 0; i < pictures.length; i++) {
-                    
-                    var data = new FormData();
-                    data.append('blob_data', pictures[i],pictures[i].name);
-                    data.append('business', 3);
-                    data.append('cover', i == 0 ? 'true' : 'false');
-                    // const data = {
-                    //     "blob_data": pictures[i],
-                    //     "business": 3,
-                    //     "cover": i == 0 ? 'true' : 'false',
-                    // }
-                    const config = {
-                        headers: {
-                            'content-type': 'multipart/form-data'
-                        }
-                    }
-                    
-                    Axios.post(url, data,config)
-                        .then((res) => {
-                            console.log(res)
-                            this.props.toggleLoading(false)
-                            if (i === pictures.length) {
-                                // this.pageChangeHandler()
-                            }
+            url = 'api/images/business_image/'
+            const pictures = this.state.Pictures
+            // console.log(pictures[0])
+            let promises = []
+            for (var i = 0; i < pictures.length; i++) {
 
-                        })
-                        .catch((e) => {
-                            console.log(e.response)
-                            this.props.toggleLoading(false)
-                        })
+                var data = new FormData();
+                data.append('blob_data', pictures[i], pictures[i].name);
+                data.append('business', this.state.business_id);
+                data.append('cover', i == 0 ? 'true' : 'false');
+                // const data = {
+                //     "blob_data": pictures[i],
+                //     "business": 3,
+                //     "cover": i == 0 ? 'true' : 'false',
+                // }
+                const config = {
+                    headers: {
+                        'content-type': 'multipart/form-data'
+                    }
                 }
 
+                console.log("object")
 
+                promises[i]=Axios.post(url, data, config)
+                    .then((res) => {
+                        console.log(res)
+
+                    })
+                    .catch((e) => {
+                        console.log(e.response)
+                        // this.props.toggleLoading(false)
+                    })
             }
+
+            Promise.allSettled(promises)
+            .then(res=>{
+                this.props.toggleLoading(false)
+                console.log("All Data Sent")
+                this.pageChangeHandler()
+
+            })
+            
+
+
         }
 
     }
@@ -186,9 +202,106 @@ class UploadImages extends Component {
                     </div>
                     : null
                 }
-                <div className="row">
-                    {this.state.inputFields}
-                </div>
+                <Box className="form-group col-md">
+                    <form>
+                        <div className="row">
+                            <ImageUploader
+                                withIcon={false}
+                                buttonText={"Select Cover Image"}
+                                className={"col-6 h-100"}
+                                buttonStyles={{ background: 'black' }}
+                                fileSizeError={"File Size is To Big Please Select Image Smaller than 5 MB"}
+                                fileTypeError={"Sorry! This File Format is Not Supported"}
+                                onChange={this.valueChangeHandler}
+                                singleImage={true}
+                                withPreview={true}
+                                withLabel={false}
+                                label={"Select Some Beautiful Images of your Saloon to Showcase"}
+                                labelStyles={{ fontSize: 20 }}
+                                imgExtension={['.jpg', '.gif', '.png', '.gif', '.jpeg']}
+                                maxFileSize={5242880}
+                                fileContainerStyle={{ height: window.innerHeight / 2 }}
+                            />
+                            <div>
+                                <div className="row">
+                                    <ImageUploader
+                                        withIcon={false}
+                                        buttonText={"Select Cover Image"}
+                                        className={"col-6 h-100"}
+                                        buttonStyles={{ background: 'black' }}
+                                        fileSizeError={"File Size is To Big Please Select Image Smaller than 5 MB"}
+                                        fileTypeError={"Sorry! This File Format is Not Supported"}
+                                        onChange={this.valueChangeHandler}
+                                        singleImage={true}
+                                        withPreview={true}
+                                        withLabel={false}
+                                        label={"Select Some Beautiful Images of your Saloon to Showcase"}
+                                        labelStyles={{ fontSize: 20 }}
+                                        imgExtension={['.jpg', '.gif', '.png', '.gif', '.jpeg']}
+                                        maxFileSize={5242880}
+                                        fileContainerStyle={{ height: window.innerHeight / 4 }}
+                                    />
+                                    <ImageUploader
+                                        withIcon={false}
+                                        buttonText={"Select Cover Image"}
+                                        className={"col-6 h-100"}
+                                        buttonStyles={{ background: 'black' }}
+                                        fileSizeError={"File Size is To Big Please Select Image Smaller than 5 MB"}
+                                        fileTypeError={"Sorry! This File Format is Not Supported"}
+                                        onChange={this.valueChangeHandler}
+                                        singleImage={true}
+                                        withPreview={true}
+                                        withLabel={false}
+                                        label={"Select Some Beautiful Images of your Saloon to Showcase"}
+                                        labelStyles={{ fontSize: 20 }}
+                                        imgExtension={['.jpg', '.gif', '.png', '.gif', '.jpeg']}
+                                        maxFileSize={5242880}
+                                        fileContainerStyle={{ height: window.innerHeight / 4 }}
+
+                                    />
+                                </div>
+                                <div className="row">
+                                    <ImageUploader
+                                        withIcon={false}
+                                        buttonText={"Select Cover Image"}
+                                        className={"col-6 h-100"}
+                                        buttonStyles={{ background: 'black' }}
+                                        fileSizeError={"File Size is To Big Please Select Image Smaller than 5 MB"}
+                                        fileTypeError={"Sorry! This File Format is Not Supported"}
+                                        onChange={this.valueChangeHandler}
+                                        singleImage={true}
+                                        withPreview={true}
+                                        withLabel={false}
+                                        label={"Select Some Beautiful Images of your Saloon to Showcase"}
+                                        labelStyles={{ fontSize: 20 }}
+                                        imgExtension={['.jpg', '.gif', '.png', '.gif', '.jpeg']}
+                                        maxFileSize={5242880}
+                                        fileContainerStyle={{ height: window.innerHeight / 4 }}
+
+                                    />
+                                    <ImageUploader
+                                        withIcon={false}
+                                        buttonText={"Select Cover Image"}
+                                        className={"col-6 h-100"}
+                                        buttonStyles={{ background: 'black' }}
+                                        fileSizeError={"File Size is To Big Please Select Image Smaller than 5 MB"}
+                                        fileTypeError={"Sorry! This File Format is Not Supported"}
+                                        onChange={this.valueChangeHandler}
+                                        singleImage={true}
+                                        withPreview={true}
+                                        withLabel={false}
+                                        label={"Select Some Beautiful Images of your Saloon to Showcase"}
+                                        labelStyles={{ fontSize: 20 }}
+                                        imgExtension={['.jpg', '.gif', '.png', '.gif', '.jpeg']}
+                                        maxFileSize={5242880}
+                                        fileContainerStyle={{ height: window.innerHeight / 4 }}
+
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </Box>
                 <div className="submitButton text-right">
                     <Button variant="contained" size="large" style={{ backgroundColor: Colors.success, color: 'white' }} onClick={this.submitHandler}>
                         Next

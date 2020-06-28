@@ -12,6 +12,7 @@ import Heading from '../../../../Components/Heading/Heading'
 import * as Validator from '../../../../Validator'
 
 
+
 class BasicDetails extends Component {
 
     state = {
@@ -36,7 +37,6 @@ class BasicDetails extends Component {
         const mode = this.props.mode
         const role = mode === 'Business' ? '1' : '0'
         this.setState({ Mode: mode, role: role })
-
         Axios.get('/api/users/user/')
             .then(res => {
                 const data = res.data
@@ -265,7 +265,6 @@ class BasicDetails extends Component {
                         variant="outlined"
                         margin="normal"
                         required
-                        type="number"
                         rowsMax={2}
                         id="mobile_number"
                         label="Phone(+91)"

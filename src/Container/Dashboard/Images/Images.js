@@ -8,7 +8,8 @@ export class Images extends Component {
         Loading: true,
         imageData: [],
         images: [],
-        imageList: []
+        imageList: [],
+        coverImage: null
     }
 
     componentDidMount() {
@@ -42,29 +43,39 @@ export class Images extends Component {
     setTableValues = () => {
         const imageList = []
         const images = this.state.images
+        let coverImage = this.state.coverImage
         for (var key in images) {
-            console.log(images[key].url.split('//')[1])
-            imageList.push(
-                <tr>
-                    <td><img src={"https://"+images[key].url.split('//')[1]} width="100" height="100" /></td>
-                </tr>
-            )
+            if (images[key].cover) {
+                coverImage = "https://" + images[key].url.split('//')[1]
+            }
+            else {
+                imageList.push(
+                    <tr>
+                        <td><img src={"https://" + images[key].url.split('//')[1]} width={100} height={100} /></td>
+                    </tr>
+                )
+            }
         }
-        this.setState({ Loading: false, imageList: imageList })
+        this.setState({ Loading: false, imageList: imageList, coverImage:coverImage })
     }
 
     render() {
         return (
-            <div>
+            <div className="container">
                 {this.state.Loading ? <CircularProgress /> :
-                    <table class="table table-striped">
+                    <table class="table table-borderless table-sm">
                         <thead>
                             <tr>
-                                <th scope="col">Image</th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            {this.state.imageList}
+                            <tr>
+                                <td><img src={this.state.coverImage} width={500} height={500} /></td>
+                                <td>{this.state.imageList}</td>
+                            </tr>
+                            
                         </tbody>
                     </table>
                 }

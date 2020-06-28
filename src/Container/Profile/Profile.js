@@ -3,12 +3,14 @@ import { connect } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
 import Avatar from '@material-ui/core/Avatar';
 import Axios from '../../Axios';
-import { Button, Box, Grid, Card, CardActions } from '@material-ui/core';
+import { Button, Box, Grid, Card, CardActions, Fade } from '@material-ui/core';
 import Heading from '../../Components/Heading/Heading';
 import Colors from '../../Constants/Colors';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import PhoneIcon from '@material-ui/icons/Phone';
 import { Loader } from '../../Components/Loader/Loader'
+import * as actionTypes from '../../store/Action/Action'
+
 
 const styles = {
     navlink: {
@@ -39,10 +41,11 @@ class Profile extends Component {
         // const DetailID = 1
         // const business_id = 4
         // const user_id = 2
-        if(!this.props.loggedIn){
+        if (!this.props.loggedIn || typeof user_id === 'undefined') {
 
-            this.props.history.push('/') 
+            this.props.history.push('/')
         }
+
 
 
         // console.log(this.props.user_detail_id)
@@ -50,51 +53,63 @@ class Profile extends Component {
         // const DetailID = 4
 
         // console.log(ID)
-        Axios.get('/api/users/user_details/' + business_id + '/')
+        const data = {
+            "user": user_id
+        }
+        Axios.post('api/users/user_data/', data)
             .then(res => {
                 console.log(res.data)
                 this.setState({
-                    name: res.data.first_name + ' ' + res.data.last_name,
-                    number: res.data.mobile_number
+                    email: res.data.email,
+                    name: res.data.user_details.first_name + " " + res.data.user_details.last_name,
+                    number: res.data.user_details.mobile_number,
+                    Loading: false
                 })
             })
+            .catch(e => {
 
-        Axios.get('/api/users/user/' + user_id + '/')
-            .then(res => {
-                console.log(res.data)
-                this.setState({
-                    email: res.data.email
-                })
             })
     }
 
     deleteProfileHandler = () => {
         // eslint-disable-next-line no-restricted-globals
-        let allow = confirm("Are you Sure You Want to Continue and Delete Your Profile?")
+        let allow = confirm("Are you Sure you Want to Continue and Delete Your Profile?")
         console.log(allow)
         this.setState({ Loading: true })
-        
+
 
         Axios.delete('/api/users/user/' + this.props.user_id + '/')
             .then(res => {
-                // if (this.props.business_user) {
-                //     Axios.delete('/api/users/business/' + this.props.business_id + '/')
-                //     .then(res=>{
-                        console.log(res.data)
-                        this.props.history.push('/') 
-                        this.setState({ Loading: false })
 
-                //     })
-                //     .catch(e=>{
-                //         console.log(e.response)
-                //         this.setState({ Loading: false })
+                console.log(res.data)
+                this.props.history.push('/')
+                this.props.history.push('/')
+                this.props.history.push('/')
+                this.setState({ Loading: false })
 
-                //     })
-                // }
+
             })
-            .catch(e=>{
+            .catch(e => {
                 console.log(e.response)
+                this.props.history.push('/')
+                this.setState({ Loading: false })
             })
+
+        if (this.props.business_user) {
+            Axios.delete('/api/users/business/' + this.props.business_id + '/')
+                .then(res => {
+                    this.props.history.push('/')
+                    this.setState({ Loading: false })
+                })
+                .catch(e => {
+                    console.log(e.response)
+                    this.props.history.push('/')
+                    this.setState({ Loading: false })
+
+                })
+        }
+
+        this.props.onDelete()
 
     }
 
@@ -112,9 +127,9 @@ class Profile extends Component {
                     : <Box>
                         <Heading text="User Profile" />
                         <Card>
-
                             <Box>
                                 <Avatar style={{ backgroundColor: this.randomColor(), width: 200, height: 200 }} className="mx-auto my-5">
+
                                     <h1>{this.state.name[0]}</h1>
                                 </Avatar>
                             </Box>
@@ -133,7 +148,7 @@ class Profile extends Component {
                                 </Box>
                                 {this.props.business_user
                                     ? <Box className="ml-auto">
-                                        <Button color="primary" size="large">Dashboard</Button>
+                                        <Button color="primary" size="large" onClick={() => this.props.history.push('/admin/dashboard')}>Dashboard</Button>
                                     </Box>
                                     : null}
                             </CardActions>
@@ -162,4 +177,13 @@ const mapStateToProps = (state) => ({
 
 
 
-export default connect(mapStateToProps, null)(withRouter(Profile))
+const mapDispatchToProps = dispatch => {
+    return {
+        onDelete: () => dispatch({
+            type: actionTypes.USER_LOGOUT
+        })
+    }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Profile))
