@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { TextField, Button, FormControl, InputLabel, Select, MenuItem, Box } from '@material-ui/core'
+import { TextField, Button, FormControl, InputLabel, Select, MenuItem, Box, Checkbox, FormControlLabel } from '@material-ui/core'
 // import './CategorySelect.css'
 import Colors from '../../../../Constants/Colors'
 import Axios from '../../../../Axios'
@@ -18,14 +18,18 @@ class ServiceSelect extends Component {
         selectedServices: [],
         prices: [],
         durations: [],
-        buffers: [],
         elementNumber: 0,
         Services: [],
+        Service_Category: [],
         business_id: '',
-        category_names: [],
+        category_names: {},
         selectedCategories: [],
         messages: [],
-        errors: false
+        errors: false,
+        customServices: [],
+        custom: false,
+        customServicesList: [],
+        customServiceElementNumber: 0
     }
 
     componentDidMount() {
@@ -34,21 +38,13 @@ class ServiceSelect extends Component {
         Axios.get('api/service/services/')
             .then(res => {
                 const data = res.data
-                console.log(res.data)
+                // console.log(res.data)
                 const newServiceList = this.state.ServiceList
                 const services = this.state.Services
-                const catNames = this.state.category_names
+                const ServiceCat = this.state.Service_Category
                 for (var key in data) {
-                    Axios.get('api/category/categories/' + data[key].categories + '/')
-                        .then(response => {
-                            catNames.push(response.data.name)
-                            this.setState({
-                                category_names: catNames
-                            })
-                        })
-                }
-                for (var key in data) {
-                    // console.log(response.data)
+                    console.log()
+                    ServiceCat[res.data[key].name] = res.data[key].categories
 
                     services.push(data[key].name)
                     newServiceList.push(
@@ -56,7 +52,7 @@ class ServiceSelect extends Component {
                     )
 
                 }
-                this.setState({ ServiceList: newServiceList, Services: services }, () => {
+                this.setState({ ServiceList: newServiceList, Services: services, Service_Category: ServiceCat }, () => {
                     this.addServiceField()
                 })
                 this.props.toggleLoading(false)
@@ -64,6 +60,18 @@ class ServiceSelect extends Component {
             })
             .catch((e) => {
                 console.log(e)
+            })
+        const catNames = this.state.category_names
+
+        Axios.get('api/category/categories/')
+            .then(response => {
+                // console.log(response.data)
+                for (var key in response.data) {
+                    catNames[response.data[key].id] = response.data[key].name
+                }
+                this.setState({
+                    category_names: catNames
+                })
             })
 
     }
@@ -113,21 +121,7 @@ class ServiceSelect extends Component {
                             autoComplete=""
                             className="col-md"
                         />
-                        {/* <TextField
-                    variant="outlined"
-                    // margin="normal"
-                    required
-                    id={this.state.elementNumber+':buffers'}
-                    onChange={this.valueChangeHandler}
-                    label={"Buffer Time(Hours)"}
-                    name="sal-name"
-                    autoComplete=""
-                    className="col-sm"
-                /> */}
                     </div>
-                    {/* <div className="text-left">
-                        {this.state.category_names[this.state.elementNumber]}
-                    </div> */}
                 </Box>
             )
             List.push(serviceItem)
@@ -135,6 +129,8 @@ class ServiceSelect extends Component {
 
         })
     }
+
+
 
     ordinal = (number) => {
         const english_ordinal_rules = new Intl.PluralRules("en", {
@@ -182,16 +178,26 @@ class ServiceSelect extends Component {
     }
 
     valueChangeHandler = (e) => {
-        let value, index, name
+        let value, index, name, selectedCat
         const services = this.state.Services
+        if (e.target.value === " ") {
+            // eslint-disable-next-line no-restricted-globals
+            event.target.value = ""
+            return null
+        }
         if (e.target.name === 'selectedServices') {
             name = e.target.name
             const id = e.target.value[0]
             index = e.target.value[1]
             value = services[id]
+            const serCat = this.state.Service_Category[value]
+            console.log(this.state.category_names[serCat])
+            selectedCat = this.state.selectedCategories
+            selectedCat[index - 1] = this.state.category_names[serCat]
+
             // eslint-disable-next-line no-restricted-globals
         } else if (this.isLetter(event.target.value[event.target.value.length - 1])) {
-            console.log("Yes")
+            // console.log("Yes")
             // eslint-disable-next-line no-restricted-globals
             event.target.value = ""
             return null
@@ -205,10 +211,9 @@ class ServiceSelect extends Component {
 
         const newValue = this.state[name]
         newValue[index - 1] = value
-        console.log(value, index, name)
         switch (name) {
             case 'selectedServices':
-                this.setState({ selectedServices: newValue }); break;
+                this.setState({ selectedServices: newValue, selectedCategories: selectedCat }); break;
             case 'prices':
                 this.setState({ prices: newValue }); break;
             case 'durations':
@@ -234,79 +239,233 @@ class ServiceSelect extends Component {
     }
 
     submitHandler = () => {
-        console.log(this.state)
+        // console.log(!this.validateData())
         if (this.validateData()) {
             this.props.toggleLoading(true)
-            const url = 'api/service/business_services/'
+            let url = 'api/service/business_services/'
             const selectedService = this.state.selectedServices
             const price = this.state.prices
             const duration = this.state.durations
-            const buffer = this.state.buffers
             const ServiceList = this.state.Services
+            const customServices = this.state.customServices
+            let promises = []
             for (var i = 0; i < selectedService.length; i++) {
                 const data = JSON.stringify({
                     "business": this.state.business_id,
                     "service": this.findIndex(selectedService[i], ServiceList) + 1,
                     "business_service_price": price[i],
                     "business_service_duration": duration[i],
-                    "buffer_time": "null",
-                    "disable": "False"
+                    "disable": "False",
+                    "buffer_time": "null"
+
                 })
-                // console.log(data)
-                Axios.post(url, data)
+               promises[i]= Axios.post(url, data)
                     .then(res => {
                         console.log(res.data)
-                        if (i === selectedService.length) {
-                            this.pageChangeHandler()
-                        }
                     })
                     .catch(e => {
                         console.log(e.response)
                     })
-
             }
+            for(var key in customServices){
+                console.log(customServices[key])
+                url = 'api/service/custom_business_services/'
+                const data = {
+                    "business": this.state.business_id,
+                    "service_name": customServices[key].name,
+                    "business_service_price": parseInt(customServices[key].prices),
+                    "business_service_duration": customServices[key].durations,
+                }
+                promises.push(
+                    Axios.post(url,data)
+                    .then(res=>{
+                        console.log(res.data)
+                    })
+                    .catch(e => {
+                        console.log(e.response)
+                    })
+                )
+            }
+
+            Promise.allSettled(promises)
+            .then(res=>{
+                this.props.toggleLoading(false)
+                console.log("All Data Sent")
+                this.pageChangeHandler()
+
+            })
 
         }
 
 
     }
 
+    addCustomServiceField = () => {
+        const customServicesList = this.state.customServicesList
+        const serviceItem = (
+            <Box>
+                <div className="row mt-3" key={new Date()}>
+                    <TextField
+                        variant="outlined"
+                        // margin="normal"
+                        required
+                        id={this.state.customServiceElementNumber + ':name'}
+                        onChange={this.customServicesValueHandler}
+                        label="Service Name"
+                        name="sal-name"
+                        autoComplete=""
+                        className="col-md"
+                    />
+                    <TextField
+                        variant="outlined"
+                        // margin="normal"
+                        required
+                        id={this.state.customServiceElementNumber + ':prices'}
+                        onChange={this.customServicesValueHandler}
+                        label="Price (&#x20b9;)"
+                        name="sal-name"
+                        autoComplete=""
+                        className="col-md"
+                    />
+                    <TextField
+                        variant="outlined"
+                        // margin="normal"
+                        required
+                        id={this.state.customServiceElementNumber + ':durations'}
+                        onChange={this.customServicesValueHandler}
+                        label={"Duration(Min)"}
+                        name="sal-name"
+                        autoComplete=""
+                        className="col-md"
+                    />
+                </div>
+            </Box>
+        )
+        customServicesList.push(serviceItem)
+        const num = this.state.customServiceElementNumber + 1
+        this.setState({
+            customServicesList: customServicesList,
+            customServiceElementNumber: num
+        })
+    }
+
+    addCustomToggle = () => {
+        const toggle = !this.state.custom
+        this.setState({
+            custom: toggle
+        })
+
+        if (toggle) {
+            this.addCustomServiceField()
+        }
+        else {
+            this.setState({ customServicesList: [] })
+        }
+    }
+
+    customServicesValueHandler = (e) => {
+        const customService = this.state.customServices
+        const index = e.target.id.split(':')[0]
+        const name = e.target.id.split(':')[1]
+        const value = e.target.value
+        if (value !== "") {
+            if (this.isLetter(value[value.length - 1]) && name !== "name") {
+                console.log("Yes")
+                // eslint-disable-next-line no-restricted-globals
+                event.target.value = ""
+                return null
+            }
+        }
+        if (value === " ") {
+            // eslint-disable-next-line no-restricted-globals
+            event.target.value = ""
+            return null
+        }
+
+        switch (name) {
+            case "name":
+                customService[index] = { ...customService[index], "name": value }
+            case "prices":
+                customService[index] = { ...customService[index], "prices": value }
+            case "durations":
+                customService[index] = { ...customService[index], "durations": value }
+
+        }
+        // console.log(customService)
+        this.setState({customServices: customService})
+    }
+
 
     render() {
         return (
-            <div className="container" style={styles.screen}>
-                <Heading text="Select Services" />
-                {this.state.errors
-                    ? <div class="alert alert-danger alert-dismissible fade show text-left" role="alert">
-                        {this.state.messages.map(function (item, i) {
+            <div>
+                <div className="container" style={styles.screen}>
+                    <Heading text="Select Services" />
+                    {this.state.errors
+                        ? <div class="alert alert-danger alert-dismissible fade show text-left" role="alert">
+                            {this.state.messages.map(function (item, i) {
 
-                            return <li key={i}>{item}</li>
-                        })}
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true" onClick={() => {
-                                const error = !this.state.errors
-                                this.setState({ errors: error })
-                            }}>&times;</span>
-                        </button>
+                                return <li key={i}>{item}</li>
+                            })}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true" onClick={() => {
+                                    const error = !this.state.errors
+                                    this.setState({ errors: error })
+                                }}>&times;</span>
+                            </button>
+                        </div>
+                        : null
+                    }
+                    <div className="row">
+                        {/* <div className="col-2">
+                            <table class="table table-borderless mt-4" >
+                                <tbody className="pt-2" style={{ overflowY: "scroll" }}>
+                                    {this.state.selectedCategories.map(index => {
+                                        return <tr className="h-100 mt-5 pt-5" style={{ marginTop: 30 }}>
+                                            <th scope="row" className="py-4"  > {index} </th>
+                                        </tr>
+                                    })}
+
+                                </tbody>
+                            </table>
+                        </div> */}
+                        <div className=" col-12" style={{ width: '100%', height: window.innerHeight / 3, overflowY: "scroll" }}>
+                            {this.state.List}
+                        </div>
                     </div>
-                    : null
-                }
-
-                <div className="list" style={{ width: '100%', height: window.innerHeight / 3, overflowY: "scroll" }}>
-                    {this.state.List}
-                </div>
-                <div>
-                    <Button variant="contained" size="small" color="primary" className="mt-4" onClick={this.addServiceField}>
-                        &#x2b; Add New Service
+                    <FormControlLabel
+                        control={<Checkbox checked={this.state.custom} onChange={this.addCustomToggle} name="checkedA" />}
+                        label="I want to Add my Custom Services"
+                    />
+                    <div>
+                        <Button variant="contained" size="small" color="primary" className="mt-2 mb-3" onClick={this.addServiceField}>
+                            &#x2b; Add New Service
                     </Button>
+                    </div>
+
+                </div >
+                <div style={{ position: "relative" }}>
+
+
+                    {this.state.custom
+                        ? <div><div className="col-12" style={{ width: '100%', height: window.innerHeight / 5, overflowY: "scroll" }}>
+                            {this.state.customServicesList}
+                        </div>
+                            <Button variant="contained" size="small" color="secondary" className="mt-4 mb-3" onClick={this.addCustomServiceField}>
+                                &#x2b; Add New Custom Service
+                </Button></div>
+                        : null}
+                    <div>
+
+                    </div>
+                    <div className="submitButton text-right">
+                        <Button variant="contained" size="large" style={{ backgroundColor: Colors.success, color: 'white' }} onClick={this.submitHandler}>
+                            Next
+                    </Button>
+                    </div>
 
                 </div>
-                <div className="submitButton text-right">
-                    <Button variant="contained" size="large" style={{ backgroundColor: Colors.success, color: 'white' }} onClick={this.submitHandler}>
-                        Next
-                    </Button>
-                </div>
-            </div >
+            </div>
         )
     }
 

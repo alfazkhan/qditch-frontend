@@ -52,7 +52,7 @@ export class Stylists extends Component {
 
     render() {
         return (
-            <div>
+            <div className="container">
                 {this.state.Loading ? <CircularProgress /> :
                     <table class="table table-striped">
                         <thead>

@@ -59,7 +59,7 @@ class MyBusiness extends Component {
 
     render() {
         return (
-            <div>
+            <div className="container">
                 {this.state.Loading ? <CircularProgress /> :
                     <div>
                         <div>
