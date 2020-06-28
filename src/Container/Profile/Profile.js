@@ -75,41 +75,46 @@ class Profile extends Component {
         // eslint-disable-next-line no-restricted-globals
         let allow = confirm("Are you Sure you Want to Continue and Delete Your Profile?")
         console.log(allow)
-        this.setState({ Loading: true })
+        
 
 
-        Axios.delete('/api/users/user/' + this.props.user_id + '/')
-            .then(res => {
-
-                console.log(res.data)
-                this.props.history.push('/')
-                this.props.history.push('/')
-                this.props.history.push('/')
-                this.setState({ Loading: false })
-
-
-            })
-            .catch(e => {
-                console.log(e.response)
-                this.props.history.push('/')
-                this.setState({ Loading: false })
-            })
-
-        if (this.props.business_user) {
-            Axios.delete('/api/users/business/' + this.props.business_id + '/')
+        if (allow) {
+            this.setState({ Loading: true })
+            Axios.delete('/api/users/user/' + this.props.user_id + '/')
                 .then(res => {
+
+                    console.log(res.data)
+                    this.props.history.push('/')
+                    this.props.history.push('/')
                     this.props.history.push('/')
                     this.setState({ Loading: false })
+
+
                 })
                 .catch(e => {
                     console.log(e.response)
                     this.props.history.push('/')
                     this.setState({ Loading: false })
-
                 })
+
+            if (this.props.business_user) {
+                Axios.delete('/api/users/business/' + this.props.business_id + '/')
+                    .then(res => {
+                        this.props.history.push('/')
+                        this.setState({ Loading: false })
+                    })
+                    .catch(e => {
+                        console.log(e.response)
+                        this.props.history.push('/')
+                        this.setState({ Loading: false })
+
+                    })
+            }
+
+            this.props.onDelete()
+
         }
 
-        this.props.onDelete()
 
     }
 
