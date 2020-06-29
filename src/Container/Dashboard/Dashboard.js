@@ -74,22 +74,25 @@ class Dashboard extends Component {
   }
 
   componentWillMount() {
+this.initialDataHandler()
+    
+  }
 
+  initialDataHandler = () =>{
     this.setState({ Loading: true })
-    if (typeof this.props.business_id === 'undefined') {
-      this.props.history.push({
-        pathname: '/',
-      })
-    }
+    // if (typeof this.props.business_id === 'undefined') {
+    //   this.props.history.push({
+    //     pathname: '/',
+    //   })
+    // }
 
     const business_id = this.props.match.params.id
 
     this.setState({ business_id: this.props.business_id }, () => {
-      Axios.get('api/users/business/' + this.props.business_id + '/')
+      Axios.get('api/users/business/' + 41 + '/') //change this hardcoded value to this.state.business_id
         .then((response) => {
           console.log(response.data)
           this.setState({ Data: response.data }, () => {
-            this.responseValuesHandler()
             this.setState({ Loading: false })
           })
         })
@@ -97,10 +100,6 @@ class Dashboard extends Component {
           console.log(err)
         })
     })
-
-  }
-
-  responseValuesHandler = () => {
 
   }
 
@@ -137,7 +136,7 @@ class Dashboard extends Component {
             </AppBar>
 
             <TabPanel value={this.state.value} index={0}>
-              <Services data={this.state.Data} />
+              <Services data={this.state.Data} reload={this.initialDataHandler} />
             </TabPanel>
             <TabPanel value={this.state.value} index={1}>
               Appointments

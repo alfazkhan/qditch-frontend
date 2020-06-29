@@ -36,24 +36,40 @@ class Timings extends Component {
             })
     }
 
+    formatAMPM = (date) => {
+        var hours = date.getHours();
+        var minutes = date.getMinutes();
+        var ampm = hours >= 12 ? 'pm' : 'am';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        var strTime = hours + ':' + minutes + ' ' + ampm;
+        return strTime;
+    }
+
+
     setTable = () => {
         // console.log(this.state.Timings)
         const timings = this.state.Timings
         const list = this.state.timingsList
         let num = 1
-        for(var key in timings){
-            const SE=timings[key].split('/')
-            console.log(SE[0]==="false")
+        for (var key in timings) {
+            const SE = timings[key].split('/')
+            let start = new Date(2020, 6, 29, SE[0].split(':')[0], SE[0].split(':')[1])
+            let end = new Date(2020, 6, 29, SE[1].split(':')[0], SE[0].split(':')[1])
+            start = this.formatAMPM(start)
+            end = this.formatAMPM(end)
+            console.log(start, end)
             list.push(
                 <tr>
                     <td>{key}</td>
-                    <td>{SE[0]==="false"?"Closed":SE[0]}</td>
-                    <td>{SE[0]==="false"?"Closed":SE[1]}</td>
+                    <td>{SE[0] === "false" ? "Closed" : start}</td>
+                    <td>{SE[0] === "false" ? "Closed" : end}</td>
                 </tr>
             )
-            num+=1
+            num += 1
         }
-        this.setState({timingsList:list,Loading:false})
+        this.setState({ timingsList: list, Loading: false })
     }
 
     render() {

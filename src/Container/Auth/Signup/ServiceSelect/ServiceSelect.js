@@ -15,12 +15,12 @@ class ServiceSelect extends Component {
 
         ],
         List: [],
-        selectedServices: [],
-        prices: [],
-        durations: [],
+        selectedServices: {},
+        // prices: [],
+        // durations: [],
         elementNumber: 0,
         Services: [],
-        Service_Category: [],
+        // Service_Category: [],
         business_id: '',
         category_names: {},
         selectedCategories: [],
@@ -41,10 +41,10 @@ class ServiceSelect extends Component {
                 // console.log(res.data)
                 const newServiceList = this.state.ServiceList
                 const services = this.state.Services
-                const ServiceCat = this.state.Service_Category
+                // const ServiceCat = this.state.Service_Category
                 for (var key in data) {
                     console.log()
-                    ServiceCat[res.data[key].name] = res.data[key].categories
+                    // ServiceCat[res.data[key].name] = res.data[key].categories
 
                     services.push(data[key].name)
                     newServiceList.push(
@@ -52,7 +52,7 @@ class ServiceSelect extends Component {
                     )
 
                 }
-                this.setState({ ServiceList: newServiceList, Services: services, Service_Category: ServiceCat }, () => {
+                this.setState({ ServiceList: newServiceList, Services: services }, () => {
                     this.addServiceField()
                 })
                 this.props.toggleLoading(false)
@@ -148,27 +148,27 @@ class ServiceSelect extends Component {
 
     validateData = () => {
 
-        const messages = []
-        const prices = this.state.prices
-        const durations = this.state.durations
-        //Services
-        !Validator.isPresent(this.state.selectedServices) ? messages.push("Select Atleast One Service") : console.log()
-        //Prices
-        !Validator.isPresent(this.state.prices) ? messages.push("Invalid Price") : console.log()
-        for (var key in prices) {
-            !parseInt(prices[key]) ? messages.push("Invalid Price Value of " + this.ordinal(parseInt(key) + 1) + " Service Selected") : console.log()
-        }
-        //Duration
-        !Validator.isPresent(this.state.durations) ? messages.push("Invalid Duration") : console.log()
-        for (var key in durations) {
-            !parseInt(durations[key]) ? messages.push("Invalid Time Value of " + this.ordinal(parseInt(key) + 1) + " Service Selected") : console.log()
-        }
+        // const messages = []
+        // const prices = this.state.prices
+        // const durations = this.state.durations
+        // //Services
+        // !Validator.isPresent(this.state.selectedServices) ? messages.push("Select Atleast One Service") : console.log()
+        // //Prices
+        // !Validator.isPresent(this.state.prices) ? messages.push("Invalid Price") : console.log()
+        // for (var key in prices) {
+        //     !parseInt(prices[key]) ? messages.push("Invalid Price Value of " + this.ordinal(parseInt(key) + 1) + " Service Selected") : console.log()
+        // }
+        // //Duration
+        // !Validator.isPresent(this.state.durations) ? messages.push("Invalid Duration") : console.log()
+        // for (var key in durations) {
+        //     !parseInt(durations[key]) ? messages.push("Invalid Time Value of " + this.ordinal(parseInt(key) + 1) + " Service Selected") : console.log()
+        // }
 
-        if (messages.length !== 0) {
-            this.setState({ messages: messages, errors: true })
-            return false
-        }
-        this.setState({ errors: false })
+        // if (messages.length !== 0) {
+        //     this.setState({ messages: messages, errors: true })
+        //     return false
+        // }
+        // this.setState({ errors: false })
         return true
 
     }
@@ -180,7 +180,8 @@ class ServiceSelect extends Component {
     valueChangeHandler = (e) => {
         let value, index, name, selectedCat
         const services = this.state.Services
-        if (e.target.value === " ") {
+        const selectedServices = this.state.selectedServices
+        if (e.target.value === " ") {   //no empty values
             // eslint-disable-next-line no-restricted-globals
             event.target.value = ""
             return null
@@ -190,36 +191,33 @@ class ServiceSelect extends Component {
             const id = e.target.value[0]
             index = e.target.value[1]
             value = services[id]
-            const serCat = this.state.Service_Category[value]
-            console.log(this.state.category_names[serCat])
-            selectedCat = this.state.selectedCategories
-            selectedCat[index - 1] = this.state.category_names[serCat]
+            selectedServices[index] = { ...selectedServices[index], "service": value }
+            this.setState({ selectedServices: selectedServices })
+            console.log(name, index, value)
+            return true
 
-            // eslint-disable-next-line no-restricted-globals
-        } else if (this.isLetter(event.target.value[event.target.value.length - 1])) {
+        }
+        // eslint-disable-next-line no-restricted-globals
+        if (this.isLetter(event.target.value[event.target.value.length - 1])) {
             // console.log("Yes")
             // eslint-disable-next-line no-restricted-globals
             event.target.value = ""
             return null
         }
-        else {
-            value = e.target.value
-            const info = e.target.id.split(':')
-            index = info[0]
-            name = info[1]
-        }
+        value = e.target.value
+        const info = e.target.id.split(':')
+        index = info[0]
+        name = info[1]
 
-        const newValue = this.state[name]
-        newValue[index - 1] = value
+        console.log(name, index, value)
+
         switch (name) {
-            case 'selectedServices':
-                this.setState({ selectedServices: newValue, selectedCategories: selectedCat }); break;
             case 'prices':
-                this.setState({ prices: newValue }); break;
+                selectedServices[index] = { ...selectedServices[index], "price": value }
+                this.setState({ selectedServices: selectedServices }); break;
             case 'durations':
-                this.setState({ durations: newValue }); break;
-            case 'buffers':
-                this.setState({ buffers: newValue }); break;
+                selectedServices[index] = { ...selectedServices[index], "duration": value }
+                this.setState({ selectedServices: selectedServices }); break;
         }
     }
 
@@ -239,27 +237,26 @@ class ServiceSelect extends Component {
     }
 
     submitHandler = () => {
-        console.log(this.state.customServices)
+        
         if (this.validateData()) {
             this.props.toggleLoading(true)
             let url = 'api/service/business_services/'
             const selectedService = this.state.selectedServices
-            const price = this.state.prices
-            const duration = this.state.durations
             const ServiceList = this.state.Services
             const customServices = this.state.customServices
             let promises = []
-            for (var i = 0; i < selectedService.length; i++) {
+            for (var key in selectedService) {
+                console.log(selectedService[key])
                 const data = JSON.stringify({
                     "business": this.state.business_id,
-                    "service": this.findIndex(selectedService[i], ServiceList) + 1,
-                    "business_service_price": price[i],
-                    "business_service_duration": duration[i],
+                    "service": this.findIndex(selectedService[key].service, ServiceList) + 1,
+                    "business_service_price": selectedService[key].price,
+                    "business_service_duration": selectedService[key].price,
                     "disable": "False",
                     "buffer_time": "null"
 
                 })
-                promises[i] = Axios.post(url, data)
+                promises[key] = Axios.post(url, data)
                     .then(res => {
                         console.log(res.data)
                     })
@@ -303,11 +300,10 @@ class ServiceSelect extends Component {
 
     addCustomServiceField = () => {
         const customServicesList = this.state.customServicesList
-        const catNames=this.state.category_names
+        const catNames = this.state.category_names
         const cats = []
-        for(var key in catNames){
-            console.log(key)
-            cats.push(<MenuItem key={key} name={"categories"} value={[key,this.state.customServiceElementNumber]}>{catNames[key]}</MenuItem>)
+        for (var key in catNames) {
+            cats.push(<MenuItem key={key} name={"categories"} value={[key, this.state.customServiceElementNumber]}>{catNames[key]}</MenuItem>)
         }
         const serviceItem = (
             <Box>
@@ -332,7 +328,7 @@ class ServiceSelect extends Component {
                             className="col-md"
                         >
                             {cats}
-                            
+
                         </Select>
                     </FormControl>
                     <TextField
@@ -383,14 +379,15 @@ class ServiceSelect extends Component {
     }
 
     customServicesValueHandler = (e) => {
-        if(e.target.name === "category"){
+
+        const customService = this.state.customServices
+
+        if (e.target.name === "category") {
             console.log(e.target.value)
-            const customService = this.state.customServices
-            customService[e.target.value[1]] = {...customService[e.target.value[1]], "category": e.target.value[0] }
+            customService[e.target.value[1]] = { ...customService[e.target.value[1]], "category": e.target.value[0] }
             this.setState({ customServices: customService })
             return true
         }
-        const customService = this.state.customServices
         const index = e.target.id.split(':')[0]
         const name = e.target.id.split(':')[1]
         const value = e.target.value
