@@ -45,6 +45,7 @@ export class Images extends Component {
         const images = this.state.images
         let coverImage = this.state.coverImage
         for (var key in images) {
+            console.log(key)
             if (images[key].cover) {
                 coverImage = "https://" + images[key].url.split('//')[1]
             }

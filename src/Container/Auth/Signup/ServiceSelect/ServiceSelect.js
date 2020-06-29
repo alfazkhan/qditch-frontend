@@ -244,6 +244,7 @@ class ServiceSelect extends Component {
             const selectedService = this.state.selectedServices
             const ServiceList = this.state.Services
             const customServices = this.state.customServices
+            console.log(customServices.length)
             let promises = []
             for (var key in selectedService) {
                 console.log(selectedService[key])
