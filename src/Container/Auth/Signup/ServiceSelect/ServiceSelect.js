@@ -148,12 +148,12 @@ class ServiceSelect extends Component {
 
     validateData = () => {
 
-        // const messages = []
+        const messages = []
         // const prices = this.state.prices
         // const durations = this.state.durations
-        // //Services
-        // !Validator.isPresent(this.state.selectedServices) ? messages.push("Select Atleast One Service") : console.log()
-        // //Prices
+        //Services
+        !Validator.isPresent(this.state.selectedServices) ? messages.push("Select Atleast One Service") : console.log()
+        //Prices
         // !Validator.isPresent(this.state.prices) ? messages.push("Invalid Price") : console.log()
         // for (var key in prices) {
         //     !parseInt(prices[key]) ? messages.push("Invalid Price Value of " + this.ordinal(parseInt(key) + 1) + " Service Selected") : console.log()
@@ -164,11 +164,11 @@ class ServiceSelect extends Component {
         //     !parseInt(durations[key]) ? messages.push("Invalid Time Value of " + this.ordinal(parseInt(key) + 1) + " Service Selected") : console.log()
         // }
 
-        // if (messages.length !== 0) {
-        //     this.setState({ messages: messages, errors: true })
-        //     return false
-        // }
-        // this.setState({ errors: false })
+        if (messages.length !== 0) {
+            this.setState({ messages: messages, errors: true })
+            return false
+        }
+        this.setState({ errors: false })
         return true
 
     }
