@@ -155,20 +155,20 @@ export class Services extends Component {
         // eslint-disable-next-line no-restricted-globals
         let allow = confirm("Are you Sure you Want to Delete this Service?")
         const url = action === "delete-service" ? 'api/service/business_services/' + id : 'api/service/custom_business_services/' + id
-        console.log(allow)
-        if (action === "delete-service") {
-            const lists = this.state.lists
-            lists.splice(index, 1)
-            this.setState({
-                lists: lists
-            })
-        } else {
-            const lists = this.state.customList
-            lists.splice(index, 1)
-            this.setState({
-                customList: lists
-            })
-        }
+        // console.log(allow)
+        // if (action === "delete-service") {
+        //     const lists = this.state.lists
+        //     lists.splice(index, 1)
+        //     this.setState({
+        //         lists: lists
+        //     })
+        // } else {
+        //     const lists = this.state.customList
+        //     lists.splice(index, 1)
+        //     this.setState({
+        //         customList: lists
+        //     })
+        // }
 
 
 
@@ -308,9 +308,10 @@ export class Services extends Component {
     }
 
     toggleModal = (e, action) => {
-        console.log(e.target.id.split(':')[2])
+        // console.log(e.target.id.split(':')[1])
         const id = e.target.id.split(':')[1]
         let data = this.state.serviceValues
+        let currentValue = ''
         switch (action) {
             case "ServiceEdit":
                 data = {
@@ -318,6 +319,12 @@ export class Services extends Component {
                     mode: "ServiceEdit",
                     id: e.target.id.split(':')[2]
                 }
+                currentValue = this.state.services[e.target.id.split(':')[1]]
+                console.log(currentValue)
+                currentValue = <div> Service: {currentValue.service} <br/>
+                     Category:  {currentValue.category}  <br/>
+                    Price:  {currentValue.price}  <br/>
+                     Duration:  {currentValue.duration} </div>
                 break;
             case "CustomEdit":
                 data = {
@@ -325,6 +332,11 @@ export class Services extends Component {
                     id: e.target.id.split(':')[2],
                     // name: "null"
                 }
+                currentValue = this.state.customServices[e.target.id.split(':')[1]]
+                currentValue = <div> Service: {currentValue.service_name} <br/>
+                     Category:  {currentValue.category}  <br/>
+                    Price:  {currentValue.business_service_price}  <br/>
+                     Duration:  {currentValue.business_service_duration} </div>
                 break;
             case "Add":
                 data = {
@@ -343,9 +355,11 @@ export class Services extends Component {
 
         }
 
+
+
         const serviceArray = []
         for (var key in this.state.allServices) {
-            console.log(key)
+            // console.log(key)
             serviceArray.push(this.state.allServices[key].name)
         }
         const categoryArray = []
@@ -367,6 +381,7 @@ export class Services extends Component {
                 maxWidth="md"
             >
                 <DialogTitle id="alert-dialog-title">{"Services"}</DialogTitle>
+                <strong className="mx-auto" >{currentValue}</strong>
                 <ServiceModal services={serviceArray} categories={categoryArray} action={action} values={this.state.serviceValues} change={this.changeValuesHandler} />
                 <DialogActions>
                     <Button onClick={() => this.setState({ Modal: false })} color="secondary">
@@ -433,7 +448,7 @@ export class Services extends Component {
                         this.props.reload()
                         this.setState({ Loading: false })
                     })
-                    .catch(e=>{
+                    .catch(e => {
                         console.log(e.response)
                     })
                 break;
@@ -454,7 +469,7 @@ export class Services extends Component {
                         this.props.reload()
                         this.setState({ Loading: false })
                     })
-                    .catch(e=>{
+                    .catch(e => {
                         console.log(e.response)
                     })
                 break;
@@ -474,7 +489,7 @@ export class Services extends Component {
                         this.props.reload()
                         this.setState({ Loading: false })
                     })
-                    .catch(e=>{
+                    .catch(e => {
                         console.log(e.response)
                     })
                 break;
@@ -495,7 +510,7 @@ export class Services extends Component {
                         this.props.reload()
                         this.setState({ Loading: false })
                     })
-                    .catch(e=>{
+                    .catch(e => {
                         console.log(e.response)
                     })
                 break;

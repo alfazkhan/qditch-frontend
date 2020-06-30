@@ -21,7 +21,8 @@ export class Stylists extends Component {
         stylistValue : {
             title: "null",
             name: "null",
-            mode : "null"
+            mode : "null",
+            id: "null"
         }
     }
 
@@ -77,13 +78,14 @@ export class Stylists extends Component {
 
                 })
                 .catch(e => {
+                    this.props.reload()
                     this.setState({ Loading: false })
                 })
         }
     }
 
     changeValuesHandler = (e) =>{
-        console.log(e.target)
+        // console.log(e.target)
         const value = this.state.stylistValue
         if(e.target.value === " "){
             e.target.value = ""
@@ -103,9 +105,18 @@ export class Stylists extends Component {
     }
 
     toggleModal = (e,action) => {
-        console.log(e.target.id,action)
+        // console.log(e.target.id,action)
         const value = this.state.stylistValue
+        let currentValue = ''
+        if(action ==="Edit"){
+            value["mode"] = "Edit"
+            value["id"] = e.target.id.split(':')[1]
+            currentValue = this.state.names[e.target.id.split(':')[0]].name
 
+        }else{
+            value["mode"] = "Add"
+        }
+        
         const Modal = !this.state.Modal
         const modal = <Dialog
             open={true}
@@ -116,26 +127,74 @@ export class Stylists extends Component {
             maxWidth="md"
         >
             <DialogTitle id="alert-dialog-title">{"Stylist"}</DialogTitle>
+            {action ==="Edit"? <strong className="mx-auto"> Enter New Value for: {currentValue} </strong> :null}
+            
             <StylistModal values={this.state.serviceValues} change={this.changeValuesHandler} />
             <DialogActions>
                 <Button onClick={() => this.setState({ Modal: false })} color="secondary">
                     Cancel
               </Button>
-                <Button onClick={() => this.serviceTableEdit()} color="primary" autoFocus>
+                <Button onClick={() => this.editStylistHandler()} color="primary" autoFocus>
                     Done
               </Button>
             </DialogActions>
         </Dialog>
 
         this.setState({
-            modalContent: modal,
+            modalContent: modal,serviceValues:value
         }, () => {
             this.setState({ Modal: Modal })
         })
     }
 
     editStylistHandler = () => {
-
+        const values = this.state.stylistValue
+        const messages = []
+        console.log(values)
+        let url,data
+        if(values.title === "null"){
+            messages.push("Please Enter Title")
+            this.setState({messages:messages,errors:true,Modal: false})
+            return true
+        }
+        if(values.name === "null"){
+            messages.push("Please Enter Name")
+            this.setState({messages:messages,errors:true,Modal: false})
+            return true
+        }
+        data = {
+            "business": this.props.data['id'],
+            "name": values.title + " " + values.name
+        }
+        this.setState({Loading: true})
+        switch(values.mode){
+            case "Add":
+                url = "api/stylist/stylist_details/"
+                Axios.post(url,data)
+                .then(res=>{
+                    console.log(res.data)
+                    this.props.reload()
+                    this.setState({Loading: false})
+                })     
+                .catch(e=>{
+                    console.log(e.response)
+                    this.setState({Loading: false})
+                })  
+                break;
+            case "Edit":
+                url = "api/stylist/stylist_details/"+ values.id + '/'
+                Axios.patch(url,data)
+                .then(res=>{
+                    console.log(res.data)
+                    this.props.reload()
+                    this.setState({Loading: false})
+                })     
+                .catch(e=>{
+                    console.log(e.response)
+                    this.setState({Loading: false})
+                })
+                break;
+        }
     }
 
     setTableValues = () => {

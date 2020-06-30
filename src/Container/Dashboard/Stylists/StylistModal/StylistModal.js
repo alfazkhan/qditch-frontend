@@ -30,7 +30,7 @@ const StylistModal = (props) => {
                         margin="none"
                         onChange={props.change}
                         required
-                        id={this.state.currentNumber}
+                        // id={this.state.currentNumber}
                         label={"Stylist Name"}
                         name="sal-name"
                         autoComplete=""
