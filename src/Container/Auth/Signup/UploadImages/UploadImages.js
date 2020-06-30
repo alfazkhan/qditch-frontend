@@ -226,7 +226,7 @@ class UploadImages extends Component {
                                 <div className="row">
                                     <ImageUploader
                                         withIcon={false}
-                                        buttonText={"Select Cover Image"}
+                                        buttonText={"Select Image"}
                                         className={"col-6 h-100"}
                                         buttonStyles={{ background: 'black' }}
                                         fileSizeError={"File Size is To Big Please Select Image Smaller than 5 MB"}
@@ -243,7 +243,7 @@ class UploadImages extends Component {
                                     />
                                     <ImageUploader
                                         withIcon={false}
-                                        buttonText={"Select Cover Image"}
+                                        buttonText={"Select Image"}
                                         className={"col-6 h-100"}
                                         buttonStyles={{ background: 'black' }}
                                         fileSizeError={"File Size is To Big Please Select Image Smaller than 5 MB"}
@@ -263,7 +263,7 @@ class UploadImages extends Component {
                                 <div className="row">
                                     <ImageUploader
                                         withIcon={false}
-                                        buttonText={"Select Cover Image"}
+                                        buttonText={"Select Image"}
                                         className={"col-6 h-100"}
                                         buttonStyles={{ background: 'black' }}
                                         fileSizeError={"File Size is To Big Please Select Image Smaller than 5 MB"}
@@ -281,7 +281,7 @@ class UploadImages extends Component {
                                     />
                                     <ImageUploader
                                         withIcon={false}
-                                        buttonText={"Select Cover Image"}
+                                        buttonText={"Select Image"}
                                         className={"col-6 h-100"}
                                         buttonStyles={{ background: 'black' }}
                                         fileSizeError={"File Size is To Big Please Select Image Smaller than 5 MB"}
