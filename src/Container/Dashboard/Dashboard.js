@@ -66,7 +66,7 @@ const styles = {
 class Dashboard extends Component {
 
   state = {
-    value: 5,
+    value: 0,
     business_id: null,
     Loading: false,
     Data: null,
@@ -80,16 +80,16 @@ this.initialDataHandler()
 
   initialDataHandler = () =>{
     this.setState({ Loading: true })
-    // if (typeof this.props.business_id === 'undefined') {
-    //   this.props.history.push({
-    //     pathname: '/',
-    //   })
-    // }
+    if (typeof this.props.business_id === 'undefined') {
+      this.props.history.push({
+        pathname: '/',
+      })
+    }
 
     const business_id = this.props.match.params.id
 
     this.setState({ business_id: this.props.business_id }, () => {
-      Axios.get('api/users/business/' + 41 + '/') //change this hardcoded value to this.state.business_id
+      Axios.get('api/users/business/' + this.state.business_id + '/') //change this hardcoded value to this.state.business_id 41
         .then((response) => {
           console.log(response.data)
           this.setState({ Data: response.data }, () => {

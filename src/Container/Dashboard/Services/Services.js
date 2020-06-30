@@ -5,7 +5,12 @@ import Axios from '../../../Axios'
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Heading from '../../../Components/Heading/Heading';
 import { withRouter } from 'react-router-dom';
-
+import { Button, Box, TextField, InputLabel, FormControl, Select, MenuItem } from '@material-ui/core';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import ServiceModal from './Modal/ServiceModal'
+import * as Validator from '../../../Validator'
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 export class Services extends Component {
 
@@ -21,7 +26,19 @@ export class Services extends Component {
         categoriesName: {},
         customServices: [],
         customList: [],
-        dataLoaded: 0
+        dataLoaded: 0,
+        Modal: false,
+        modalContent: null,
+        serviceValues: {
+            name: "null",
+            price: "null",
+            duration: "null",
+            category: "null",
+            mode: "null",
+            id: "null"
+        },
+        errors: false,
+        messages: []
 
     }
 
@@ -179,9 +196,6 @@ export class Services extends Component {
 
 
 
-    requestHandler = (action, id) => {
-
-    }
 
     setServiceTable = () => {
         const List = []
@@ -197,7 +211,7 @@ export class Services extends Component {
                     <td>{services[key].category}</td>
                     <td> {services[key].duration} </td>
                     <td>{services[key].price} </td>
-                    <td><button type="button" class="btn btn-primary disabled">Edit</button></td>
+                    <td><button id={"edit-custom-service:" + key + ':' + id} type="button" class="btn btn-primary" onClick={(e) => this.toggleModal(e, "ServiceEdit")}>Edit</button></td>
                     <td ><button id={"delete-service:" + id + ':' + key} onClick={this.deleteHandler} type="button" class="btn btn-danger">Delete</button> </td>
                 </tr>
             )
@@ -218,7 +232,6 @@ export class Services extends Component {
         // console.log(customServices)
         for (var key = 0; key < customServices.length; key++) {
             const id = customServices[key].service_id
-            console.log(id)
             List.push(
                 <tr>
                     <th scope="row">{key + 1}</th>
@@ -226,7 +239,7 @@ export class Services extends Component {
                     <td>{customServices[key].category}</td>
                     <td> {customServices[key].business_service_duration} </td>
                     <td>{customServices[key].business_service_price} </td>
-                    <td><button type="button" class="btn btn-primary disabled">Edit</button> </td>
+                    <td><button type="button" id={"edit-service:" + key + ':' + id} class="btn btn-primary" onClick={(e) => this.toggleModal(e, "CustomEdit")}>Edit</button> </td>
                     <td ><button id={"delete-custom-service:" + id} onClick={this.deleteHandler} type="button" class="btn btn-danger">Delete</button> </td>
                 </tr>
             )
@@ -242,6 +255,243 @@ export class Services extends Component {
 
     }
 
+    changeValuesHandler = (e) => {
+
+        const values = this.state.serviceValues
+
+        switch (e.target.name) {
+            case "selectedServices":
+
+                values["name"] = e.target.value
+                // values["mode"] = "ServiceEdit"
+                break;
+            case "category":
+
+                values["category"] = e.target.value
+                // values["mode"] = "CustomServiceEdit"
+                break;
+            default:
+                console.log()
+        }
+
+        switch (e.target.id) {
+            case "name":
+                if (e.target.value === " ") {
+                    // e.target.value = e.target.value.slice(0, -1)
+                    return true
+                }
+                // console.log("object")
+                values["name"] = e.target.value
+                break;
+            case "prices":
+                if (e.target.value.length > 6) {
+                    e.target.value = e.target.value.slice(0, -1)
+                    return true
+                }
+                values["price"] = e.target.value
+                break;
+            case "durations":
+                if (e.target.value.length > 6) {
+                    e.target.value = e.target.value.slice(0, -1)
+                    return true
+                }
+                values["duration"] = e.target.value
+                break;
+            default:
+                console.log()
+        }
+
+        console.log(values)
+
+        this.setState({
+            serviceValues: values
+        })
+    }
+
+    toggleModal = (e, action) => {
+        console.log(e.target.id.split(':')[2])
+        const id = e.target.id.split(':')[1]
+        let data = this.state.serviceValues
+        switch (action) {
+            case "ServiceEdit":
+                data = {
+                    category: this.state.services[id].category,
+                    mode: "ServiceEdit",
+                    id: e.target.id.split(':')[2]
+                }
+                break;
+            case "CustomEdit":
+                data = {
+                    mode: "CustomServiceEdit",
+                    id: e.target.id.split(':')[2],
+                    // name: "null"
+                }
+                break;
+            case "Add":
+                data = {
+                    mode: "Add",
+                    category: "No Cat"
+                }
+                break;
+            case "CustomAdd":
+                console.log("object")
+                data = {
+                    mode: "CustomAdd",
+                    // name: "null"
+                }
+                break;
+
+
+        }
+
+        const serviceArray = []
+        for (var key in this.state.allServices) {
+            console.log(key)
+            serviceArray.push(this.state.allServices[key].name)
+        }
+        const categoryArray = []
+        for (var key in this.state.categoriesName) {
+            // console.log(this.state.categoriesName[key])
+            // categoryArray.push(this.state.categoriesName[key].name)
+            categoryArray.push(<MenuItem key={key} name={"categories"} value={key}>{this.state.categoriesName[key].name}</MenuItem>)
+        }
+
+
+        this.setState({ serviceValues: data }, () => {
+            const Modal = !this.state.Modal
+            const modal = <Dialog
+                open={true}
+                onClose={() => this.setState({ Modal: false })}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                fullWidth={true}
+                maxWidth="md"
+            >
+                <DialogTitle id="alert-dialog-title">{"Services"}</DialogTitle>
+                <ServiceModal services={serviceArray} categories={categoryArray} action={action} values={this.state.serviceValues} change={this.changeValuesHandler} />
+                <DialogActions>
+                    <Button onClick={() => this.setState({ Modal: false })} color="secondary">
+                        Cancel
+              </Button>
+                    <Button onClick={() => this.serviceTableEdit()} color="primary" autoFocus>
+                        Done
+              </Button>
+                </DialogActions>
+            </Dialog>
+            this.setState({
+                modalContent: modal,
+            }, () => {
+                this.setState({ Modal: Modal })
+            })
+
+        })
+
+
+    }
+
+    serviceTableEdit = () => {
+        const messages = []
+
+        console.log(this.state.serviceValues)
+        if (typeof this.state.serviceValues.name === "undefined") {
+            messages.push("Empty Service Field")
+            this.setState({ messages: messages, errors: true })
+            return true
+        }
+        if (typeof this.state.serviceValues.category === "undefined") {
+            messages.push("Empty Category Field")
+            this.setState({ messages: messages, errors: true })
+            return true
+        }
+        if (typeof this.state.serviceValues.price === "undefined") {
+            messages.push("Empty Price Field")
+            this.setState({ messages: messages, errors: true })
+            return true
+        }
+        if (typeof this.state.serviceValues.duration === "undefined") {
+            messages.push("Empty Duration Field")
+            this.setState({ messages: messages, errors: true })
+            return true
+        }
+
+        let url = ''
+        let data = {}
+        this.setState({ Loading: true })
+        switch (this.state.serviceValues.mode) {
+            case "ServiceEdit":
+                url = 'api/service/business_services/' + this.state.serviceValues.id + '/'
+                data = {
+                    "business": this.props.data.id,
+                    "service": this.state.serviceValues.name + 1,
+                    "business_service_price": this.state.serviceValues.price,
+                    "business_service_duration": this.state.serviceValues.duration,
+                    "buffer_time": "null",
+                    "disable": "False"
+                }
+                Axios.patch(url, data)
+                    .then(res => {
+                        console.log(res.data)
+                        this.props.reload()
+                        this.setState({ Loading: false })
+                    })
+                break;
+            case "CustomServiceEdit":
+                url = 'api/service/custom_business_services/' + this.state.serviceValues.id + '/'
+                data = {
+                    "business": this.props.data.id,
+                    "service_name": this.state.serviceValues.name,
+                    "business_service_price": this.state.serviceValues.price,
+                    "business_service_duration": this.state.serviceValues.duration,
+                    "buffer_time": "null",
+                    "disable": "False",
+                    "category": this.state.serviceValues.category
+                }
+                Axios.patch(url, data)
+                    .then(res => {
+                        console.log(res.data)
+                        this.props.reload()
+                        this.setState({ Loading: false })
+                    })
+                break;
+            case "Add":
+                url = 'api/service/business_services/'
+                data = {
+                    "business": this.props.data.id,
+                    "service": this.state.serviceValues.name + 1,
+                    "business_service_price": this.state.serviceValues.price,
+                    "business_service_duration": this.state.serviceValues.duration,
+                    "buffer_time": "null",
+                    "disable": "False"
+                }
+                Axios.post(url, data)
+                    .then(res => {
+                        console.log(res.data)
+                        this.props.reload()
+                        this.setState({ Loading: false })
+                    })
+                break;
+            case "CustomAdd":
+                url = 'api/service/custom_business_services/'
+                data = {
+                    "business": this.props.data.id,
+                    "service_name": this.state.serviceValues.name,
+                    "business_service_price": this.state.serviceValues.price,
+                    "business_service_duration": this.state.serviceValues.duration,
+                    "buffer_time": "null",
+                    "disable": "False",
+                    "category": this.state.serviceValues.category
+                }
+                Axios.post(url, data)
+                    .then(res => {
+                        console.log(res.data)
+                        this.props.reload()
+                        this.setState({ Loading: false })
+                    })
+                break;
+        }
+        this.setState({ Modal: false, serviceValues: {} })
+    }
+
 
 
 
@@ -249,7 +499,22 @@ export class Services extends Component {
     render() {
         return (
             <div className="container">
+                {this.state.errors
+                    ? <div class="alert alert-danger alert-dismissible fade show text-left" role="alert">
+                        {this.state.messages.map(function (item, i) {
 
+                            return <li key={i}>{item}</li>
+                        })}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true" onClick={() => {
+                                const error = !this.state.errors
+                                this.setState({ errors: error })
+                            }}>&times;</span>
+                        </button>
+                    </div>
+                    : null
+                }
+                {this.state.Modal ? this.state.modalContent : null}
                 {this.state.Loading ? <CircularProgress /> :
                     <div>
                         <Heading text="Saloon Services" />
@@ -269,6 +534,10 @@ export class Services extends Component {
                                 {this.state.lists}
                             </tbody>
                         </table>
+                        <Button variant="contained" size="small" color="primary" className="mt-4 mb-3" onClick={(e) => this.toggleModal(e, "Add")}>
+                            &#x2b; Add New Service
+                        </Button>
+
                         <Heading text="Saloon Custom Services" />
                         <table class="table table-borderless">
                             <thead>
@@ -286,6 +555,9 @@ export class Services extends Component {
                                 {this.state.customList}
                             </tbody>
                         </table>
+                        <Button variant="contained" size="small" color="secondary" className="mt-4 mb-3" onClick={(e) => this.toggleModal(e, "CustomAdd")}>
+                            &#x2b; Add New Custom Service
+                        </Button>
                     </div>
                 }
             </div>
