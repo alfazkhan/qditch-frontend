@@ -1,6 +1,19 @@
 import React, { Component } from 'react'
 import Axios from '../../../Axios'
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Heading from '../../../Components/Heading/Heading';
+import { Button } from '@material-ui/core';
+import Colors from '../../../Constants/Colors';
+
+const styles = {
+    coverImage: {
+        border: "5px solid " + Colors.primary
+    },
+    Image: {
+        border: "2px solid " + Colors.primary
+    }
+}
+
 
 export class Images extends Component {
 
@@ -9,7 +22,10 @@ export class Images extends Component {
         imageData: [],
         images: [],
         imageList: [],
-        coverImage: null
+        coverImage: null,
+        coverImageID: null,
+        errors: false,
+        messages: []
     }
 
     componentDidMount() {
@@ -23,10 +39,11 @@ export class Images extends Component {
                 for (var key in imageData) {
                     Axios.get('api/images/business_image/' + imageData[key] + '/')
                         .then(res => {
-                            console.log(res.data)
+                            // console.log(res.data)
                             images.push({
                                 url: res.data.blob_data,
-                                cover: res.data.cover
+                                cover: res.data.cover,
+                                id: res.data.id
                             })
                             this.setState({ images: images }, () => {
                                 this.setTableValues()
@@ -40,43 +57,150 @@ export class Images extends Component {
         })
     }
 
+    deleteImageHandler = (e) => {
+        // console.log(e.target.id)
+
+        const id = e.target.id.split(':')[1]
+        let url = 'api/images/business_image/' + id + '/'
+
+        
+        // eslint-disable-next-line no-restricted-globals
+        let allow = confirm("Are you Sure you Want to Delete this Image?")
+
+        if (allow) {
+            this.setState({
+                Loading: true
+            })
+            Axios.delete(url)
+                .then(res => {
+                    console.log(res.data)
+                    this.props.reload()
+                    this.setState({
+                        Loading: false
+                    })
+                })
+                .catch(e => {
+                    console.log(e.response)
+                })
+        }
+
+
+    }
+
+    imageEditHandler = (e) => {
+        const messages = []
+        let url = 'api/images/business_image/' + e.target.id.split(':')[1] + '/'
+        const data = new FormData()
+        data.append("blob_data", e.target.files[0])
+        data.append("business", this.props.data['id'])
+        data.append("cover", e.target.id.split(':')[0] === "cover-image-edit" ? "true" : "false")
+        if (e.target.files[0] && e.target.files[0].size > 5242880) {
+            messages.push("Image Size should be Less than 5 MB")
+            this.setState({
+                errors: true,
+                messages: messages
+            })
+            return true
+        }
+
+        const formats = ['image/jpg', 'image/gif', 'image/png', 'image/jpeg']
+
+        if (!formats.includes(e.target.files[0].type)) {
+            messages.push("Image Format should be .jpg,.gif,.png,.jpeg")
+            this.setState({
+                errors: true,
+                messages: messages
+            })
+            return true
+        }
+        this.setState({
+            Loading: true
+        })
+
+        Axios.patch(url, data)
+            .then(res => {
+                console.log(res.data)
+                this.props.reload()
+                this.setState({
+                    Loading: false
+                })
+            })
+            .catch(e => {
+                console.log(e.response)
+            })
+
+    }
+
     setTableValues = () => {
         const imageList = []
         const images = this.state.images
         let coverImage = this.state.coverImage
+        let coverImageID = this.state.coverImageID
         for (var key in images) {
-            console.log(key)
+            // console.log(images[key].id)
             if (images[key].cover) {
                 coverImage = "https://" + images[key].url.split('//')[1]
+                coverImageID = images[key].id
             }
             else {
                 imageList.push(
                     <tr>
-                        <td><img src={"https://" + images[key].url.split('//')[1]} width={100} height={100} /></td>
+                        <td><img src={"https://" + images[key].url.split('//')[1]} width="auto" height={100} style={styles.Image} /></td>
+                        <td>
+                            <label for={"image-edit:" + images[key].id}>
+                                <div type="button" class="btn btn-primary mt-4">Edit Image</div>
+                            </label>
+                            <input id={"image-edit:" + images[key].id} type="file" style={{ display: "none" }} onChange={this.imageEditHandler} />
+                        </td>
+                        <td ><button id={"delete-service:" + images[key].id} onClick={this.deleteImageHandler} type="button" class="btn btn-danger mt-4">Delete</button> </td>
                     </tr>
                 )
             }
         }
-        this.setState({ Loading: false, imageList: imageList, coverImage:coverImage })
+        this.setState({ Loading: false, imageList: imageList, coverImage: coverImage, coverImageID: coverImageID })
     }
 
     render() {
         return (
             <div className="container">
+                <Heading text="Salon Images" />
+                {this.state.errors
+                    ? <div class="alert alert-danger alert-dismissible fade show text-left" role="alert">
+                        {this.state.messages.map(function (item, i) {
+
+                            return <li key={i}>{item}</li>
+                        })}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true" onClick={() => {
+                                const error = !this.state.errors
+                                this.setState({ errors: error })
+                            }}>&times;</span>
+                        </button>
+                    </div>
+                    : null
+                }
                 {this.state.Loading ? <CircularProgress /> :
-                    <table class="table table-borderless table-sm">
+                    <table class="table table-bordered table-sm">
                         <thead>
                             <tr>
+                                <th scope="col">Images</th>
                                 <th scope="col"></th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td><img src={this.state.coverImage} width={500} height={500} /></td>
-                                <td>{this.state.imageList}</td>
+                                <td><img src={this.state.coverImage} style={styles.coverImage} width="auto" height={300} /></td>
+                                <td>
+                                    <label for={"cover-image-edit:" + this.state.coverImageID}>
+                                        <div type="button" class="btn btn-primary mt-5">Edit Cover Image</div>
+                                    </label>
+                                    <input id={"cover-image-edit:" + this.state.coverImageID} type="file" style={{ display: "none" }} onChange={this.imageEditHandler} />
+                                </td>
                             </tr>
-                            
+                            <tr><div className="my-5"></div></tr>
+                            {this.state.imageList}
+
                         </tbody>
                     </table>
                 }
@@ -84,5 +208,8 @@ export class Images extends Component {
         )
     }
 }
+
+
+
 
 export default Images

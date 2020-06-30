@@ -27,26 +27,28 @@ export class Services extends Component {
 
     componentDidMount() {
         const business_services = this.state.data['business_services']
+
         const custom_business_services = this.state.data['custom_business_services']
         const promise = []
         const allCat = this.state.categoriesName
         const allServ = this.state.allServices
 
         promise[1] = Axios.get('api/category/categories/')
-        .then(res=>{
-            for (var key in res.data) {
-                allCat[res.data[key].id] = { "name": res.data[key].name }
-            }
-            this.setState({ categoriesName: allCat }, () => {
-                // console.log(this.state.categoriesName)
+            .then(res => {
+                for (var key in res.data) {
+                    allCat[res.data[key].id] = { "name": res.data[key].name }
+                }
+                this.setState({ categoriesName: allCat }, () => {
+                    // console.log(this.state.categoriesName)
+                })
             })
-        })
+
 
         promise[0] = Axios.get('api/service/services/')
             .then(res => {
-                
+
                 for (var key in res.data) {
-                    allServ[res.data[key].id] = { "name": res.data[key].name, "category": res.data[key].categories  }
+                    allServ[res.data[key].id] = { "name": res.data[key].name, "category": res.data[key].categories }
                 }
                 this.setState({ allServices: allServ }, () => {
                 })
@@ -55,6 +57,13 @@ export class Services extends Component {
 
         Promise.allSettled(promise)
             .then(res => {
+                if (business_services.length === 0) {
+                    this.setState({
+                        Loading: false
+                    })
+                    this.loadCustomTableData()
+                    return true
+                }
                 const all = this.state.allServices
                 const services = this.state.services
                 for (var key in business_services) {
@@ -62,20 +71,20 @@ export class Services extends Component {
                         Axios.get('api/service/business_services/' + business_services[key] + '/')
                             .then(res => {
                                 // console.log(res.data)
-                            const data = {
-                                "service" : all[res.data.service].name,
-                                "service_id": res.data.id,
-                                "category" : allCat[all[res.data.service].category].name,
-                                "duration" : res.data.business_service_duration,
-                                "price" : res.data.business_service_price
-                            }
-                            services.push(data)
-                            // console.log(data)
+                                const data = {
+                                    "service": all[res.data.service].name,
+                                    "service_id": res.data.id,
+                                    "category": allCat[all[res.data.service].category].name,
+                                    "duration": res.data.business_service_duration,
+                                    "price": res.data.business_service_price
+                                }
+                                services.push(data)
+                                // console.log(data)
 
-                            const num = this.state.dataLoaded + 1
-                            this.setState({dataLoaded:num,services:services})
-                                if(this.state.dataLoaded === business_services.length){
-                                    
+                                const num = this.state.dataLoaded + 1
+                                this.setState({ dataLoaded: num, services: services })
+                                if (this.state.dataLoaded === business_services.length) {
+
                                     this.loadCustomTableData()
                                 }
 
@@ -85,7 +94,7 @@ export class Services extends Component {
                             })
 
                     )
-                   
+
 
                 }
             })
@@ -96,20 +105,25 @@ export class Services extends Component {
     loadCustomTableData = () => {
         const customServices = this.state.customServices
         const custom_services_data = this.state.data['custom_business_services']
+        if (custom_services_data.length === 0) {
+            this.setState({
+                Loading: false
+            })
+        }
         const allCat = this.state.categoriesName
-        for(var key in custom_services_data){
+        for (var key in custom_services_data) {
             // console.log(custom_services_data[key])
             const data = {
-                service_name : custom_services_data[key].service_name,
-                business_service_duration: custom_services_data[key].business_service_duration ,
+                service_name: custom_services_data[key].service_name,
+                business_service_duration: custom_services_data[key].business_service_duration,
                 business_service_price: custom_services_data[key].business_service_price,
                 category: allCat[custom_services_data[key].category].name,
-                service_id : custom_services_data[key].id
+                service_id: custom_services_data[key].id
             }
             // console.log(data)
             customServices.push(data)
         }
-        this.setState({customServices:customServices},()=>{
+        this.setState({ customServices: customServices }, () => {
             this.setServiceTable()
             this.setcustomServices()
         })
@@ -126,23 +140,23 @@ export class Services extends Component {
         let allow = confirm("Are you Sure you Want to Delete this Service?")
         const url = action === "delete-service" ? 'api/service/business_services/' + id : 'api/service/custom_business_services/' + id
         console.log(allow)
-        if(action === "delete-service"){
-            const lists = this.state.lists 
+        if (action === "delete-service") {
+            const lists = this.state.lists
             lists.splice(index, 1)
             this.setState({
-                lists : lists
+                lists: lists
             })
-        }else{
+        } else {
             const lists = this.state.customList
             lists.splice(index, 1)
             this.setState({
-                customList : lists
+                customList: lists
             })
         }
-         
 
 
-        
+
+
 
         if (allow) {
             this.setState({ Loading: true })
@@ -191,7 +205,7 @@ export class Services extends Component {
         }
 
         this.setState({ lists: List }, () => {
-            
+
         })
 
     }
