@@ -36,7 +36,8 @@ class SetTimings extends Component {
         business_id: '',
         user_id: '',
         messages: [],
-        errors: false
+        errors: false,
+        
     }
 
     componentDidMount() {

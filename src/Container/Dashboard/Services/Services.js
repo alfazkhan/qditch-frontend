@@ -321,9 +321,9 @@ export class Services extends Component {
                 }
                 currentValue = this.state.services[e.target.id.split(':')[1]]
                 console.log(currentValue)
-                currentValue = <div> Service: {currentValue.service} <br/>
-                     Category:  {currentValue.category}  <br/>
-                    Price:  {currentValue.price}  <br/>
+                currentValue = <div> Service: {currentValue.service} ,
+                     Category:  {currentValue.category}  ,
+                    Price:  {currentValue.price}  ,
                      Duration:  {currentValue.duration} </div>
                 break;
             case "CustomEdit":
@@ -333,9 +333,9 @@ export class Services extends Component {
                     // name: "null"
                 }
                 currentValue = this.state.customServices[e.target.id.split(':')[1]]
-                currentValue = <div> Service: {currentValue.service_name} <br/>
-                     Category:  {currentValue.category}  <br/>
-                    Price:  {currentValue.business_service_price}  <br/>
+                currentValue = <div> Service: {currentValue.service_name} ,
+                     Category:  {currentValue.category}  ,
+                    Price:  {currentValue.business_service_price}  ,
                      Duration:  {currentValue.business_service_duration} </div>
                 break;
             case "Add":

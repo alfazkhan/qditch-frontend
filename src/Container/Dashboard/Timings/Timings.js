@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { CircularProgress } from '@material-ui/core'
+import { CircularProgress, Button, DialogTitle, Dialog, DialogActions} from '@material-ui/core'
 import Axios from '../../../Axios'
+import TimingModal from './TimingModal/TimingModal'
 
 
 class Timings extends Component {
@@ -8,7 +9,11 @@ class Timings extends Component {
     state = {
         Loading: true,
         Timings: [],
-        timingsList: []
+        timingsList: [],
+        initialDataLoaded : false,
+        editedTimeValues:{
+            
+        }
     }
 
     componentDidMount() {
@@ -47,6 +52,62 @@ class Timings extends Component {
         return strTime;
     }
 
+    changeValuesHandler=(data)=>{
+        const Days = data[2]
+        const start = data[0]
+        const end = data[1]
+        const values = this.state.editedTimeValues
+        for(var key in Days){
+            console.log(start[key])
+            values[key.toLowerCase()] = Days[key] ? (start[key] + '/' + end[key]).toString() : 'false'
+        }
+        values["business"] = this.props.data['id']
+        // var data = JSON.stringify({
+        //     "monday": Days[Monday] ? (start[Monday] + '/' + end[Monday]).toString() : 'false',
+        //     "tuesday": Days[Tuesday] ? (start[Tuesday] + '/' + end[1]).toString() : 'false',
+        //     "wednesday": Days[2] ? (start[2] + '/' + end[2]).toString() : 'false',
+        //     "thursday": Days[3] ? (start[3] + '/' + end[3]).toString() : 'false',
+        //     "friday": Days[4] ? (start[4] + '/' + end[4]).toString() : 'false',
+        //     "saturday": Days[5] ? (start[5] + '/' + end[5]).toString() : 'false',
+        //     "sunday": Days[6] ? (start[6] + '/' + end[6]).toString() : 'false',
+        //     "business": this.state.business_id
+        // });
+        // console.log(values)
+
+        this.setState({editedTimeValues:values})
+    }
+
+    toggleModal=()=>{
+        const Modal = !this.state.Modal
+        const modal = <Dialog
+            open={true}
+            onClose={() => this.setState({ Modal: false, initialDataLoaded:false  })}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            fullWidth={true}
+            maxWidth="md"
+        >
+            <DialogTitle id="alert-dialog-title">{"Edit Timings"}</DialogTitle>
+            <TimingModal data={!this.state.initialDataLoaded?this.state.Timings:null} change={this.changeValuesHandler} />
+            <DialogActions>
+                <Button onClick={() => this.setState({ Modal: false, initialDataLoaded:false })} color="secondary">
+                    Cancel
+          </Button>
+                <Button onClick={() => this.timeEditSubmit()} color="primary" autoFocus>
+                    Done
+                </Button>
+            </DialogActions>
+        </Dialog>
+        
+        this.setState({
+            modalContent: modal,
+            initialDataLoaded: true
+        }, () => {
+            console.log(this.state.initialDataLoaded)
+            this.setState({ Modal: Modal })
+        })
+    }
+
 
     setTable = () => {
         // console.log(this.state.Timings)
@@ -82,10 +143,31 @@ class Timings extends Component {
         this.setState({ timingsList: list, Loading: false })
     }
 
+
+    timeEditSubmit = () =>{
+        const data = this.state.editedTimeValues
+        console.log(data)
+        const url = 'https://master.qditch.com/api/availability/timing/' + this.props.data['business_timings'][0] + '/'
+
+        this.setState({Loading:true})
+        Axios.put(url,data)
+        .then(res=>{
+            console.log(res.data)
+            this.props.reload()
+            this.setState({Loading:false})
+        })
+        .catch(e=>{
+            console.log(e.response)
+            this.setState({Loading:false})
+        })
+    }
+
     render() {
         return (
             <div className="container">
                 {this.state.Loading ? <CircularProgress /> :
+                <div>
+                    {this.state.Modal? this.state.modalContent:null}
                     <table class="table table-striped">
                         <thead>
                             <tr>
@@ -98,6 +180,11 @@ class Timings extends Component {
                             {this.state.timingsList}
                         </tbody>
                     </table>
+                    <Button variant="contained" size="small" color="primary" className="mt-4 mb-3" onClick={() => this.toggleModal()}>
+                 Edit Timings
+                </Button>
+                </div>
+                
                 }
             </div>
         )
