@@ -9,7 +9,6 @@ import { Button, Box, TextField, InputLabel, FormControl, Select, MenuItem } fro
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import ServiceModal from './Modal/ServiceModal'
-import * as Validator from '../../../Validator'
 import DialogTitle from '@material-ui/core/DialogTitle';
 
 export class Services extends Component {
@@ -434,6 +433,9 @@ export class Services extends Component {
                         this.props.reload()
                         this.setState({ Loading: false })
                     })
+                    .catch(e=>{
+                        console.log(e.response)
+                    })
                 break;
             case "CustomServiceEdit":
                 url = 'api/service/custom_business_services/' + this.state.serviceValues.id + '/'
@@ -452,6 +454,9 @@ export class Services extends Component {
                         this.props.reload()
                         this.setState({ Loading: false })
                     })
+                    .catch(e=>{
+                        console.log(e.response)
+                    })
                 break;
             case "Add":
                 url = 'api/service/business_services/'
@@ -468,6 +473,9 @@ export class Services extends Component {
                         console.log(res.data)
                         this.props.reload()
                         this.setState({ Loading: false })
+                    })
+                    .catch(e=>{
+                        console.log(e.response)
                     })
                 break;
             case "CustomAdd":
@@ -486,6 +494,9 @@ export class Services extends Component {
                         console.log(res.data)
                         this.props.reload()
                         this.setState({ Loading: false })
+                    })
+                    .catch(e=>{
+                        console.log(e.response)
                     })
                 break;
         }

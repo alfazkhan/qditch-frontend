@@ -56,17 +56,27 @@ class Timings extends Component {
         for (var key in timings) {
             const SE = timings[key].split('/')
             let start = new Date(2020, 6, 29, SE[0].split(':')[0], SE[0].split(':')[1])
-            let end = new Date(2020, 6, 29, SE[1].split(':')[0], SE[0].split(':')[1])
             start = this.formatAMPM(start)
-            end = this.formatAMPM(end)
-            console.log(start, end)
-            list.push(
-                <tr>
-                    <td>{key}</td>
-                    <td>{SE[0] === "false" ? "Closed" : start}</td>
-                    <td>{SE[0] === "false" ? "Closed" : end}</td>
-                </tr>
-            )
+            if (SE[0] !== "false") {
+                let end = new Date(2020, 6, 29, SE[1].split(':')[0], SE[0].split(':')[1])
+                end = this.formatAMPM(end)
+                list.push(
+                    <tr>
+                        <td>{key}</td>
+                        <td>{SE[0] === "false" ? "Closed" : start}</td>
+                        <td>{SE[0] === "false" ? "Closed" : end}</td>
+                    </tr>
+                )
+            }
+            else {
+                list.push(
+                    <tr>
+                        <td>{key}</td>
+                        <td>{SE[0] === "false" ? "Closed" : start}</td>
+                        <td>{SE[0] === "false" ? "Closed" : null}</td>
+                    </tr>
+                )
+            }
             num += 1
         }
         this.setState({ timingsList: list, Loading: false })

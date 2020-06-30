@@ -1,6 +1,12 @@
 import React, { Component } from 'react'
 import Axios from '../../../Axios'
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import { Button } from '@material-ui/core';
+import StylistModal from './StylistModal/StylistModal';
+
 
 export class Stylists extends Component {
 
@@ -8,7 +14,15 @@ export class Stylists extends Component {
         stylists: [],
         names: [],
         nameList: [],
-        Loading: true
+        Loading: true,
+        Modal: false,
+        messages: [],
+        modalContent: null,
+        stylistValue : {
+            title: "null",
+            name: "null",
+            mode : "null"
+        }
     }
 
     componentWillMount() {
@@ -68,17 +82,73 @@ export class Stylists extends Component {
         }
     }
 
+    changeValuesHandler = (e) =>{
+        console.log(e.target)
+        const value = this.state.stylistValue
+        if(e.target.value === " "){
+            e.target.value = ""
+            return true
+        }
+        if(e.target.name === "Stylist Title"){
+            value["title"] = e.target.value
+        }else{
+            value["name"] = e.target.value
+        }
+
+        this.setState({
+            stylistValue : value
+        })
+
+
+    }
+
+    toggleModal = (e,action) => {
+        console.log(e.target.id,action)
+        const value = this.state.stylistValue
+
+        const Modal = !this.state.Modal
+        const modal = <Dialog
+            open={true}
+            onClose={() => this.setState({ Modal: false })}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+            fullWidth={true}
+            maxWidth="md"
+        >
+            <DialogTitle id="alert-dialog-title">{"Stylist"}</DialogTitle>
+            <StylistModal values={this.state.serviceValues} change={this.changeValuesHandler} />
+            <DialogActions>
+                <Button onClick={() => this.setState({ Modal: false })} color="secondary">
+                    Cancel
+              </Button>
+                <Button onClick={() => this.serviceTableEdit()} color="primary" autoFocus>
+                    Done
+              </Button>
+            </DialogActions>
+        </Dialog>
+
+        this.setState({
+            modalContent: modal,
+        }, () => {
+            this.setState({ Modal: Modal })
+        })
+    }
+
+    editStylistHandler = () => {
+
+    }
+
     setTableValues = () => {
         const names = this.state.names
         const nameList = []
         for (var key = 0; key < this.state.stylists.length; key++) {
-            console.log(names[key])
+            // console.log(names[key])
             const id = names[key].id
             nameList.push(
                 <tr>
                     <th scope="row">{key + 1}</th>
                     <td>{names[key].name}</td>
-                    <td><button type="button" class="btn btn-primary disabled">Edit</button> </td>
+                    <td><button type="button" id={key+':'+id} class="btn btn-primary" onClick={(e)=>this.toggleModal(e,"Edit")} >Edit</button> </td>
                     <td ><button id={id + ':' + key} onClick={this.deleteHandler} type="button" class="btn btn-danger">Delete</button> </td>
                 </tr>
             )
@@ -90,6 +160,22 @@ export class Stylists extends Component {
     render() {
         return (
             <div className="container">
+                {this.state.errors
+                    ? <div class="alert alert-danger alert-dismissible fade show text-left" role="alert">
+                        {this.state.messages.map(function (item, i) {
+
+                            return <li key={i}>{item}</li>
+                        })}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true" onClick={() => {
+                                const error = !this.state.errors
+                                this.setState({ errors: error })
+                            }}>&times;</span>
+                        </button>
+                    </div>
+                    : null
+                }
+                {this.state.Modal ? this.state.modalContent : null}
                 {this.state.Loading ? <CircularProgress /> :
                     <table class="table table-striped">
                         <thead>
@@ -105,6 +191,9 @@ export class Stylists extends Component {
                         </tbody>
                     </table>
                 }
+                <Button variant="contained" size="small" color="primary" className="mt-4 mb-3" onClick={(e) => this.toggleModal(e, "Add")}>
+                    &#x2b; Add New Stylist
+                        </Button>
             </div>
         )
     }
