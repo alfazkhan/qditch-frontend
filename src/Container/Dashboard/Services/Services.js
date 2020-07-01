@@ -154,7 +154,7 @@ export class Services extends Component {
         console.log(action)
         // eslint-disable-next-line no-restricted-globals
         let allow = confirm("Are you Sure you Want to Delete this Service?")
-        const url = action === "delete-service" ? 'api/service/business_services/' + id : 'api/service/custom_business_services/' + id
+        const url = action === "delete-service" ? 'api/service/business_services/' + id  : 'api/service/custom_business_services/' + id 
         // console.log(allow)
         // if (action === "delete-service") {
         //     const lists = this.state.lists

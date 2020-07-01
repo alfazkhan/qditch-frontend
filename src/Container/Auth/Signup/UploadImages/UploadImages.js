@@ -141,7 +141,7 @@ class UploadImages extends Component {
             for (var i = 0; i < pictures.length; i++) {
 
                 var data = new FormData();
-                data.append('blob_data', pictures[i], pictures[i].name);
+                data.append('blob_data', pictures[i]);
                 data.append('business', this.state.business_id);
                 data.append('cover', i == 0 ? 'true' : 'false');
                 // const data = {

@@ -21,6 +21,7 @@ import Stylists from './Stylists/Stylists';
 import Images from './Images/Images';
 import Timings from './Timings/Timings';
 import { withRouter } from 'react-router-dom';
+import EditProfile from './EditProfile/EditProfile';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -66,7 +67,7 @@ const styles = {
 class Dashboard extends Component {
 
   state = {
-    value: 4,
+    value: 0,
     business_id: null,
     Loading: false,
     Data: null,
@@ -89,9 +90,9 @@ this.initialDataHandler()
     const business_id = this.props.match.params.id
 
     this.setState({ business_id: this.props.business_id }, () => {
-      Axios.get('api/users/business/' + this.state.business_id + '/') //change this hardcoded value to this.state.business_id 41
+      Axios.get('api/users/business/' + this.state.business_id + '/') //change this hardcoded value to this.state.business_id 2
         .then((response) => {
-          console.log(response.data)
+          // console.log(response.data)
           this.setState({ Data: response.data }, () => {
             this.setState({ Loading: false })
           })
@@ -154,7 +155,7 @@ this.initialDataHandler()
               <Images data={this.state.Data} reload={this.initialDataHandler} />
             </TabPanel>
             <TabPanel value={this.state.value} index={6}>
-              Edit Data
+              <EditProfile data={this.state.Data} reload={this.initialDataHandler} />
         </TabPanel>
           </div>}
       </div>

@@ -2,6 +2,7 @@ import Slideshow from '../../Components/SlideShow/Slideshow'
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Axios from '../../Axios'
+import Categories from '../../Components/Categories/Categories'
 
 export class Landing extends Component {
     state = {
@@ -35,6 +36,7 @@ export class Landing extends Component {
                 } */}
 
                 <Slideshow />
+                {/* <Categories/> */}
             </div>
         )
     }

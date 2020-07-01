@@ -3,6 +3,7 @@ import Slide1 from '../../Assets/Slide-1.png'
 import Slide2 from '../../Assets/Slide-2.png'
 import Slide3 from '../../Assets/Slide-3.png'
 import Slide4 from '../../Assets/Slide-4.png'
+import Categories from '../Categories/Categories'
 
 const Slideshow = () => {
 
@@ -30,8 +31,9 @@ const Slideshow = () => {
                         <div className="carousel-item">
                             <img className="d-block w-100" src={Slide4} style={styles.thumbpost_center} alt="First slide" />
                         </div>
-                        
                     </div>
+                    <Categories/>
+                    
                     {/* <a className="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                         <span className="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span className="sr-only">Previous</span>
@@ -40,6 +42,7 @@ const Slideshow = () => {
                         <span className="carousel-control-next-icon" aria-hidden="true"></span>
                         <span className="sr-only">Next</span>
                     </a> */}
+                    
                 </div>
         </div>
     )
