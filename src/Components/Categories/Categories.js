@@ -35,28 +35,28 @@ const Categories = (props) => {
         <div className="container-fluid mb-5 mx-auto" style={{ backgroundColor: "rgba(255,255,255,0)" }}>
             <div className="row">
                 <div className="col" onClick={clickHandler} >
-                    <Avatar className="mx-5" id="Hair" style={styles.Avatar}>Hair</Avatar>
+                    <Avatar variant="square" className="mx-5" id="Hair" style={styles.Avatar}>Hair</Avatar>
                 </div>
                 <div className="col" onClick={clickHandler} >
-                    <Avatar className="mx-5" id="Skin" style={styles.Avatar}>Skin</Avatar>
+                    <Avatar variant="square" className="mx-5" id="Skin" style={styles.Avatar}>Skin</Avatar>
                 </div>
                 <div className="col" onClick={clickHandler} >
-                    <Avatar className="mx-5" id="Spa" style={styles.Avatar}>Spa</Avatar>
+                    <Avatar variant="square" className="mx-5" id="Spa" style={styles.Avatar}>Spa</Avatar>
                 </div>
                 <div className="col" onClick={clickHandler} >
-                    <Avatar className="mx-5" id="Makeup" style={styles.Avatar}>Makeup</Avatar>
+                    <Avatar variant="square" className="mx-5" id="Makeup" style={styles.Avatar}>Makeup</Avatar>
                 </div>
                 <div className="col" onClick={clickHandler} >
-                    <Avatar className="mx-5" id="Eyebrows" style={styles.Avatar}>Eyebrows</Avatar>
+                    <Avatar variant="square" className="mx-5" id="Eyebrows" style={styles.Avatar}>Eyebrows</Avatar>
                 </div>
                 <div className="col" onClick={clickHandler} >
-                    <Avatar className="mx-5" id="Hair Removal" style={styles.Avatar}>Hair Removal</Avatar>
+                    <Avatar variant="square" className="mx-5" id="Hair Removal" style={styles.Avatar}>Hair Removal</Avatar>
                 </div>
                 <div className="col" onClick={clickHandler} >
-                    <Avatar className="mx-5" id="Nails" style={styles.Avatar}>Nails</Avatar>
+                    <Avatar variant="square" className="mx-5" id="Nails" style={styles.Avatar}>Nails</Avatar>
                 </div>
                 <div className="col" onClick={clickHandler} >
-                    <Avatar className="mx-5" id="Massage" style={styles.Avatar}>Massage</Avatar>
+                    <Avatar variant="square" className="mx-5" id="Massage" style={styles.Avatar}>Massage</Avatar>
                 </div>
             </div>
         </div>

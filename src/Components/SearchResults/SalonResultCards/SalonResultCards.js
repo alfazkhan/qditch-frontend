@@ -10,7 +10,8 @@ const SalonResults = (props) => {
   const [salonsPerPage] = useState(10);
 
   useEffect(() => {
-    const ids = props.business_ids
+    const ids = props.business_ids.sort()
+    // console.log(ids)
     const salonsList = salons
     const promise = []
     setLoading(true);

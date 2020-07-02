@@ -24,7 +24,8 @@ class UploadImages extends Component {
         user_id: null,
         messages: [],
         errors: false,
-        requestNumber: 0
+        requestNumber: 0,
+        CoverImage: false
     }
 
     ordinal = (number) => {
@@ -68,7 +69,7 @@ class UploadImages extends Component {
         //                     buttonStyles={{ background: 'black' }}
         //                     fileSizeError={"File Size is To Big Please Select Image Smaller than 5 MB"}
         //                     fileTypeError={"Sorry! This File Format is Not Supported"}
-        //                     onChange={this.valueChangeHandler}
+        //                     onChangee={this.valueChangeHandler}e,
         //                     singleImage={true}
         //                     withPreview={true}
         //                     withLabel={false}
@@ -79,7 +80,7 @@ class UploadImages extends Component {
         //                 />
         //                 <div class="row">
         //                     <label for="exampleFormControlFile1">{"Select Image"}</label>
-        //                     <input type="file" class="form-control-file" id="exampleFormControlFile1" onChange={this.valueChangeHandler} />
+        //                     <input type="file" class="form-control-file" id="exampleFormControlFile1" onChangee={this.valueChangeHandler}e, />
         //                 </div>
         //             </div>)
         //     }
@@ -92,12 +93,12 @@ class UploadImages extends Component {
         return '#' + Math.floor(Math.random() * 16777215).toString(16);
     }
 
-    valueChangeHandler = (picture) => {
-        console.log(picture[0])
+    valueChangeHandler = (picture, id) => {
+        console.log(id)
 
         const pictures = this.state.Pictures
-        pictures.push(picture[0])
-        this.setState({ Pictures: pictures })
+        pictures[id]=picture[0]
+        this.setState({ Pictures: pictures, CoverImage: true })
 
     }
 
@@ -157,7 +158,7 @@ class UploadImages extends Component {
 
                 console.log("object")
 
-                promises[i]=Axios.post(url, data, config)
+                promises[i] = Axios.post(url, data, config)
                     .then((res) => {
                         console.log(res)
 
@@ -169,13 +170,13 @@ class UploadImages extends Component {
             }
 
             Promise.allSettled(promises)
-            .then(res=>{
-                this.props.toggleLoading(false)
-                console.log("All Data Sent")
-                this.pageChangeHandler()
+                .then(res => {
+                    this.props.toggleLoading(false)
+                    console.log("All Data Sent")
+                    this.pageChangeHandler()
 
-            })
-            
+                })
+
 
 
         }
@@ -206,13 +207,14 @@ class UploadImages extends Component {
                     <form>
                         <div className="row">
                             <ImageUploader
+                                id="0"
                                 withIcon={false}
                                 buttonText={"Select Cover Image"}
                                 className={"col-6 h-100"}
                                 buttonStyles={{ background: 'black' }}
                                 fileSizeError={"File Size is To Big Please Select Image Smaller than 5 MB"}
                                 fileTypeError={"Sorry! This File Format is Not Supported"}
-                                onChange={this.valueChangeHandler}
+                                onChange={(e) => this.valueChangeHandler(e, 0)}
                                 singleImage={true}
                                 withPreview={true}
                                 withLabel={false}
@@ -223,81 +225,90 @@ class UploadImages extends Component {
                                 fileContainerStyle={{ height: window.innerHeight / 2 }}
                             />
                             <div>
-                                <div className="row">
-                                    <ImageUploader
-                                        withIcon={false}
-                                        buttonText={"Select Image"}
-                                        className={"col-6 h-100"}
-                                        buttonStyles={{ background: 'black' }}
-                                        fileSizeError={"File Size is To Big Please Select Image Smaller than 5 MB"}
-                                        fileTypeError={"Sorry! This File Format is Not Supported"}
-                                        onChange={this.valueChangeHandler}
-                                        singleImage={true}
-                                        withPreview={true}
-                                        withLabel={false}
-                                        label={"Select Some Beautiful Images of your Saloon to Showcase"}
-                                        labelStyles={{ fontSize: 20 }}
-                                        imgExtension={['.jpg', '.gif', '.png', '.gif', '.jpeg']}
-                                        maxFileSize={5242880}
-                                        fileContainerStyle={{ height: window.innerHeight / 4 }}
-                                    />
-                                    <ImageUploader
-                                        withIcon={false}
-                                        buttonText={"Select Image"}
-                                        className={"col-6 h-100"}
-                                        buttonStyles={{ background: 'black' }}
-                                        fileSizeError={"File Size is To Big Please Select Image Smaller than 5 MB"}
-                                        fileTypeError={"Sorry! This File Format is Not Supported"}
-                                        onChange={this.valueChangeHandler}
-                                        singleImage={true}
-                                        withPreview={true}
-                                        withLabel={false}
-                                        label={"Select Some Beautiful Images of your Saloon to Showcase"}
-                                        labelStyles={{ fontSize: 20 }}
-                                        imgExtension={['.jpg', '.gif', '.png', '.gif', '.jpeg']}
-                                        maxFileSize={5242880}
-                                        fileContainerStyle={{ height: window.innerHeight / 4 }}
 
-                                    />
+                                <div>
+                                    <div className="row">
+                                        <ImageUploader
+                                            id="1"
+                                            withIcon={false}
+                                            buttonText={"Select Image"}
+                                            className={"col-6 h-100"}
+                                            buttonStyles={{ background: 'black' }}
+                                            fileSizeError={"File Size is To Big Please Select Image Smaller than 5 MB"}
+                                            fileTypeError={"Sorry! This File Format is Not Supported"}
+                                            onChange={(e) => this.valueChangeHandler(e, 1)}
+                                            singleImage={true}
+                                            withPreview={true}
+                                            withLabel={false}
+                                            label={"Select Some Beautiful Images of your Saloon to Showcase"}
+                                            labelStyles={{ fontSize: 20 }}
+                                            imgExtension={['.jpg', '.gif', '.png', '.gif', '.jpeg']}
+                                            maxFileSize={5242880}
+                                            fileContainerStyle={{ height: window.innerHeight / 4 }}
+                                        />
+                                        <ImageUploader
+                                            id="2"
+                                            withIcon={false}
+                                            buttonText={"Select Image"}
+                                            className={"col-6 h-100"}
+                                            buttonStyles={{ background: 'black' }}
+                                            fileSizeError={"File Size is To Big Please Select Image Smaller than 5 MB"}
+                                            fileTypeError={"Sorry! This File Format is Not Supported"}
+                                            onChange={(e) => this.valueChangeHandler(e, 2)}
+                                            singleImage={true}
+                                            withPreview={true}
+                                            withLabel={false}
+                                            label={"Select Some Beautiful Images of your Saloon to Showcase"}
+                                            labelStyles={{ fontSize: 20 }}
+                                            imgExtension={['.jpg', '.gif', '.png', '.gif', '.jpeg']}
+                                            maxFileSize={5242880}
+                                            fileContainerStyle={{ height: window.innerHeight / 4 }}
+
+                                        />
+                                    </div>
+                                    <div className="row">
+                                        <ImageUploader
+                                            id="3"
+                                            withIcon={false}
+                                            buttonText={"Select Image"}
+                                            className={"col-6 h-100"}
+                                            buttonStyles={{ background: 'black' }}
+                                            fileSizeError={"File Size is To Big Please Select Image Smaller than 5 MB"}
+                                            fileTypeError={"Sorry! This File Format is Not Supported"}
+                                            onChange={(e) => this.valueChangeHandler(e, 3)}
+                                            singleImage={true}
+                                            withPreview={true}
+                                            withLabel={false}
+                                            label={"Select Some Beautiful Images of your Saloon to Showcase"}
+                                            labelStyles={{ fontSize: 20 }}
+                                            imgExtension={['.jpg', '.gif', '.png', '.gif', '.jpeg']}
+                                            maxFileSize={5242880}
+                                            fileContainerStyle={{ height: window.innerHeight / 4 }}
+
+                                        />
+                                        <ImageUploader
+                                            id="4"
+                                            withIcon={false}
+                                            buttonText={"Select Image"}
+                                            className={"col-6 h-100"}
+                                            buttonStyles={{ background: 'black' }}
+                                            fileSizeError={"File Size is To Big Please Select Image Smaller than 5 MB"}
+                                            fileTypeError={"Sorry! This File Format is Not Supported"}
+                                            onChange={(e) => this.valueChangeHandler(e, 4)}
+                                            singleImage={true}
+                                            withPreview={true}
+                                            withLabel={false}
+                                            label={"Select Some Beautiful Images of your Saloon to Showcase"}
+                                            labelStyles={{ fontSize: 20 }}
+                                            imgExtension={['.jpg', '.gif', '.png', '.gif', '.jpeg']}
+                                            maxFileSize={5242880}
+                                            fileContainerStyle={{ height: window.innerHeight / 4 }}
+
+                                        />
+                                    </div>
                                 </div>
-                                <div className="row">
-                                    <ImageUploader
-                                        withIcon={false}
-                                        buttonText={"Select Image"}
-                                        className={"col-6 h-100"}
-                                        buttonStyles={{ background: 'black' }}
-                                        fileSizeError={"File Size is To Big Please Select Image Smaller than 5 MB"}
-                                        fileTypeError={"Sorry! This File Format is Not Supported"}
-                                        onChange={this.valueChangeHandler}
-                                        singleImage={true}
-                                        withPreview={true}
-                                        withLabel={false}
-                                        label={"Select Some Beautiful Images of your Saloon to Showcase"}
-                                        labelStyles={{ fontSize: 20 }}
-                                        imgExtension={['.jpg', '.gif', '.png', '.gif', '.jpeg']}
-                                        maxFileSize={5242880}
-                                        fileContainerStyle={{ height: window.innerHeight / 4 }}
 
-                                    />
-                                    <ImageUploader
-                                        withIcon={false}
-                                        buttonText={"Select Image"}
-                                        className={"col-6 h-100"}
-                                        buttonStyles={{ background: 'black' }}
-                                        fileSizeError={"File Size is To Big Please Select Image Smaller than 5 MB"}
-                                        fileTypeError={"Sorry! This File Format is Not Supported"}
-                                        onChange={this.valueChangeHandler}
-                                        singleImage={true}
-                                        withPreview={true}
-                                        withLabel={false}
-                                        label={"Select Some Beautiful Images of your Saloon to Showcase"}
-                                        labelStyles={{ fontSize: 20 }}
-                                        imgExtension={['.jpg', '.gif', '.png', '.gif', '.jpeg']}
-                                        maxFileSize={5242880}
-                                        fileContainerStyle={{ height: window.innerHeight / 4 }}
 
-                                    />
-                                </div>
                             </div>
                         </div>
                     </form>

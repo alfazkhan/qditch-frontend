@@ -40,7 +40,9 @@ class Profile extends Component {
             confirmPass: ""
         },
         messages: [],
-        errors: false
+        errors: false,
+        success: false,
+        successMessages: []
     }
 
     componentDidMount() {
@@ -93,6 +95,7 @@ class Profile extends Component {
     passwordSubmitHandler = () => {
         const values = this.state.passwordValues
         const messages = []
+        const successMessages = []
 
         if ( !Validator.isPresent(values.newPass) || !Validator.isPresent(values.confirmPass) ) {
             messages.push("Can't Leave Empty Fields")
@@ -123,9 +126,12 @@ class Profile extends Component {
         Axios.post(url,data,config)
         .then(res=>{
             console.log(res.data)
+            successMessages.push("Password Changed Successfully")
+            this.setState({Modal:false,successMessages:successMessages,success:true})
         })
         .catch(e=>{
             console.log(e.response)
+            this.setState({Modal:false})
         })
 
         // const headers = {
@@ -271,6 +277,21 @@ class Profile extends Component {
                                     <span aria-hidden="true" onClick={() => {
                                         const error = !this.state.errors
                                         this.setState({ errors: error })
+                                    }}>&times;</span>
+                                </button>
+                            </div>
+                            : null
+                        }
+                        {this.state.success
+                            ? <div class="alert alert-success alert-dismissible fade show text-left" role="alert">
+                                {this.state.successMessages.map(function (item, i) {
+
+                                    return <li key={i}>{item}</li>
+                                })}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true" onClick={() => {
+                                        const success = !this.state.success
+                                        this.setState({ success: success })
                                     }}>&times;</span>
                                 </button>
                             </div>

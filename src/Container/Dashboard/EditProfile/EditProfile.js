@@ -29,6 +29,7 @@ class EditProfile extends Component {
     valuesChangeHandler = (e) => {
         const values = this.state.values
         if(e.target.name === "type"){
+            // console.log(e.target.value)
             values['type'] = e.target.value
             this.setState({values:values})
             return true
@@ -95,7 +96,7 @@ class EditProfile extends Component {
                                     <FormControl variant="" className="col-sm">
                                         <InputLabel>{(this.state.values.type).toUpperCase()}</InputLabel>
                                         <Select
-                                            name='category'
+                                            name='type'
                                             onChange={this.valuesChangeHandler}
                                             // value={"10"}
                                             id="type"

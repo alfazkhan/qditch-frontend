@@ -90,9 +90,9 @@ this.initialDataHandler()
     const business_id = this.props.match.params.id
 
     this.setState({ business_id: this.props.business_id }, () => {
-      Axios.get('api/users/business/' + this.state.business_id + '/') //change this hardcoded value to this.state.business_id 2
+      Axios.get('api/users/business/' + this.state.business_id + '/') //change this hardcoded value to this.state.business_id 16
         .then((response) => {
-          // console.log(response.data)
+          console.log(response.data)
           this.setState({ Data: response.data }, () => {
             this.setState({ Loading: false })
           })

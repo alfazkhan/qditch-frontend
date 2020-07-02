@@ -15,7 +15,7 @@ import { CircularProgress } from '@material-ui/core';
 class SalonCard extends Component {
 
   state = {
-    userDetails: [],
+    userDetails: {},
     Loading: true
   }
 
@@ -23,29 +23,31 @@ class SalonCard extends Component {
     let promise = []
     const details = this.state.userDetails
 
-    for (var key in this.props.salon) {
+    const salonData = this.props.salon
+    // console.log(salonData)
+
+    for (var key in salonData) {
       const url = 'api/users/user_data/'
       const data = {
-        "user": this.props.salon[key].user
+        "user": salonData[key].user
       }
       promise.push(Axios.post(url, data)
         .then(res => {
-          details.push({
+          // console.log(res.data)
+          details[res.data.user_details.users] = {
             "name": res.data.user_details.first_name + " " + res.data.user_details.last_name,
             "mobile": res.data.user_details.mobile_number
-          })
+          }
         })
         .catch(e => {
           console.log(e.response)
         }))
-      }
-      Promise.allSettled(promise)
-        .then(res => {
-          console.log(details)
-          this.setState({ userDetails: details,Loading:false })
-        })
-
-
+    }
+    Promise.allSettled(promise)
+      .then(res => {
+        // console.log(details)
+        this.setState({ userDetails: details, Loading: false })
+      })
   }
 
 
@@ -82,7 +84,7 @@ class SalonCard extends Component {
                         {salon.address}
                       </Typography>
                       <Typography variant="body2" color="primary" component="p">
-                        {this.state.userDetails[index].name + ":" + this.state.userDetails[index].mobile} 
+                        {this.state.userDetails[salon.user].name + ":" + this.state.userDetails[salon.user].mobile} 
                       </Typography>
                     </CardContent>
                   </CardActionArea>
@@ -105,11 +107,11 @@ class SalonCard extends Component {
 
 const styles = {
   container: {
-      marginTop: window.innerHeight / 6,
-      width: window.innerWidth < 768 ? '100%' : '50%',
+    marginTop: window.innerHeight / 6,
+    width: window.innerWidth < 768 ? '100%' : '50%',
   },
   Loader: {
-      marginTop: '40px'
+    marginTop: '40px'
   }
 }
 

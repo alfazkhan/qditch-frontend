@@ -89,7 +89,7 @@ const Navigator = (props) => {
                                     </li>
                                     <li className="nav-item">
                                         {/* <Button variant="contained" size="small" color="primary"> */}
-                                        <Link to='/Register/Business' className={" "} style={styles.navlink} >Business Signup</Link>
+                                        <Link to='/Register/Business'  className={" "} style={styles.navlink} >Business Signup</Link>
                                         {/* </Button> */}
                                     </li>
                                 

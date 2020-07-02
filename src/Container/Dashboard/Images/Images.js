@@ -88,6 +88,7 @@ export class Images extends Component {
     }
 
     imageEditHandler = (e) => {
+        console.log(e.target.id)
         const messages = []
         let url = 'api/images/business_image/' + e.target.id.split(':')[1] + '/'
         const data = new FormData()
