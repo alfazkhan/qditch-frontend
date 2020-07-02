@@ -3,14 +3,15 @@ import { connect } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
 import Avatar from '@material-ui/core/Avatar';
 import Axios from '../../Axios';
-import { Button, Box, Grid, Card, CardActions, Fade } from '@material-ui/core';
+import { Button, Box, Grid, Card, CardActions, Fade, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField } from '@material-ui/core';
 import Heading from '../../Components/Heading/Heading';
 import Colors from '../../Constants/Colors';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import PhoneIcon from '@material-ui/icons/Phone';
 import { Loader } from '../../Components/Loader/Loader'
 import * as actionTypes from '../../store/Action/Action'
-
+import * as Validator from '../../Validator'
+import axios from 'axios'
 
 const styles = {
     navlink: {
@@ -31,7 +32,15 @@ class Profile extends Component {
         name: "",
         number: "",
         email: "",
-        Loading: false
+        Loading: false,
+        Modal: false,
+        modalContent: null,
+        passwordValues: {
+            newPass: "",
+            confirmPass: ""
+        },
+        messages: [],
+        errors: false
     }
 
     componentDidMount() {
@@ -41,6 +50,8 @@ class Profile extends Component {
         // const DetailID = 1
         // const business_id = 4
         // const user_id = 2
+
+
         if (!this.props.loggedIn || typeof user_id === 'undefined') {
 
             this.props.history.push('/')
@@ -67,15 +78,135 @@ class Profile extends Component {
                 })
             })
             .catch(e => {
-
+                console.log(e.response)
             })
+    }
+
+
+    valueChangeHandler = (e) => {
+        // console.log(e.target.id, e.target.value)
+        const values = this.state.passwordValues
+        values[e.target.id] = e.target.value
+        this.setState({ passwordValues: values })
+    }
+
+    passwordSubmitHandler = () => {
+        const values = this.state.passwordValues
+        const messages = []
+
+        if ( !Validator.isPresent(values.newPass) || !Validator.isPresent(values.confirmPass) ) {
+            messages.push("Can't Leave Empty Fields")
+            this.setState({messages:messages,errors:true})
+            return true
+        }
+       
+        if (!Validator.validAtleastLength(values.newPass,6)) {
+            messages.push("Password Should Have atleast 6 Characters")
+            this.setState({messages:messages,errors:true})
+            return true
+        }
+        if (!Validator.equalValues(values.confirmPass, values.newPass)) {
+            messages.push("Password Values don't Match")
+            this.setState({messages:messages,errors:true})
+            return true
+        }
+
+        const url = 'rest-auth/password/change/'
+        const config = {headers : {
+            "Authorization" : "Token "+ this.props.token
+        }}
+        const data = {
+            "new_password1": values.newPass,
+            "new_password2": values.confirmPass
+        }
+        
+        Axios.post(url,data,config)
+        .then(res=>{
+            console.log(res.data)
+        })
+        .catch(e=>{
+            console.log(e.response)
+        })
+
+        // const headers = {
+        //     'Content-Type': 'application/json',
+        //     'Authorization': 'Token e0c18e0e2861966f83c756a4a2c4e011ea5bf48a'
+        //   }
+          
+        //   axios.post(url, data, config)
+        //     .then((response) => {
+        //       console.log(response.data)
+        //     })
+        //     .catch((error) => {
+        //       console.log(error.response)
+        //     })
+
+    }
+
+
+    editProfileHandler = () => {
+
+        const modalContent = (
+            <Dialog
+                open={true}
+                onClose={() => { this.setState({ Modal: false }) }}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+                maxWidth="md"
+                fullWidth={true}
+            >
+                <DialogTitle id="alert-dialog-title">{"Change Password"}</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        
+                        <div className="row">
+                            <TextField
+                                id="newPass"
+                                label="New Password"
+                                type="password"
+                                fullWidth
+                                autoComplete="current-password"
+                                variant="outlined"
+                                onChange={this.valueChangeHandler}
+                            />
+                        </div>
+                        <div className="row mt-4">
+                            <TextField
+                                id="confirmPass"
+                                label="Confirm Password"
+                                type="password"
+                                fullWidth
+                                autoComplete="current-password"
+                                variant="outlined"
+                                onChange={this.valueChangeHandler}
+                            />
+                        </div>
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => { this.setState({ Modal: false }) }} color="primary">
+                        Disagree
+                </Button>
+                    <Button onClick={this.passwordSubmitHandler} color="primary" autoFocus>
+                        Agree
+                </Button>
+                </DialogActions>
+            </Dialog>
+
+        )
+
+        this.setState({
+            Modal: true,
+            modalContent: modalContent
+        })
+
     }
 
     deleteProfileHandler = () => {
         // eslint-disable-next-line no-restricted-globals
         let allow = confirm("Are you Sure you Want to Continue and Delete Your Profile?")
         console.log(allow)
-        
+
 
 
         if (allow) {
@@ -84,8 +215,6 @@ class Profile extends Component {
                 .then(res => {
 
                     console.log(res.data)
-                    this.props.history.push('/')
-                    this.props.history.push('/')
                     this.props.history.push('/')
                     this.setState({ Loading: false })
 
@@ -131,6 +260,22 @@ class Profile extends Component {
                     ? <Loader />
                     : <Box>
                         <Heading text="User Profile" />
+                        {this.state.Modal ? this.state.modalContent : null}
+                        {this.state.errors
+                            ? <div class="alert alert-danger alert-dismissible fade show text-left" role="alert">
+                                {this.state.messages.map(function (item, i) {
+
+                                    return <li key={i}>{item}</li>
+                                })}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true" onClick={() => {
+                                        const error = !this.state.errors
+                                        this.setState({ errors: error })
+                                    }}>&times;</span>
+                                </button>
+                            </div>
+                            : null
+                        }
                         <Card>
                             <Box>
                                 <Avatar style={{ backgroundColor: this.randomColor(), width: 200, height: 200 }} className="mx-auto my-5">
@@ -159,9 +304,12 @@ class Profile extends Component {
                             </CardActions>
                         </Card>
                         <Box>
-                            <Button variant="contained" color="secondary" className="my-3 px-auto" style={{ width: '100%' }} onClick={this.deleteProfileHandler}>
+                            <Button variant="contained" color="primary" className="my-3 px-auto" style={{ width: '100%' }} onClick={this.editProfileHandler}>
+                                Change Password
+                            </Button>
+                            <Button variant="contained" color="secondary" className="px-auto" style={{ width: '100%' }} onClick={this.deleteProfileHandler}>
                                 Delete My Profile
-                </Button>
+                            </Button>
                         </Box>
                     </Box>
 
@@ -177,7 +325,8 @@ const mapStateToProps = (state) => ({
     business_id: state.business_id,
     business_user: state.businessUser,
     loggedIn: state.userLoggedIn,
-    user_detail_id: state.user_details_id
+    user_detail_id: state.user_details_id,
+    token : state.token
 })
 
 

@@ -101,8 +101,8 @@ const Navigator = (props) => {
                     </nav>
                     <Switch>
                         <Route path="/" exact children={<Landing />} />
-                        <Route path="/results/:type/:query" children={<Results />} />
-                        <Route path="/businessinfo" exact children={<BusinessInfo />} />
+                        <Route path="/results/:category/:categoryName" children={<Results />} />
+                        <Route path="/saloninfo/:id" exact children={<BusinessInfo />} />
                         <Route path="/Login" exact children={<Login />} />
                         <Route path="/Register/:mode" exact children={<Signup />} />
                         <Route path="/admin/dashboard/" exact children={<Dashboard />} />
