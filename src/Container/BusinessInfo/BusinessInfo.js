@@ -5,6 +5,8 @@ import { CircularProgress, Button, Paper } from '@material-ui/core'
 import BusinessSlideshow from '../../Components/BusinessInfo/BusinessSlideshow/BusinessSlideshow'
 import SalonTimingsCard from '../../Components/BusinessInfo/SalonTimingsCard/SalonTimingsCard'
 import Heading from '../../Components/Heading/Heading'
+import ServiceBook from '../../Components/BusinessInfo/ServiceBook/ServiceBook'
+import SalonInfoCard from '../../Components/BusinessInfo/SalonInfocard/SalonInfoCard'
 
 
 class BusinessInfo extends Component {
@@ -19,7 +21,7 @@ class BusinessInfo extends Component {
         console.log(id)
         Axios.get('api/users/business/' + id + '/')
             .then(res => {
-                console.log(res.data)
+                // console.log(res.data)
                 this.setState({ business_data: res.data, Loading: false }, () => {
                 })
 
@@ -49,14 +51,17 @@ class BusinessInfo extends Component {
                                 <BusinessSlideshow images={this.state.business_data['business_images']} />
                             </div>
                             <div className="col-6">
-                                <SalonTimingsCard timings={this.state.business_data['business_timings'][0]} />
+                                <SalonInfoCard data={this.state.business_data} />
                             </div>
                         </div>
+
                         <div className="row">
-                            <Heading text={this.state.business_data['business_name']} />
-                        </div>
-                        <div className="row">
-                            {/* <Heading text={this.state.business_data['business_name']} /> */}
+                            <div className="col-8">
+                                <ServiceBook data={this.state.business_data} />
+                            </div>
+                            <div className="col-4">
+                                <SalonTimingsCard timings={this.state.business_data['business_timings'][0]} />
+                            </div>
                         </div>
                     </div>
                 }

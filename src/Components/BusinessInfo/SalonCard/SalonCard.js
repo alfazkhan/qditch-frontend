@@ -16,19 +16,22 @@ class SalonCard extends Component {
 
   state = {
     userDetails: {},
-    Loading: true
+    Loading: true,
+    coverImages: {}
   }
 
   componentDidMount() {
     let promise = []
     const details = this.state.userDetails
+    const images = this.state.coverImages
 
     const salonData = this.props.salon
     // console.log(salonData)
 
     for (var key in salonData) {
       const url = 'api/users/user_data/'
-      const data = {
+      const url2 = 'api/images/business_cover_image/'
+      let data = {
         "user": salonData[key].user
       }
       promise.push(Axios.post(url, data)
@@ -42,12 +45,24 @@ class SalonCard extends Component {
         .catch(e => {
           console.log(e.response)
         }))
-    }
-    Promise.allSettled(promise)
-      .then(res => {
-        // console.log(details)
-        this.setState({ userDetails: details, Loading: false })
-      })
+      data = {
+        "business": salonData[key].id
+      }
+      // console.log(data)
+      promise.push(Axios.post(url2, data)
+        .then(res => {
+          // console.log(res.data)
+          images[res.data.business]=res.data['cover_photo'] 
+        })
+        .catch(e => {
+          console.log(e.response)
+        }))
+      }
+      Promise.allSettled(promise)
+        .then(res => {
+          console.log(images)
+          this.setState({ userDetails: details, Loading: false, coverImages: images })
+        })
   }
 
 
@@ -69,7 +84,7 @@ class SalonCard extends Component {
                       component="img"
                       alt="Contemplative Reptile"
                       height="200"
-                      image="https://images.pexels.com/photos/705255/pexels-photo-705255.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+                      image={"https://master.qditch.com" + this.state.coverImages[salon.id]}
                       title={salon.business_name}
                     />
                   </CardActionArea>
@@ -84,7 +99,7 @@ class SalonCard extends Component {
                         {salon.address}
                       </Typography>
                       <Typography variant="body2" color="primary" component="p">
-                        {this.state.userDetails[salon.user].name + ":" + this.state.userDetails[salon.user].mobile} 
+                        {this.state.userDetails[salon.user].name + ":" + this.state.userDetails[salon.user].mobile}
                       </Typography>
                     </CardContent>
                   </CardActionArea>

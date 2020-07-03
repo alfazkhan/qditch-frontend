@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { withRouter, Link } from 'react-router-dom'
 import Avatar from '@material-ui/core/Avatar';
 import Axios from '../../Axios';
-import { Button, Box, Grid, Card, CardActions, Fade, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField } from '@material-ui/core';
+import { Button, Box, Grid, Card, CardActions, Fade, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, TextField, Snackbar } from '@material-ui/core';
 import Heading from '../../Components/Heading/Heading';
 import Colors from '../../Constants/Colors';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
@@ -12,6 +12,8 @@ import { Loader } from '../../Components/Loader/Loader'
 import * as actionTypes from '../../store/Action/Action'
 import * as Validator from '../../Validator'
 import axios from 'axios'
+
+
 
 const styles = {
     navlink: {
@@ -97,48 +99,50 @@ class Profile extends Component {
         const messages = []
         const successMessages = []
 
-        if ( !Validator.isPresent(values.newPass) || !Validator.isPresent(values.confirmPass) ) {
+        if (!Validator.isPresent(values.newPass) || !Validator.isPresent(values.confirmPass)) {
             messages.push("Can't Leave Empty Fields")
-            this.setState({messages:messages,errors:true})
+            this.setState({ messages: messages, errors: true })
             return true
         }
-       
-        if (!Validator.validAtleastLength(values.newPass,6)) {
+
+        if (!Validator.validAtleastLength(values.newPass, 6)) {
             messages.push("Password Should Have atleast 6 Characters")
-            this.setState({messages:messages,errors:true})
+            this.setState({ messages: messages, errors: true })
             return true
         }
         if (!Validator.equalValues(values.confirmPass, values.newPass)) {
             messages.push("Password Values don't Match")
-            this.setState({messages:messages,errors:true})
+            this.setState({ messages: messages, errors: true })
             return true
         }
 
         const url = 'rest-auth/password/change/'
-        const config = {headers : {
-            "Authorization" : "Token "+ this.props.token
-        }}
+        const config = {
+            headers: {
+                "Authorization": "Token " + this.props.token
+            }
+        }
         const data = {
             "new_password1": values.newPass,
             "new_password2": values.confirmPass
         }
-        
-        Axios.post(url,data,config)
-        .then(res=>{
-            console.log(res.data)
-            successMessages.push("Password Changed Successfully")
-            this.setState({Modal:false,successMessages:successMessages,success:true})
-        })
-        .catch(e=>{
-            console.log(e.response)
-            this.setState({Modal:false})
-        })
+
+        Axios.post(url, data, config)
+            .then(res => {
+                console.log(res.data)
+                successMessages.push("Password Changed Successfully")
+                this.setState({ Modal: false, successMessages: successMessages, success: true })
+            })
+            .catch(e => {
+                console.log(e.response)
+                this.setState({ Modal: false })
+            })
 
         // const headers = {
         //     'Content-Type': 'application/json',
         //     'Authorization': 'Token e0c18e0e2861966f83c756a4a2c4e011ea5bf48a'
         //   }
-          
+
         //   axios.post(url, data, config)
         //     .then((response) => {
         //       console.log(response.data)
@@ -163,8 +167,23 @@ class Profile extends Component {
             >
                 <DialogTitle id="alert-dialog-title">{"Change Password"}</DialogTitle>
                 <DialogContent>
+                    {this.state.errors
+                        ? <div class="alert alert-danger alert-dismissible fade show text-left" role="alert">
+                            {this.state.messages.map(function (item, i) {
+
+                                return <li key={i}>{item}</li>
+                            })}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true" onClick={() => {
+                                    const error = !this.state.errors
+                                    this.setState({ errors: error })
+                                }}>&times;</span>
+                            </button>
+                        </div>
+                        : null
+                    }
                     <DialogContentText id="alert-dialog-description">
-                        
+
                         <div className="row">
                             <TextField
                                 id="newPass"
@@ -268,18 +287,28 @@ class Profile extends Component {
                         <Heading text="User Profile" />
                         {this.state.Modal ? this.state.modalContent : null}
                         {this.state.errors
-                            ? <div class="alert alert-danger alert-dismissible fade show text-left" role="alert">
-                                {this.state.messages.map(function (item, i) {
+                            ?
+                            <div>
 
-                                    return <li key={i}>{item}</li>
-                                })}
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true" onClick={() => {
-                                        const error = !this.state.errors
-                                        this.setState({ errors: error })
-                                    }}>&times;</span>
-                                </button>
+                                <Snackbar open={true} autoHideDuration={6000} onClose={() => {
+                                    const error = !this.state.errors
+                                    this.setState({ errors: error })
+                                }}>
+                                    <div class="alert alert-danger alert-dismissible fade show text-left" role="alert">
+                                        {this.state.messages.map(function (item, i) {
+
+                                            return <li key={i}>{item}</li>
+                                        })}
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true" onClick={() => {
+                                                const error = !this.state.errors
+                                                this.setState({ errors: error })
+                                            }}>&times;</span>
+                                        </button>
+                                    </div>
+                                </Snackbar>
                             </div>
+
                             : null
                         }
                         {this.state.success
@@ -347,7 +376,7 @@ const mapStateToProps = (state) => ({
     business_user: state.businessUser,
     loggedIn: state.userLoggedIn,
     user_detail_id: state.user_details_id,
-    token : state.token
+    token: state.token
 })
 
 
