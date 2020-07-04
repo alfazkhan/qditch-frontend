@@ -85,13 +85,13 @@ class ServiceSelect extends Component {
                 <Box>
                     <div className="row mt-3" key={new Date()}>
                         {/* <div className="col-md pr-5"></div> */}
-                        <FormControl variant="outlined" className="col-sm">
+                        <FormControl variant="outlined" className="col-md-4">
                             <InputLabel>Select Service</InputLabel>
                             <Select
                                 name='selectedServices'
                                 onChange={this.valueChangeHandler}
                                 label="Select Service"
-                                className="col-md"
+                                className="col"
                             >
 
                                 {this.state.Services.map((value, index) => {
@@ -108,7 +108,7 @@ class ServiceSelect extends Component {
                             label="Price (&#x20b9;)"
                             name="sal-name"
                             autoComplete=""
-                            className="col-md"
+                            className="col-md-4"
                         />
                         <TextField
                             variant="outlined"
@@ -119,7 +119,7 @@ class ServiceSelect extends Component {
                             label={"Duration(Min)"}
                             name="sal-name"
                             autoComplete=""
-                            className="col-md"
+                            className="col-md-4"
                         />
                     </div>
                 </Box>
@@ -453,7 +453,7 @@ class ServiceSelect extends Component {
                                 </tbody>
                             </table>
                         </div> */}
-                        <div className=" col-12" style={{ width: '100%', height: window.innerHeight / 3, overflowY: "scroll" }}>
+                        <div className=" col-12" style={{ width: '100%', height: 400, overflowY: "scroll" }}>
                             {this.state.List}
                         </div>
                     </div>
@@ -472,7 +472,7 @@ class ServiceSelect extends Component {
 
 
                     {this.state.custom
-                        ? <div><div className="col-12" style={{ width: '100%', height: window.innerHeight / 5, overflowY: "scroll" }}>
+                        ? <div><div className="col-12" style={{ width: '100%', height: 500, overflowY: "scroll" }}>
                             {this.state.customServicesList}
                         </div>
                             <Button variant="contained" size="small" color="secondary" className="mt-4 mb-3" onClick={this.addCustomServiceField}>
