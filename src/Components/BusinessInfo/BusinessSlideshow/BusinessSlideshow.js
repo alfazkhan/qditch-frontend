@@ -60,7 +60,7 @@ const styles = {
         objectFit: 'cover',
         objectPosition: 'center',
         width: window.innerWidth,
-        maxHeight: 300,
+        height: 300,
         position: 'sticky',
         overFlow: 'hidden',
         top: 1000

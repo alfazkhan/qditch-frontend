@@ -62,7 +62,7 @@ class SalonTimingsCard extends Component {
                 let end = new Date(2020, 6, 29, SE[1].split(':')[0], SE[0].split(':')[1])
                 end = this.formatAMPM(end)
                 list.push(
-                    <tr style={{color:'#fff'}}>
+                    <tr style={{color:''}}>
                         <td>{key}</td>
                         <td>{SE[0] === "false" ? "Closed" : start}</td>
                         <td>{SE[0] === "false" ? "Closed" : end}</td>
@@ -71,7 +71,7 @@ class SalonTimingsCard extends Component {
             }
             else {
                 list.push(
-                    <tr style={{color:'#fff'}}>
+                    <tr style={{color:''}}>
                         <td>{key}</td>
                         <td>{SE[0] === "false" ? "Closed" : start}</td>
                         <td>{SE[0] === "false" ? "Closed" : null}</td>
@@ -87,7 +87,7 @@ class SalonTimingsCard extends Component {
         return (
             <div>
                 {this.state.Loading ? <CircularProgress /> :
-                    <Paper elevation={3} style={{backgroundColor:'#333333'}}>
+                    <Paper elevation={3} style={{backgroundColor:''}}>
                         <table class="table table-borderless">
                         {this.state.timingsList}
                         </table>

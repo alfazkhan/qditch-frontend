@@ -53,7 +53,7 @@ export class ServiceBook extends Component {
                 <tr style={{color:'#fff'}}>
                     <th scope="row">
                         <FormControlLabel
-                            value={["services", services[key].id], services[key].business_service_price, services[key].business_service_duration}
+                            value={["services", services[key].id, services[key].business_service_price, services[key].business_service_duration]}
                             control={<Checkbox style={{color:'#fff'}} />}
                             // label={Categories[i]}
                             // labelPlacement="end"
@@ -74,7 +74,7 @@ export class ServiceBook extends Component {
                 <tr style={{color:'#fff'}}>
                     <th scope="row">
                         <FormControlLabel
-                            value={["custom-services", custom_services[key].id]}
+                            value={["custom-services", custom_services[key].id,custom_services[key].business_service_price,custom_services[key].business_service_duration]}
                             control={<Checkbox style={{color:'#fff'}} />}
                             // label={Categories[i]}
                             // labelPlacement="end"

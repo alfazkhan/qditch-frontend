@@ -60,7 +60,7 @@ class SalonCard extends Component {
       }
       Promise.allSettled(promise)
         .then(res => {
-          console.log(images)
+          // console.log(images)
           this.setState({ userDetails: details, Loading: false, coverImages: images })
         })
   }
