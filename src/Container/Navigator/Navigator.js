@@ -17,7 +17,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import * as actionTypes from '../../store/Action/Action'
 import { Logout } from '../Auth/Login/Logout';
 import Logo from '../../Assets/Logo.png'
-import  Profile  from '../Profile/Profile';
+import Profile from '../Profile/Profile';
 import FaceIcon from '@material-ui/icons/Face';
 const styles = {
     navlink: {
@@ -31,8 +31,8 @@ const Navigator = (props) => {
 
     const [userLoggedIn, setuserLoggedIn] = useState(true)
     // const [businessUser, setBusinessUser] = useState(true)
-    
-    const [userID,setuserID] = useState(useSelector(state => state.user_id))
+
+    const [userID, setuserID] = useState(useSelector(state => state.user_id))
 
 
 
@@ -44,12 +44,12 @@ const Navigator = (props) => {
 
     useEffect(() => {
         setuserLoggedIn(!userLoggedIn)
-        
+
         console.log("updated")
     }, [useSelector(state => state.userLoggedIn)])
 
-    
-   
+
+
 
 
 
@@ -63,9 +63,10 @@ const Navigator = (props) => {
                             <MenuRoundedIcon style={styles.navlink} />
                         </button>
                         <Link to='/' className={"navbar-brand "} >
-                            <img src={Logo} width="auto" height="40" alt="Qditch"  />
+                            <img src={Logo} width="auto" height="40" alt="Qditch" />
                         </Link>
                         <div className="collapse navbar-collapse" id="navbarTogglerDemo03">
+
                             {userLoggedIn
                                 ?
                                 <ul className="navbar-nav ml-auto mt-lg-0">
@@ -79,7 +80,7 @@ const Navigator = (props) => {
                                         : null
                                     } */}
                                     <li className="nav-item">
-                                            <Link to={'/profile'} className={"navbar-link text-bold"} style={styles.navlink}>My Profile </Link>
+                                        <Link to={'/profile'} className={"navbar-link text-bold"} style={styles.navlink}>My Profile </Link>
                                     </li>
                                 </ul>
                                 :
@@ -89,10 +90,16 @@ const Navigator = (props) => {
                                     </li>
                                     <li className="nav-item">
                                         {/* <Button variant="contained" size="small" color="primary"> */}
-                                        <Link to='/Register/Business'  className={" "} style={styles.navlink} >Business Signup</Link>
+                                        <Link to='/Register/Business' className={" "} style={styles.navlink} >Business Signup</Link>
                                         {/* </Button> */}
                                     </li>
-                                
+                                    {/* {window.innerWidth <= 1000
+                                        ? <div>
+                                            <div class="dropdown-divider"></div>
+                                            <Link to='/Register/Business' className={" "} style={styles.navlink} >Business Signup</Link>
+                                        </div>
+                                        : null
+                                    } */}
                                 </ul>
                             }
 
@@ -107,8 +114,8 @@ const Navigator = (props) => {
                         <Route path="/Register/:mode" exact children={<Signup />} />
                         <Route path="/admin/dashboard/" exact children={<Dashboard />} />
                         <Route path='/logout' exact children={<Logout />} />
-                        <Route path='/profile' exact children={<Profile logout={props.logout}/>} />
-                        
+                        <Route path='/profile' exact children={<Profile logout={props.logout} />} />
+
                     </Switch>
                 </div>
             </div>

@@ -1,13 +1,43 @@
-import React from 'react'
+import React,{useEffect,useState} from 'react'
 import Slide1 from '../../Assets/Slide-1.png'
 import Slide2 from '../../Assets/Slide-2.png'
 import Slide3 from '../../Assets/Slide-3.png'
 import Slide4 from '../../Assets/Slide-4.png'
 import Categories from '../Categories/Categories'
+import { Avatar, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
+import Axios from '../../Axios'
+import { withRouter } from 'react-router-dom'
+import Colors from '../../Constants/Colors'
 
-const Slideshow = () => {
+
+const Slideshow = (props) => {
+
+    const [categories, setCategories] = useState({})
+
+    useEffect(() => {
+        const data = categories
+        Axios.get('api/category/categories/')
+            .then(res => {
+                for (var key in res.data) {
+                    data[res.data[key].name] = res.data[key].id
+                }
+            })
+
+        setCategories(data)
+
+        console.log(data)
 
 
+    }, [categories])
+
+
+    const clickHandler = (e) => {
+        if (e.target.id === "") {
+            return true
+        }
+        props.history.push('/results/' + categories[e.target.id] + '/' + e.target.id)
+
+    }
 
     return (
         <div>
@@ -31,9 +61,12 @@ const Slideshow = () => {
                     <div className="carousel-item">
                         <img className="d-block w-100" src={Slide4} style={styles.thumbpost_center} alt="First slide" />
                     </div>
-                    <div class="carousel-caption d-none d-md-block" style={{top:300}}>
-                    <Categories />
-                    </div>
+                    {window.innerWidth > 1000
+                        ? <div class="carousel-caption d-none d-md-block" style={{ top: 300 }}>
+                            <Categories />
+                        </div>
+                        : null}
+
                 </div>
 
                 {/* <a className="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -46,8 +79,36 @@ const Slideshow = () => {
                     </a> */}
 
             </div>
+
+            {window.innerWidth <= 1000
+                ? <div className='row text-center mx-1 my-3' style={{backgroundColor: '#fff'}}>
+                    <FormControl variant="filled" className={"text-center"} style={{ width: '100%' }} >
+                        <InputLabel className="text-center" >Search By Category</InputLabel>
+                        <Select
+                            fullWidth
+                            value={""}
+                            className="text-center"
+                            inputProps={{
+                                name: 'age',
+                                id: 'filled-age-native-simple',
+                            }}
+                            style={{color:'#fff'}}
+                        >
+                            <MenuItem id="Hair" onClick={clickHandler}>Hair</MenuItem>
+                            <MenuItem id="Skin" onClick={clickHandler}>Skin</MenuItem>
+                            <MenuItem id="Spa" onClick={clickHandler}>Spa</MenuItem>
+                            <MenuItem id="Makeup" onClick={clickHandler}>Makeup</MenuItem>
+                            <MenuItem id="Eyebrows" onClick={clickHandler}>Eyebrows</MenuItem>
+                            <MenuItem id="Hair Removal" onClick={clickHandler}>Hair Removal</MenuItem>
+                            <MenuItem id="Nails" onClick={clickHandler}>Nails</MenuItem>
+                            <MenuItem id="Massage" onClick={clickHandler}>Massage</MenuItem>
+                        </Select>
+                    </FormControl>
+                </div>
+                : null}
+
             <div>
-                
+
 
             </div>
         </div>
@@ -89,4 +150,4 @@ const styles = {
 }
 
 
-export default Slideshow
+export default withRouter(Slideshow)

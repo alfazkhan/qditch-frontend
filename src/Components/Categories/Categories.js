@@ -1,33 +1,33 @@
 import React, { useEffect, useState } from 'react'
-import { Avatar } from '@material-ui/core'
+import { Avatar, FormControl, InputLabel, Select } from '@material-ui/core'
 import Axios from '../../Axios'
-import { withRouter } from 'react-router-dom'
+import { withRouter, Link } from 'react-router-dom'
 
 const Categories = (props) => {
 
-    const [categories,setCategories] = useState({})
+    const [categories, setCategories] = useState({})
 
     useEffect(() => {
         const data = categories
         Axios.get('api/category/categories/')
-        .then(res=>{
-            for(var key in res.data){
-                data[res.data[key].name] = res.data[key].id
-            }
-        })
+            .then(res => {
+                for (var key in res.data) {
+                    data[res.data[key].name] = res.data[key].id
+                }
+            })
 
         setCategories(data)
 
         console.log(data)
 
-        
+
     }, [categories])
 
-    const clickHandler=(e)=>{
-        if(e.target.id === ""){
+    const clickHandler = (e) => {
+        if (e.target.id === "") {
             return true
         }
-        props.history.push('/results/'+ categories[e.target.id] +'/'+ e.target.id )
+        props.history.push('/results/' + categories[e.target.id] + '/' + e.target.id)
 
     }
 
@@ -59,13 +59,16 @@ const Categories = (props) => {
                     <Avatar variant="square" className="mx-5" id="Massage" style={styles.Avatar}>Massage</Avatar>
                 </div>
             </div>
+           
+
+
         </div>
     )
 }
 
 const styles = {
     Avatar: {
-        height: 100,
+        height: 70,
         width: 100,
         backgroundColor: '#5b5b5b',
         color: 'white',
