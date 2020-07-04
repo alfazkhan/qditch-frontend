@@ -13,22 +13,23 @@ import { PersistGate } from 'redux-persist/integration/react'
 import { Loader } from './Components/Loader/Loader';
 
 
-const persistConfig = {
-  key: 'root',
-  storage
-}
-const persistedReducer = persistReducer(persistConfig, Reducer)
-let store = createStore(persistedReducer)
-let persistor = persistStore(store)
-console.log(storage)
+// const persistConfig = {
+//   key: 'root',
+//   storage
+// }
+// const persistedReducer = persistReducer(persistConfig, Reducer)
+// let store = createStore(persistedReducer)
+// let persistor = persistStore(store)
+// console.log(storage)
 
+let store = createStore(Reducer)
 
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
-      <PersistGate loading={<Loader/>} persistor={persistor}>
+      {/* <PersistGate loading={<Loader/>} persistor={persistor}> */}
         <App />
-      </PersistGate>
+      {/* </PersistGate> */}
     </BrowserRouter>
   </Provider>,
   document.getElementById('root')

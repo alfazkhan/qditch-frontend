@@ -7,32 +7,42 @@ const initialState = {
     userLoggedIn: false,
     businessUser: false,
     user_details_id : null,
-    errorMessages:[]
 }
+
+let updatedState
 
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.UPDATE_USER_ID:
-            return {
+            updatedState = {
                 ...state,
                 user_id: action.user_id,
                 userLoggedIn: true
             }
+            localStorage.setItem('state',JSON.stringify(updatedState))
+            return updatedState
+            
         case actionTypes.UPDATE_BUSINESS_ID:
-            return {
+            updatedState = {
                 ...state,
                 business_id: action.business_id,
                 businessUser: true
             }
+            localStorage.setItem('state',JSON.stringify(updatedState))
+            return updatedState
+
         case actionTypes.UPDATE_TOKEN:
-            return {
+             updatedState = {
                 ...state,
                 token: action.token,
                 userLoggedIn: true
             }
+            localStorage.setItem('state',JSON.stringify(updatedState))
+            return updatedState
+
         case actionTypes.USER_LOGOUT:
             console.log("Logged Out")
-            return {
+            updatedState = {
                 ...state,
                 token: null,
                 user_id: null,
@@ -40,20 +50,28 @@ const reducer = (state = initialState, action) => {
                 business_id: null,
                 userLoggedIn: false
             }
+            localStorage.setItem('state',JSON.stringify(updatedState))
+            return updatedState
+
         case actionTypes.USER_DETAIL_ID:
-            console.log(action.user_details_id)
-            return {
+            // console.log(action.user_details_id)
+            updatedState = {
                 ...state,
                 user_details_id : action.user_details_id
             }
-        case actionTypes.ERROR_MESSAGES:
-            // console.log(action.user_details_id)
-            return {
-                ...state,
-                errorMessages : action.errors
+            localStorage.setItem('state',JSON.stringify(updatedState))
+            return updatedState
+
+        case actionTypes.LOCAL_STORAGE_FETCH:
+            console.log(action.fetchedState)
+            updatedState = {
+                ...action.fetchedState
             }
+            return updatedState
+            
+        }
 
     }
-}
+
 
 export default reducer

@@ -341,7 +341,6 @@ const styles = {
 
 const mapStateToProps = state => {
     return {
-        errors: state.errorMessages
     }
 
 }
@@ -364,10 +363,6 @@ const mapDispatchToProps = dispatch => {
             type: actionTypes.USER_DETAIL_ID,
             user_details_id: data
         }),
-        onError: (data) => dispatch({
-            type: actionTypes.ERROR_MESSAGES,
-            errors: data
-        })
     }
 }
 

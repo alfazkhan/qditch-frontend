@@ -29,7 +29,7 @@ const styles = {
 
 const Navigator = (props) => {
 
-    const [userLoggedIn, setuserLoggedIn] = useState(true)
+    const [userLoggedIn, setuserLoggedIn] = useState(useSelector(state=>state.userLoggedIn))
     // const [businessUser, setBusinessUser] = useState(true)
 
     const [userID, setuserID] = useState(useSelector(state => state.user_id))
@@ -40,11 +40,17 @@ const Navigator = (props) => {
     // const logout = async () => {
     //     this.props.history.push('/logout')
     //   };
-
+    
 
     useEffect(() => {
-        setuserLoggedIn(!userLoggedIn)
+        const data = JSON.parse(localStorage.getItem('state'))
+        if(data){
+            console.log(data)
+            setuserLoggedIn(data.userLoggedIn)
+            setuserID(data.user_id)
+        }
 
+        
         console.log("updated")
     }, [useSelector(state => state.userLoggedIn)])
 

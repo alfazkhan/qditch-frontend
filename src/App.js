@@ -10,16 +10,31 @@ import './App.css'
 import { Loader } from './Components/Loader/Loader'
 export class App extends Component {
 
+  state={
+    Loading: true
+  }
+
   logoutHandler = () =>{
     this.props.onLogout()
     this.props.history.go('/')
 }
 
+  componentWillMount() {
+    const data = JSON.parse(localStorage.getItem('state'))
+    // console.log(data)
+    this.props.onstart(data)
+    this.setState({Loading:false})
+  }
+  
+
   render() {
     return (
       <div className="App">
-      <Navigator logout={this.logoutHandler} />
-      {/* <Loader/> */}
+        {this.state.Loading
+        ?<Loader/>
+      :<Navigator logout={this.logoutHandler} />}
+      
+      
       </div>
     )
   }
@@ -34,6 +49,10 @@ const mapDispatchToProps = dispatch => {
   return {
       onLogout: () => dispatch({
           type: actionTypes.USER_LOGOUT
+      }),
+      onstart: (data) => dispatch({
+        type: actionTypes.LOCAL_STORAGE_FETCH,
+        fetchedState : data
       })
   }
 
