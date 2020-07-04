@@ -42,7 +42,9 @@ export class SalonInfoCard extends Component {
                     ? <Paper elevation={3} className="p-3">
                         <Heading text={this.props.data['business_name']} />
                         <strong className="ml-3 mr-3 mb-3 text-break">{this.props.data['address']}</strong>
+                        <div className='mt-2' style={{maxHeight: 200,overflow: 'scroll',overflowX: 'hidden'}}>
                         {this.state.safetyFeatures}
+                        </div>
 
                     </Paper>
                     : null}

@@ -104,7 +104,7 @@ export class ServiceBook extends Component {
     render() {
         return (
             <div>
-                <Paper className="" elevation={3} style={{backgroundColor:'#333'}}>
+                <Paper className="col" elevation={3} style={{backgroundColor:'#333'}}>
                     <table class="table table-striped">
                         <thead>
                             <tr style={{color:'#fff'}}>

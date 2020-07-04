@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
 import Axios from '../../Axios'
-import { CircularProgress, Button, Paper } from '@material-ui/core'
+import { CircularProgress, Button, Paper, Dialog, DialogContent, DialogTitle, DialogActions } from '@material-ui/core'
 import BusinessSlideshow from '../../Components/BusinessInfo/BusinessSlideshow/BusinessSlideshow'
 import SalonTimingsCard from '../../Components/BusinessInfo/SalonTimingsCard/SalonTimingsCard'
 import Heading from '../../Components/Heading/Heading'
@@ -13,7 +13,9 @@ class BusinessInfo extends Component {
 
     state = {
         business_data: null,
-        Loading: true
+        Loading: true,
+        timeModal: false,
+        modalContent: null
     }
 
     componentDidMount() {
@@ -32,7 +34,27 @@ class BusinessInfo extends Component {
 
     }
 
+    timeModalhandler = () => {
+        const modalContent = (
+            <Dialog onClose={() => this.setState({ timeModal: false })} aria-labelledby="simple-dialog-title" open={true}>
+                <DialogTitle id="simple-dialog-title">Timings</DialogTitle>
+                <DialogContent>
+                    <SalonTimingsCard timings={this.state.business_data['business_timings'][0]} />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => this.setState({ timeModal: false })} color="secondary">
+                        Cancel
+              </Button>
+                </DialogActions>
+            </Dialog>
 
+        )
+
+        this.setState({
+            timeModal: true,
+            modalContent: modalContent
+        })
+    }
 
     render() {
         return (
@@ -55,13 +77,29 @@ class BusinessInfo extends Component {
                             </div>
                         </div>
 
+                        {window.innerWidth <= 1000
+                            ? <div className="row my-4">
+                                <Button onClick={this.timeModalhandler} color="primary" variant="contained" fullWidth >View Salon Timings</Button>
+                                {this.state.timeModal
+                                    ? this.state.modalContent
+                                    : null
+                                }
+                            </div>
+                            : null}
+
+
+
+
                         <div className="row">
-                            <div className="col-8">
+                            <div className="col">
                                 <ServiceBook data={this.state.business_data} />
                             </div>
-                            <div className="col-4">
-                                <SalonTimingsCard timings={this.state.business_data['business_timings'][0]} />
-                            </div>
+                            {window.innerWidth > 1000
+                                ? <div className="col">
+                                    <SalonTimingsCard timings={this.state.business_data['business_timings'][0]} />
+                                </div>
+                                : null}
+
                         </div>
                     </div>
                 }
