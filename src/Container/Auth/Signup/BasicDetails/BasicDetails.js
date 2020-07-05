@@ -187,8 +187,8 @@ class BasicDetails extends Component {
                         this.props.toggleLoading(false)
                         // console.log(error.response.data);
                         const messages = []
-                        messages.push(error.response.data)
-                        this.setState({messages:messages,errors:true})
+                        // messages.push(error.response.data)
+                        // this.setState({messages:messages,errors:true})
                     });
             }
 

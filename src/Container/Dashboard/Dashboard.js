@@ -76,7 +76,7 @@ class Dashboard extends Component {
 
   componentWillMount() {
 this.initialDataHandler()
-    
+window.scrollTo(0,0)   
   }
 
   initialDataHandler = () =>{

@@ -49,6 +49,40 @@ export class Services extends Component {
         const allCat = this.state.categoriesName
         const allServ = this.state.allServices
 
+        const all = this.state.allServices
+                const services = this.state.services
+                for (var key in business_services) {
+                    promise.push(
+                        Axios.get('api/service/business_services/' + business_services[key] + '/')
+                            .then(res => {
+                                // console.log(res.data)
+                                const data = {
+                                    "service": all[res.data.service].name,
+                                    "service_id": res.data.id,
+                                    "category": allCat[all[res.data.service].category].name,
+                                    "duration": res.data.business_service_duration,
+                                    "price": res.data.business_service_price
+                                }
+                                services.push(data)
+                                // console.log(data)
+
+                                const num = this.state.dataLoaded + 1
+                                this.setState({ dataLoaded: num, services: services })
+                                // if (this.state.dataLoaded === business_services.length) {
+
+                                //     this.loadCustomTableData()
+                                // }
+
+                            })
+                            .catch(e => {
+
+                            })
+
+                    )
+
+
+                }
+
         promise[1] = Axios.get('api/category/categories/')
             .then(res => {
                 for (var key in res.data) {
@@ -65,8 +99,8 @@ export class Services extends Component {
             .then(res => {
 
                 for (var key in res.data) {
-                    // console.log(res.data[key])
-                    allServ[res.data[key].id] = {"category": res.data[key].categories }
+                    console.log(res.data[key])
+                    allServ[res.data[key].id] = {"category": res.data[key].categories, "name":res.data[key].name }
                 }
                 this.setState({ allServices: allServ }, () => {
                 })
@@ -82,8 +116,8 @@ export class Services extends Component {
                     this.loadCustomTableData()
                     return true
                 }
-                const all = this.state.allServices
-                const services = this.state.services
+                // const all = this.state.allServices
+                // const services = this.state.services
                 // for (var key in business_services) {
                 //     promise.push(
                 //         Axios.get('api/service/business_services/' + business_services[key] + '/')
@@ -101,10 +135,10 @@ export class Services extends Component {
 
                 //                 const num = this.state.dataLoaded + 1
                 //                 this.setState({ dataLoaded: num, services: services })
-                //                 if (this.state.dataLoaded === business_services.length) {
+                //                 // if (this.state.dataLoaded === business_services.length) {
 
-                //                     this.loadCustomTableData()
-                //                 }
+                //                 //     this.loadCustomTableData()
+                //                 // }
 
                 //             })
                 //             .catch(e => {
@@ -112,8 +146,6 @@ export class Services extends Component {
                 //             })
 
                 //     )
-
-
                 // }
             })
 
@@ -205,7 +237,7 @@ export class Services extends Component {
         const services = this.state.data['business_services']
         const allServices = this.state.allServices
         const allCat = this.state.categoriesName
-        console.log(allCat)
+        // console.log(allCat)
         // console.log(allServices[1])
 
         // console.log(Object.values(allServices))
@@ -372,7 +404,7 @@ export class Services extends Component {
 
         const serviceArray = []
         for (var key in this.state.allServices) {
-            // console.log(key)
+            // console.log(this.state.allServices)
             serviceArray.push(this.state.allServices[key].name)
         }
         const categoryArray = []

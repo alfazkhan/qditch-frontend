@@ -31,6 +31,7 @@ class BusinessInfo extends Component {
             .catch(e => {
                 console.log(e.response)
             })
+            window.scrollTo(0,0)
 
     }
 

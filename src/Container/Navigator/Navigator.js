@@ -49,7 +49,7 @@ const Navigator = (props) => {
             setuserLoggedIn(data.userLoggedIn)
             setuserID(data.user_id)
         }
-
+        window.scrollTo(0,0)
         
         console.log("updated")
     }, [useSelector(state => state.userLoggedIn)])

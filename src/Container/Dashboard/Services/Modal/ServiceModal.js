@@ -67,6 +67,7 @@ const ServiceModal = (props) => {
                                 >
 
                                     {props.services.map((value, index) => {
+                                        // console.log(props.services)
                                         return <MenuItem key={index} value={index} >{value}</MenuItem>
                                     })}
                                 </Select>

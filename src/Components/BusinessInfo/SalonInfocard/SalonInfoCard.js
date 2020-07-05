@@ -23,14 +23,14 @@ export class SalonInfoCard extends Component {
                 }
             })
             .catch(e => {
-                console.log(e.response)
+                // console.log(e.response)
             })]
 
-        console.log(safetyFeatures)
+        // console.log(safetyFeatures)
 
         Promise.allSettled(promise)
             .then(res => {
-                console.log(safetyFeatures)
+                // console.log(safetyFeatures)
                 this.setState({ safetyFeatures: safetyFeatures, Loading: false })
             })
     }

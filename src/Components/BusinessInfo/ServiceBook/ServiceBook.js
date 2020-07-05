@@ -1,8 +1,12 @@
 import React, { Component } from 'react'
-import { Paper, Checkbox, FormControlLabel, TextField, Chip, Button } from '@material-ui/core'
+import { Paper, Checkbox, FormControlLabel, TextField, Chip, Button, Snackbar } from '@material-ui/core'
 import { MuiPickersUtilsProvider, KeyboardTimePicker, KeyboardDatePicker } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import Colors from '../../../Constants/Colors'
+import { connect } from 'react-redux'
+import Axios from '../../../Axios'
+import MuiAlert from '@material-ui/lab/Alert';
+
 
 export class ServiceBook extends Component {
 
@@ -11,19 +15,34 @@ export class ServiceBook extends Component {
         custom_services: {},
         serviceTableList: [],
         selectedServices: {},
+        business: this.props.data['id'],
+
+
         totalPrice: 0,
         totalDuration: 0,
-        defaultTime: null
+        startTime: null,
+        startDate: null,
+        serviceSelected: [],
+        customServiceSelected: [],
+        allowSubmit: false,
+        bookingSuccess: false
+
     }
 
     componentDidMount() {
         const services = this.props.data['business_services']
+
         const custom_services = this.props.data['custom_business_services']
-        
+
+        let date = new Date().toString().split(' ')
+        const startDate = date[2] + '/' + this.getMonthFromString(date[1]) + '/' + date[3]
+
         // console.log(services,custom_services)
         this.setState({
             services: services,
             custom_services: custom_services,
+            startDate: startDate,
+            startTime: date[4]
         }, () => {
             this.setServiceTable()
         })
@@ -50,11 +69,11 @@ export class ServiceBook extends Component {
 
         for (var key in services) {
             list.push(
-                <tr style={{color:'#fff'}}>
+                <tr style={{ color: '#fff' }}>
                     <th scope="row">
                         <FormControlLabel
                             value={["services", services[key].id, services[key].business_service_price, services[key].business_service_duration]}
-                            control={<Checkbox style={{color:'#fff'}} />}
+                            control={<Checkbox style={{ color: '#fff' }} />}
                             // label={Categories[i]}
                             // labelPlacement="end"
                             // index={i}
@@ -71,15 +90,15 @@ export class ServiceBook extends Component {
         }
         for (var key in custom_services) {
             list.push(
-                <tr style={{color:'#fff'}}>
+                <tr style={{ color: '#fff' }}>
                     <th scope="row">
                         <FormControlLabel
-                            value={["custom-services", custom_services[key].id,custom_services[key].business_service_price,custom_services[key].business_service_duration]}
-                            control={<Checkbox style={{color:'#fff'}} />}
+                            value={["custom-services", custom_services[key].id, custom_services[key].business_service_price, custom_services[key].business_service_duration]}
+                            control={<Checkbox style={{ color: '#fff' }} />}
                             // label={Categories[i]}
                             // labelPlacement="end"
                             // index={i}
-                            
+
                             onChange={this.serviceSelectHandler}
                         />
                     </th>
@@ -97,76 +116,187 @@ export class ServiceBook extends Component {
     }
 
     serviceSelectHandler = (e) => {
-        console.log(e.target.value)
+        const info = e.target.value.split(',')
+        const type = info[0]
+        const id = info[1]
+        const price = this.state.totalPrice + parseInt(info[2])
+        const duration = this.state.totalDuration + parseInt(info[3])
+        const serviceSelected = this.state.serviceSelected
+        const customServiceSelected = this.state.customServiceSelected
+        if (type === "services") {
+            serviceSelected.push(id)
+        }
+        else {
+            customServiceSelected.push(id)
+        }
+
+        this.setState({
+            totalPrice: price,
+            totalDuration: duration,
+            selectedServices: serviceSelected,
+            customServiceSelected: customServiceSelected,
+            allowSubmit: true
+        })
+
+
+    }
+
+    getMonthFromString = (mon) => {
+        return new Date(Date.parse(mon + " 1, 2012")).getMonth() + 1
+    }
+
+    handleDateChange = (e) => {
+        let date = e.toString().split(' ')
+
+        date = date[2] + '/' + this.getMonthFromString(date[1]) + '/' + date[3]
+        this.setState({
+            startDate: date
+        })
+    }
+    handleTimeChange = (e) => {
+        let time = e.toString().split(' ')
+        time = time[4]
+        //validation
+        this.setState({
+            startTime: time
+        })
+    }
+
+
+    submitHandler = () => {
+        // console.table(this.state
+        const data = {
+            "user": this.props.user_id,
+            "business": this.state.business,
+            "business_services": this.state.serviceSelected,
+            "custom_business_services": this.state.customServiceSelected,
+            "start_time": this.state.startDate + ' ' + this.state.startTime,
+            "total_time": this.state.totalDuration,
+            "total_cost": this.state.totalPrice
+
+        }
+        const url = 'api/booking/bookings/'
+        Axios.post(url, data)
+            .then(res => {
+                console.log(res.data)
+                this.setState({bookingSuccess:true})
+            })
+            .catch(e => {
+                console.log(e.response)
+            })
     }
 
 
     render() {
         return (
-            <div>
-                <Paper className="col" elevation={3} style={{backgroundColor:'#333'}}>
+            <div className="container">
+                <div className="row">
+                    <Paper className="col" elevation={3} style={{ backgroundColor: '#333' }}>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr style={{ color: '#fff' }}>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Duration</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.state.serviceTableList}
+                            </tbody>
+                        </table>
+                    </Paper>
                     <table class="table table-striped">
                         <thead>
-                            <tr style={{color:'#fff'}}>
-                                <th scope="col">#</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Price</th>
-                                <th scope="col">Duration</th>
+                            <tr>
+                                <th scope="col">
+                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                        <KeyboardDatePicker
+                                            disableToolbar
+                                            variant="inline"
+                                            format="dd/MM/yyyy"
+                                            id="date-picker-inline"
+                                            label="Select Date"
+                                            disablePast
+                                            value={this.state.startDate}
+                                            invalidDateMessage=""
+                                            format="dd/MM/yyyy"
+                                            maxDateMessage=""
+                                            minDateMessage=""
+                                            onChange={this.handleDateChange}
+                                            KeyboardButtonProps={{
+                                                'aria-label': 'change date',
+                                            }}
+                                        />
+                                    </MuiPickersUtilsProvider>
+                                </th>
+                                <th scope="col">
+                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                        <KeyboardTimePicker
+                                            id="time-picker"
+                                            label="Select Time"
+                                            value={this.state.startTime}
+                                            onChange={this.handleTimeChange}
+                                            invalidDateMessage=""
+                                            KeyboardButtonProps={{
+                                                'aria-label': 'change time',
+                                            }}
+                                        />
+                                    </MuiPickersUtilsProvider>
+                                </th>
                             </tr>
                         </thead>
-                        <tbody>
-                            {this.state.serviceTableList}
-                        </tbody>
                     </table>
-                </Paper>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">
-                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                    <KeyboardDatePicker
-                                        disableToolbar
-                                        variant="inline"
-                                        format="dd/MM/yyyy"
-                                        id="date-picker-inline"
-                                        label="Select Date"
-                                        // value={selectedDate}
-                                        // onChange={handleDateChange}
-                                        KeyboardButtonProps={{
-                                            'aria-label': 'change date',
-                                        }}
-                                    />
-                                </MuiPickersUtilsProvider>
-                            </th>
-                            <th scope="col">
-                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                    <KeyboardTimePicker
-                                        id="time-picker"
-                                        label="Select Time"
-                                        // value={selectedDate}
-                                        // onChange={handleDateChange}
-                                        KeyboardButtonProps={{
-                                            'aria-label': 'change time',
-                                        }}
-                                    />
-                                </MuiPickersUtilsProvider>
-                            </th>
-                            <th scope="col">
-                                <Chip color="primary" className="" label="100 ₹" />
-                            </th>
-                            <th scope="col">
-                                <Chip color="primary" className="" label="1 Hour" />
-                            </th>
-                        </tr>
-                    </thead>
-                </table>
-                <Button variant="contained" fullWidth style={{backgroundColor: Colors.success,color:'#fff'}}>
-                    Book Now
+                </div>
+                {this.state.serviceSelected.length > 0
+                    ? <div className="row">
+                        <th scope="col">
+                            <Chip color="primary" className="col ml-5 mr-5" label={this.state.totalPrice + " ₹"} />
+                        </th>
+                        <th scope="col">
+                            <Chip color="secondary" className="col ml-5 mr-5" label={this.timeConvert(this.state.totalDuration)} />
+                        </th>
+                    </div>
+                    : null}
+                {this.props.user_id
+                    ? <Button variant="contained"
+                        className="mt-4"
+                        fullWidth
+                        style={{ backgroundColor: this.state.allowSubmit ? Colors.success : 'grey', color: '#fff' }}
+                        onClick={this.submitHandler}
+                    >
+                        Book Now
                 </Button>
-                
+                    :
+                    <strong className="text-danger">*You need Sign In to Book an Appointment</strong>
+                }
+
+                <Snackbar open={this.state.bookingSuccess} autoHideDuration={6000}  onClose={() => this.setState({ bookingSuccess: false })}>
+                    <MuiAlert >
+                        Booking Confirmed
+                    </MuiAlert>
+                </Snackbar>
+
+
+
             </div>
         )
     }
 }
 
-export default ServiceBook
+
+
+
+
+
+const mapStateToProps = (state) => ({
+
+    user_id: state.user_id
+
+})
+
+const mapDispatchToProps = {
+
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ServiceBook)
