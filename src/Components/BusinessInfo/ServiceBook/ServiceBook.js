@@ -256,6 +256,26 @@ export class ServiceBook extends Component {
 
     submitHandler = () => {
         // console.table(this.state
+        const currentTime = new Date()
+        
+        if (parseInt(this.state.startDate.split('/')[0]) === currentTime.getDate()) {
+            if (this.state.startTime.split(':')[0] < currentTime.getHours()) {
+                this.setState({
+                    error: true,
+                    errorMessages: "You Can't select Past Time"
+                })
+                if (this.state.startTime.split(':')[1] < currentTime.getMinutes()) {
+                    this.setState({
+                        error: true,
+                        errorMessages: "You Can't select Past Time"
+                    })
+                    return 1
+                }
+                return 1
+            }
+        }
+
+
         const data = {
             "user": this.props.user_id,
             "business": this.state.business,
@@ -281,13 +301,15 @@ export class ServiceBook extends Component {
                 return true
             })
             .catch(e => {
-                // console.log(e)
                 if (typeof e.response !== "undefined") {
+                    console.log(e.response.data.Detail)
                     messages.push(e.response.data.Detail)
                     this.setState({
                         responseModal: true,
                         responseMessage: messages,
                         bookingSuccess: false
+                    },()=>{
+                        console.log("object")
                     })
                 }
             })
