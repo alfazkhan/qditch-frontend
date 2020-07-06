@@ -68,7 +68,7 @@ class ResponseModal extends Component {
                             <DialogContentText id="alert-dialog-description" className="mt-5">
 
                                 {this.props.messages.map(msg => {
-                                        return <li>{msg}</li>
+                                        return <li>{this.props.status?"Booking Successful":msg}</li>
                                     })
                                 }
 
