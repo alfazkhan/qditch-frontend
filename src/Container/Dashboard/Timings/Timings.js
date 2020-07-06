@@ -39,6 +39,7 @@ class Timings extends Component {
             .catch(e => {
                 console.log(e.response)
             })
+            
     }
 
     formatAMPM = (date) => {

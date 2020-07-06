@@ -35,7 +35,12 @@ export class ServiceBook extends Component {
 
         responseModal: false,
         responseMessage: [],
-        bookingSuccess: false
+        bookingSuccess: false,
+        successMessage: null,
+
+
+        error: false,
+        errorMessages: ""
 
     }
 
@@ -139,7 +144,7 @@ export class ServiceBook extends Component {
             const duration = this.state.totalDuration - parseInt(info[3])
             this.setState({
                 totalPrice: price,
-                totalDuration : duration
+                totalDuration: duration
             })
             return true
         }
@@ -151,7 +156,7 @@ export class ServiceBook extends Component {
             const duration = this.state.totalDuration - parseInt(info[3])
             this.setState({
                 totalPrice: price,
-                totalDuration : duration
+                totalDuration: duration
             })
             return true
 
@@ -159,7 +164,7 @@ export class ServiceBook extends Component {
 
         const price = this.state.totalPrice + parseInt(info[2])
         const duration = this.state.totalDuration + parseInt(info[3])
-        
+
         if (type === "services") {
             serviceSelected.push(id)
         }
@@ -193,6 +198,24 @@ export class ServiceBook extends Component {
     }
     handleTimeChange = (e) => {
         let time = e.toString().split(' ')
+        const currentTime = new Date()
+        
+        if (parseInt(this.state.startDate.split('/')[0]) === currentTime.getDate()) {
+            if (e.getHours() < currentTime.getHours()) {
+                this.setState({
+                    error: true,
+                    errorMessages: "You Can't select Past Time"
+                })
+                if (e.getMinutes() < currentTime.getMinutes()) {
+                    this.setState({
+                        error: true,
+                        errorMessages: "You Can't select Past Time"
+                    })
+                    return 1
+                }
+                return 1
+            }
+        }
         time = time[4]
         //validation
         this.setState({
@@ -205,7 +228,12 @@ export class ServiceBook extends Component {
     scheduleModalHandler = () => {
 
         const scheduleModalContent = (
-            <ScheduleModal close={() => this.setState({ scheduleModal: false })} business={this.state.business} startDate={this.state.startDate} />
+            <ScheduleModal close={() => this.setState({ scheduleModal: false })}
+                business={this.state.business}
+                startDate={this.state.startDate}
+                timingID={this.props.data['business_timings'][0]}
+
+            />
         )
 
         this.setState({
@@ -213,6 +241,17 @@ export class ServiceBook extends Component {
             scheduleModal: true
         })
 
+    }
+
+    formatAMPM = (date) => {
+        var hours = date.getHours();
+        var minutes = date.getMinutes();
+        var ampm = hours >= 12 ? 'pm' : 'am';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        var strTime = hours + ':' + minutes + ' ' + ampm;
+        return strTime;
     }
 
     submitHandler = () => {
@@ -233,20 +272,24 @@ export class ServiceBook extends Component {
         Axios.post(url, data)
             .then(res => {
                 console.log(res.data)
+
                 this.setState({
+                    // successMessage: res.data,
                     responseModal: true,
-                    bookingSuccess: true
+                    bookingSuccess: true,
                 })
                 return true
             })
             .catch(e => {
-                console.log(e.response)
-                messages.push(e.response.data.Detail)
-                this.setState({
-                    responseModal: true,
-                    responseMessage: messages,
-                    bookingSuccess: false
-                })
+                // console.log(e)
+                if (typeof e.response !== "undefined") {
+                    messages.push(e.response.data.Detail)
+                    this.setState({
+                        responseModal: true,
+                        responseMessage: messages,
+                        bookingSuccess: false
+                    })
+                }
             })
     }
 
@@ -351,10 +394,21 @@ export class ServiceBook extends Component {
                     ? <ResponseModal close={() => this.setState({ responseModal: false })}
                         messages={this.state.responseMessage}
                         status={this.state.bookingSuccess}
+                        Message={this.state.successMessage}
+                        business_name={this.props.data['business_name']}
+                        business_services={this.props.data['business_services']}
+                        custom_business_services={this.props.data['custom_business_services']}
                     />
                     : null}
 
-
+                <Snackbar open={this.state.error} autoHideDuration={60000} onClose={() => this.setState({ error: false })}>
+                    <div class="alert alert-danger alert-dismissible fade show text-left" role="alert">
+                        {this.state.errorMessages}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true" onClick={() => this.setState({ error: false })}>&times;</span>
+                        </button>
+                    </div>
+                </Snackbar>
 
 
             </div>

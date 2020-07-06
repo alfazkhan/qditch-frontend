@@ -27,7 +27,6 @@ class SalonTimingsCard extends Component {
                 }
                 this.setState({ Timings: Timings }, () => {
                     this.setTable()
-                    // console.log(this.state.Timings)
                 })
                 // console.log(res.data)
             })
