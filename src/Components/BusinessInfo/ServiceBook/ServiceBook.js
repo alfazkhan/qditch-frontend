@@ -129,24 +129,37 @@ export class ServiceBook extends Component {
         const info = e.target.value.split(',')
         const type = info[0]
         const id = info[1]
+        const serviceSelected = this.state.serviceSelected
+        const customServiceSelected = this.state.customServiceSelected
         console.log(id)
         if (this.state.serviceSelected.includes(id)) {
-            var Index = this.state.serviceSelected.indexOf(id)
-            this.state.serviceSelected.splice(Index, 1)
+            var Index = serviceSelected.indexOf(id)
+            serviceSelected.splice(Index, 1)
+            const price = this.state.totalPrice - parseInt(info[2])
+            const duration = this.state.totalDuration - parseInt(info[3])
+            this.setState({
+                totalPrice: price,
+                totalDuration : duration
+            })
             return true
         }
 
         if (this.state.customServiceSelected.includes(id)) {
-            var Index = this.state.customServiceSelected.indexOf(id)
-            this.state.customServiceSelected.splice(Index, 1)
+            var Index = customServiceSelected.indexOf(id)
+            customServiceSelected.splice(Index, 1)
+            const price = this.state.totalPrice - parseInt(info[2])
+            const duration = this.state.totalDuration - parseInt(info[3])
+            this.setState({
+                totalPrice: price,
+                totalDuration : duration
+            })
             return true
 
         }
 
         const price = this.state.totalPrice + parseInt(info[2])
         const duration = this.state.totalDuration + parseInt(info[3])
-        const serviceSelected = this.state.serviceSelected
-        const customServiceSelected = this.state.customServiceSelected
+        
         if (type === "services") {
             serviceSelected.push(id)
         }
@@ -226,8 +239,8 @@ export class ServiceBook extends Component {
                 })
             })
             .catch(e => {
-                console.log(e.response)
-                messages.push(e.response.data.Detail)
+                console.log(e.response.data)
+                // messages.push(e.response.data['0'].Detail)
                 this.setState({
                     responseModal: true,
                     responseMessage: messages,

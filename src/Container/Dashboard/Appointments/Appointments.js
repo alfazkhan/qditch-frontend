@@ -82,6 +82,17 @@ export class Appointments extends Component {
     }
 
 
+    formatAMPM = (date) => {
+        var hours = date.getHours();
+        var minutes = date.getMinutes();
+        var ampm = hours >= 12 ? 'pm' : 'am';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        var strTime = hours + ':' + minutes + ' ' + ampm;
+        return strTime;
+    }
+
     setAppointmentTable = () => {
         const appointments = this.state.appointments
         const users = this.state.users
@@ -92,14 +103,20 @@ export class Appointments extends Component {
         const appointmentList = this.state.appointmentList
 
         for (var key in appointments) {
-            console.log(business_services[appointments[key].service])
+            // console.log(business_services[appointments[key].service])
+            const start = appointments[key].start_time.split('T')
+            const startTime =  new Date(2020,6,2,start[1].slice(0, -1).split(':')[0],start[1].slice(0, -1).split(':')[1])
+            const end = appointments[key].end_time.split('T')
+            const endTime =  new Date(2020,6,2,end[1].slice(0, -1).split(':')[0],end[1].slice(0, -1).split(':')[1])
+
+            // console.log(this.formatAMPM(endTime))
             appointmentList.push(
                 <tr>
                     <th scope="row">{appointments[key].service !== null ? business_services[appointments[key].service].name : custom_business_services[appointments[key].custom_service].name}</th>
                     <td> {users[appointments[key].user].name} </td>
-                    <td>{appointments[key].start_time}</td>
-                    <td>{appointments[key].end_time}</td>
-                    <td>{appointments[key].service !== null ? business_services[appointments[key].service].price : custom_business_services[appointments[key].custom_service].price}</td>
+                    <td>{this.formatAMPM(startTime)}</td>
+                    <td>{this.formatAMPM(endTime)}</td>
+                    <td>{appointments[key].service !== null ? business_services[appointments[key].service].price + '₹' : custom_business_services[appointments[key].custom_service].price + '₹'}</td>
                     <td className={appointments[key].status === "confirm"?"text-success":"text-danger"} >{appointments[key].status}</td>
                 </tr>
             )
@@ -118,6 +135,7 @@ export class Appointments extends Component {
         return (
             <div className="container">
                 <Heading text="Appointments" />
+                <h4><u>Today's Appointments</u></h4>
                 {this.state.Loading ? <CircularProgress />
                     : <table class="table table-borderless">
                         <thead>
