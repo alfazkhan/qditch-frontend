@@ -1,4 +1,4 @@
-import React,{useEffect,useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import Slide1 from '../../Assets/Slide-1.png'
 import Slide2 from '../../Assets/Slide-2.png'
 import Slide3 from '../../Assets/Slide-3.png'
@@ -8,7 +8,7 @@ import { Avatar, FormControl, InputLabel, Select, MenuItem } from '@material-ui/
 import Axios from '../../Axios'
 import { withRouter } from 'react-router-dom'
 import Colors from '../../Constants/Colors'
-
+import Chip from '@material-ui/core/Chip';
 
 const Slideshow = (props) => {
 
@@ -81,29 +81,62 @@ const Slideshow = (props) => {
             </div>
 
             {window.innerWidth <= 1000
-                ? <div className='row text-center mx-1 my-3' style={{backgroundColor: '#fff'}}>
-                    <FormControl variant="filled" className={"text-center"} style={{ width: '100%' }} >
-                        <InputLabel className="text-center" >Search By Category</InputLabel>
-                        <Select
-                            fullWidth
-                            value={""}
-                            className="text-center"
-                            inputProps={{
-                                name: 'age',
-                                id: 'filled-age-native-simple',
-                            }}
-                            style={{color:'#fff'}}
-                        >
-                            <MenuItem id="Hair" onClick={clickHandler}>Hair</MenuItem>
-                            <MenuItem id="Skin" onClick={clickHandler}>Skin</MenuItem>
-                            <MenuItem id="Spa" onClick={clickHandler}>Spa</MenuItem>
-                            <MenuItem id="Makeup" onClick={clickHandler}>Makeup</MenuItem>
-                            <MenuItem id="Eyebrows" onClick={clickHandler}>Eyebrows</MenuItem>
-                            <MenuItem id="Hair Removal" onClick={clickHandler}>Hair Removal</MenuItem>
-                            <MenuItem id="Nails" onClick={clickHandler}>Nails</MenuItem>
-                            <MenuItem id="Massage" onClick={clickHandler}>Massage</MenuItem>
-                        </Select>
-                    </FormControl>
+
+                // ? <div className='row text-center mx-1 my-3' style={{ backgroundColor: '#fff' }}>
+                //     <FormControl variant="filled" className={"text-center"} style={{ width: '100%' }} >
+                //         <InputLabel className="text-center" >Search By Category</InputLabel>
+                //         <Select
+                //             fullWidth
+                //             value={""}
+                //             className="text-center"
+                //             inputProps={{
+                //                 name: 'age',
+                //                 id: 'filled-age-native-simple',
+                //             }}
+                //             style={{ color: '#fff' }}
+                //         >
+                //             <MenuItem id="Hair" onClick={clickHandler}>Hair</MenuItem>
+                //             <MenuItem id="Skin" onClick={clickHandler}>Skin</MenuItem>
+                //             <MenuItem id="Spa" onClick={clickHandler}>Spa</MenuItem>
+                //             <MenuItem id="Makeup" onClick={clickHandler}>Makeup</MenuItem>
+                //             <MenuItem id="Eyebrows" onClick={clickHandler}>Eyebrows</MenuItem>
+                //             <MenuItem id="Hair Removal" onClick={clickHandler}>Hair Removal</MenuItem>
+                //             <MenuItem id="Nails" onClick={clickHandler}>Nails</MenuItem>
+                //             <MenuItem id="Massage" onClick={clickHandler}>Massage</MenuItem>
+                //         </Select>
+                //     </FormControl>
+                // </div>
+                ?
+                <div className="mt-5">
+                    < div className="row mx-auto my-3">
+                        <div className="col-1" />
+                        <Chip id="Hair" onClick={clickHandler} label="Hair" className="col-4" color="primary" />
+                        <div className="col-2" />
+                        <Chip id="Skin" onClick={clickHandler} label="Skin" className="col-4" color="primary" />
+                        <div className="col-1" />
+                    </div>
+                    < div className="row mx-auto my-3">
+                        <div className="col-1" />
+                        <Chip id="Spa" onClick={clickHandler} label="Spa" className="col-4" color="primary" />
+                        <div className="col-2" />
+                        <Chip id="Makeup" onClick={clickHandler} label="Makeup" className="col-4" color="primary" />
+                        <div className="col-1" />
+                    </div>
+                    < div className="row mx-auto my-3">
+                        <div className="col-1" />
+                        <Chip id="Eyebrows" onClick={clickHandler} label="Eyebrows" className="col-4" color="primary" />
+                        <div className="col-2" />
+                        <Chip id="Hair Removal" onClick={clickHandler} label="Hair Removal" className="col-4" color="primary" />
+                        <div className="col-1" />
+                    </div>
+                    < div className="row mx-auto my-3">
+                        <div className="col-1" />
+                        <Chip id="Nails" onClick={clickHandler} label="Nails" className="col-4" color="primary" />
+                        <div className="col-2" />
+                        <Chip label="Massage" className="col-4" color="primary" />
+                        <div id="Massage" onClick={clickHandler} className="col-1" />
+                    </div>
+                    
                 </div>
                 : null}
 
@@ -111,7 +144,7 @@ const Slideshow = (props) => {
 
 
             </div>
-        </div>
+        </div >
     )
 }
 

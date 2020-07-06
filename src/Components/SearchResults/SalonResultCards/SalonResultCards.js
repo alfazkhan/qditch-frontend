@@ -49,16 +49,16 @@ const SalonResults = (props) => {
   return (
     <div className='container mt-5'>
       {!loading
-        ? <SalonCard salon={currentSalons} />
+        ? <SalonCard salon={salons} />
         : null}
 
-      {salons.length > salonsPerPage
+      {/* {salons.length > salonsPerPage
         ? <Pagination
           salonPerPage={salonsPerPage}
           totalSalons={salons.length}
           paginate={paginate}
         />
-        : null}
+        : null} */}
 
     </div>
   );

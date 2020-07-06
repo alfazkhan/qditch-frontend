@@ -22,6 +22,7 @@ import Images from './Images/Images';
 import Timings from './Timings/Timings';
 import { withRouter } from 'react-router-dom';
 import EditProfile from './EditProfile/EditProfile';
+import Appointments from './Appointments/Appointments';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -67,7 +68,7 @@ const styles = {
 class Dashboard extends Component {
 
   state = {
-    value: 0,
+    value: 1,
     business_id: null,
     Loading: false,
     Data: null,
@@ -140,7 +141,7 @@ window.scrollTo(0,0)
               <Services data={this.state.Data} reload={this.initialDataHandler} />
             </TabPanel>
             <TabPanel value={this.state.value} index={1}>
-              Appointments
+              <Appointments data={this.state.Data} reload={this.initialDataHandler} />
           </TabPanel>
             <TabPanel value={this.state.value} index={2}>
               <MyBusiness data={this.state.Data} />

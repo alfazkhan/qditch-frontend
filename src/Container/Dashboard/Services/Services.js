@@ -99,7 +99,7 @@ export class Services extends Component {
             .then(res => {
 
                 for (var key in res.data) {
-                    console.log(res.data[key])
+                    // console.log(res.data[key])
                     allServ[res.data[key].id] = {"category": res.data[key].categories, "name":res.data[key].name }
                 }
                 this.setState({ allServices: allServ }, () => {

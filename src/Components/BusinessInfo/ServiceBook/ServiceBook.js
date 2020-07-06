@@ -6,6 +6,8 @@ import Colors from '../../../Constants/Colors'
 import { connect } from 'react-redux'
 import Axios from '../../../Axios'
 import MuiAlert from '@material-ui/lab/Alert';
+import ResponseModal from './ResponseModal';
+import ScheduleModal from '../ScheduleModal/ScheduleModal';
 
 
 export class ServiceBook extends Component {
@@ -14,8 +16,12 @@ export class ServiceBook extends Component {
         services: {},
         custom_services: {},
         serviceTableList: [],
-        selectedServices: {},
         business: this.props.data['id'],
+        date: new Date(),
+        time: new Date(),
+
+        scheduleModal: false,
+        scheduleModalContent: null,
 
 
         totalPrice: 0,
@@ -25,13 +31,17 @@ export class ServiceBook extends Component {
         serviceSelected: [],
         customServiceSelected: [],
         allowSubmit: false,
+
+
+        responseModal: false,
+        responseMessage: [],
         bookingSuccess: false
 
     }
 
     componentDidMount() {
         const services = this.props.data['business_services']
-
+        console.log(this.props.data)
         const custom_services = this.props.data['custom_business_services']
 
         let date = new Date().toString().split(' ')
@@ -119,6 +129,20 @@ export class ServiceBook extends Component {
         const info = e.target.value.split(',')
         const type = info[0]
         const id = info[1]
+        console.log(id)
+        if (this.state.serviceSelected.includes(id)) {
+            var Index = this.state.serviceSelected.indexOf(id)
+            this.state.serviceSelected.splice(Index, 1)
+            return true
+        }
+
+        if (this.state.customServiceSelected.includes(id)) {
+            var Index = this.state.customServiceSelected.indexOf(id)
+            this.state.customServiceSelected.splice(Index, 1)
+            return true
+
+        }
+
         const price = this.state.totalPrice + parseInt(info[2])
         const duration = this.state.totalDuration + parseInt(info[3])
         const serviceSelected = this.state.serviceSelected
@@ -150,7 +174,8 @@ export class ServiceBook extends Component {
 
         date = date[2] + '/' + this.getMonthFromString(date[1]) + '/' + date[3]
         this.setState({
-            startDate: date
+            startDate: date,
+            date: e
         })
     }
     handleTimeChange = (e) => {
@@ -158,10 +183,24 @@ export class ServiceBook extends Component {
         time = time[4]
         //validation
         this.setState({
-            startTime: time
+            startTime: time,
+            time: e
         })
     }
 
+
+    scheduleModalHandler = () => {
+
+        const scheduleModalContent = (
+            <ScheduleModal close={() => this.setState({ scheduleModal: false })} business={this.state.business} startDate={this.state.startDate} />
+        )
+
+        this.setState({
+            scheduleModalContent: scheduleModalContent,
+            scheduleModal: true
+        })
+
+    }
 
     submitHandler = () => {
         // console.table(this.state
@@ -175,14 +214,25 @@ export class ServiceBook extends Component {
             "total_cost": this.state.totalPrice
 
         }
+        const messages = []
+        console.log(data)
         const url = 'api/booking/bookings/'
         Axios.post(url, data)
             .then(res => {
                 console.log(res.data)
-                this.setState({bookingSuccess:true})
+                this.setState({
+                    responseModal: true,
+                    bookingSuccess: true
+                })
             })
             .catch(e => {
                 console.log(e.response)
+                messages.push(e.response.data.Detail)
+                this.setState({
+                    responseModal: true,
+                    responseMessage: messages,
+                    bookingSuccess: false
+                })
             })
     }
 
@@ -218,8 +268,8 @@ export class ServiceBook extends Component {
                                             id="date-picker-inline"
                                             label="Select Date"
                                             disablePast
-                                            value={this.state.startDate}
-                                            invalidDateMessage=""
+                                            value={this.state.date}
+                                            // invalidDateMessage=""
                                             format="dd/MM/yyyy"
                                             maxDateMessage=""
                                             minDateMessage=""
@@ -235,9 +285,9 @@ export class ServiceBook extends Component {
                                         <KeyboardTimePicker
                                             id="time-picker"
                                             label="Select Time"
-                                            value={this.state.startTime}
+                                            value={this.state.time}
                                             onChange={this.handleTimeChange}
-                                            invalidDateMessage=""
+                                            // invalidDateMessage=""
                                             KeyboardButtonProps={{
                                                 'aria-label': 'change time',
                                             }}
@@ -248,7 +298,8 @@ export class ServiceBook extends Component {
                         </thead>
                     </table>
                 </div>
-                {this.state.serviceSelected.length > 0
+
+                {this.state.serviceSelected.length > 0 || this.state.customServiceSelected.length > 0
                     ? <div className="row">
                         <th scope="col">
                             <Chip color="primary" className="col ml-5 mr-5" label={this.state.totalPrice + " ₹"} />
@@ -258,6 +309,17 @@ export class ServiceBook extends Component {
                         </th>
                     </div>
                     : null}
+
+                <Button variant="contained"
+                    className="mt-4"
+                    fullWidth
+                    color="secondary"
+                    onClick={this.scheduleModalHandler}
+                >
+                    View This Date Schedule
+                </Button>
+
+                {this.state.scheduleModal ? this.state.scheduleModalContent : null}
                 {this.props.user_id
                     ? <Button variant="contained"
                         className="mt-4"
@@ -271,11 +333,13 @@ export class ServiceBook extends Component {
                     <strong className="text-danger">*You need Sign In to Book an Appointment</strong>
                 }
 
-                <Snackbar open={this.state.bookingSuccess} autoHideDuration={6000}  onClose={() => this.setState({ bookingSuccess: false })}>
-                    <MuiAlert >
-                        Booking Confirmed
-                    </MuiAlert>
-                </Snackbar>
+                {this.state.responseModal
+                    ? <ResponseModal close={() => this.setState({ responseModal: false })}
+                        messages={this.state.responseMessage}
+                        status={this.state.bookingSuccess}
+                    />
+                    : null}
+
 
 
 
