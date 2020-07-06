@@ -403,8 +403,8 @@ export class ServiceBook extends Component {
                     ? <Button variant="contained"
                         className="mt-4"
                         fullWidth
-                        style={{ backgroundColor: this.state.allowSubmit ? Colors.success : 'grey', color: '#fff' }}
-                        onClick={this.submitHandler}
+                        style={{ backgroundColor: this.state.serviceSelected.length > 0 || this.state.customServiceSelected.length > 0 ? Colors.success : 'grey', color: '#fff' }}
+                        onClick={this.state.serviceSelected.length > 0 || this.state.customServiceSelected.length > 0?this.submitHandler:null}
                     >
                         Book Now
                 </Button>
