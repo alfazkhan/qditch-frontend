@@ -200,7 +200,7 @@ export class ServiceBook extends Component {
         let time = e.toString().split(' ')
         const currentTime = new Date()
         
-        if (parseInt(this.state.startDate.split('/')[0]) === currentTime.getDate()) {
+        if (parseInt(this.state.startDate.split('/')[0]) === currentTime.getDate() && parseInt(this.state.startDate.split('/')[1]) === currentTime.getMonth() ) {
             if (e.getHours() < currentTime.getHours()) {
                 this.setState({
                     error: true,
@@ -258,22 +258,22 @@ export class ServiceBook extends Component {
         // console.table(this.state
         const currentTime = new Date()
         
-        if (parseInt(this.state.startDate.split('/')[0]) === currentTime.getDate()) {
-            if (this.state.startTime.split(':')[0] < currentTime.getHours()) {
-                this.setState({
-                    error: true,
-                    errorMessages: "You Can't select Past Time"
-                })
-                if (this.state.startTime.split(':')[1] < currentTime.getMinutes()) {
-                    this.setState({
-                        error: true,
-                        errorMessages: "You Can't select Past Time"
-                    })
-                    return 1
-                }
-                return 1
-            }
-        }
+        // if (parseInt(this.state.startDate.split('/')[0]) === currentTime.getDate()) {
+        //     if (this.state.startTime.split(':')[0] < currentTime.getHours()) {
+        //         this.setState({
+        //             error: true,
+        //             errorMessages: "You Can't select Past Time"
+        //         })
+        //         if (this.state.startTime.split(':')[1] < currentTime.getMinutes()) {
+        //             this.setState({
+        //                 error: true,
+        //                 errorMessages: "You Can't select Past Time"
+        //             })
+        //             return 1
+        //         }
+        //         return 1
+        //     }
+        // }
 
 
         const data = {
@@ -294,7 +294,7 @@ export class ServiceBook extends Component {
                 console.log(res.data)
 
                 this.setState({
-                    // successMessage: res.data,
+                    successMessage: res.data,
                     responseModal: true,
                     bookingSuccess: true,
                 })
@@ -302,7 +302,7 @@ export class ServiceBook extends Component {
             })
             .catch(e => {
                 if (typeof e.response !== "undefined") {
-                    console.log(e.response.data.Detail)
+                    console.log(e.response.data)
                     messages.push(e.response.data.Detail)
                     this.setState({
                         responseModal: true,
