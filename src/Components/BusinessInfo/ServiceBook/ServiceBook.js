@@ -237,10 +237,11 @@ export class ServiceBook extends Component {
                     responseModal: true,
                     bookingSuccess: true
                 })
+                return true
             })
             .catch(e => {
-                console.log(e.response.data)
-                // messages.push(e.response.data['0'].Detail)
+                console.log(e.response)
+                messages.push(e.response.data.Detail)
                 this.setState({
                     responseModal: true,
                     responseMessage: messages,
