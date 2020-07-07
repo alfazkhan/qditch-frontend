@@ -201,13 +201,13 @@ export class ServiceBook extends Component {
         const currentTime = new Date()
         console.log(currentTime > e)
         console.log(e)
-        if (e < currentTime) {
-            this.setState({
-                error: true,
-                errorMessages: "You Can't select Past Time"
-            })
-            return 1
-        }
+        // if (e < currentTime) {
+        //     this.setState({
+        //         error: true,
+        //         errorMessages: "You Can't select Past Time"
+        //     })
+        //     return 1
+        // }
         time = time[4]
         //validation
         this.setState({
