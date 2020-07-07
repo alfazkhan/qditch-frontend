@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Avatar, FormControl, InputLabel, Select } from '@material-ui/core'
 import Axios from '../../Axios'
 import { withRouter, Link } from 'react-router-dom'
+import './Categories.css'
 
 const Categories = (props) => {
 
@@ -34,29 +35,29 @@ const Categories = (props) => {
     return (
         <div className="container-fluid mb-5 mx-auto" style={{ backgroundColor: "rgba(255,255,255,0)" }}>
             <div className="row">
-                <div className="col" onClick={clickHandler} >
-                    <Avatar variant="square" className="mx-5" id="Hair" style={styles.Avatar}>Hair</Avatar>
+                <div className="col " onClick={clickHandler} >
+                    <Avatar variant="square" className="mx-5 category-button" id="Hair" style={styles.Avatar}>Hair</Avatar>
                 </div>
-                <div className="col" onClick={clickHandler} >
-                    <Avatar variant="square" className="mx-5" id="Skin" style={styles.Avatar}>Skin</Avatar>
+                <div className="col " onClick={clickHandler} >
+                    <Avatar variant="square" className="mx-5 category-button" id="Skin" style={styles.Avatar}>Skin</Avatar>
                 </div>
-                <div className="col" onClick={clickHandler} >
-                    <Avatar variant="square" className="mx-5" id="Spa" style={styles.Avatar}>Spa</Avatar>
+                <div className="col " onClick={clickHandler} >
+                    <Avatar variant="square" className="mx-5 category-button" id="Spa" style={styles.Avatar}>Spa</Avatar>
                 </div>
-                <div className="col" onClick={clickHandler} >
-                    <Avatar variant="square" className="mx-5" id="Makeup" style={styles.Avatar}>Makeup</Avatar>
+                <div className="col " onClick={clickHandler} >
+                    <Avatar variant="square" className="mx-5 category-button" id="Makeup" style={styles.Avatar}>Makeup</Avatar>
                 </div>
-                <div className="col" onClick={clickHandler} >
-                    <Avatar variant="square" className="mx-5" id="Eyebrows" style={styles.Avatar}>Eyebrows</Avatar>
+                <div className="col " onClick={clickHandler} >
+                    <Avatar variant="square" className="mx-5 category-button" id="Eyebrows" style={styles.Avatar}>Eyebrows</Avatar>
                 </div>
-                <div className="col" onClick={clickHandler} >
-                    <Avatar variant="square" className="mx-5" id="Hair Removal" style={styles.Avatar}>Hair Removal</Avatar>
+                <div className="col " onClick={clickHandler} >
+                    <Avatar variant="square" className="mx-5 category-button" id="Hair Removal" style={styles.Avatar}>Hair Removal</Avatar>
                 </div>
-                <div className="col" onClick={clickHandler} >
-                    <Avatar variant="square" className="mx-5" id="Nails" style={styles.Avatar}>Nails</Avatar>
+                <div className="col " onClick={clickHandler} >
+                    <Avatar variant="square" className="mx-5 category-button" id="Nails" style={styles.Avatar}>Nails</Avatar>
                 </div>
-                <div className="col" onClick={clickHandler} >
-                    <Avatar variant="square" className="mx-5" id="Massage" style={styles.Avatar}>Massage</Avatar>
+                <div className="col " onClick={clickHandler} >
+                    <Avatar variant="square" className="mx-5 category-button" id="Massage" style={styles.Avatar}>Massage</Avatar>
                 </div>
             </div>
            
@@ -70,9 +71,6 @@ const styles = {
     Avatar: {
         height: 70,
         width: 100,
-        backgroundColor: '#5b5b5b',
-        color: 'white',
-        border: '2px solid white'
     }
 }
 

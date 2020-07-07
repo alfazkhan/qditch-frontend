@@ -198,16 +198,20 @@ export class ServiceBook extends Component {
     }
     handleTimeChange = (e) => {
         let time = e.toString().split(' ')
-        const currentTime = new Date()
-        console.log(currentTime > e)
-        console.log(e)
-        // if (e < currentTime) {
-        //     this.setState({
-        //         error: true,
-        //         errorMessages: "You Can't select Past Time"
-        //     })
-        //     return 1
-        // }
+        let startDate = this.state.startDate.split('/')
+
+        const date = new Date()
+
+        const currentTime = new Date(startDate[2], startDate[1] - 1, startDate[0], e.getHours(), e.getMinutes())
+        // console.log("Selected Time with Date: ", currentTime)
+        // console.log("current Time: ",date)
+        if (currentTime < date) {
+            this.setState({
+                error: true,
+                errorMessages: "You Can't select Past Time"
+            })
+            return 1
+        }
         time = time[4]
         //validation
         this.setState({
@@ -401,7 +405,7 @@ export class ServiceBook extends Component {
                         Book Now
                 </Button>
                     :
-                    <strong className="text-danger">*You need Sign In to Book an Appointment</strong>
+                    <strong className="text-danger">*Please Sign in/Sign up to book an Appointment</strong>
                 }
 
                 {this.state.responseModal

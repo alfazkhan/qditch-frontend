@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import Axios from '../../../Axios'
 import Heading from '../../../Components/Heading/Heading'
 import { CircularProgress, Button, ButtonGroup } from '@material-ui/core'
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers'
+import DateFnsUtils from '@date-io/date-fns';
+
 
 export class Appointments extends Component {
 
@@ -34,6 +37,15 @@ export class Appointments extends Component {
             this.setAppointment()
         })
 
+    }
+
+    handleDateChange=(e)=>{
+        const date = this.state.date
+        console.log(e.getDate())
+        date.setDate(e.getDate())
+        this.setState({ date: date, Loading: true }, () => {
+            this.setAppointment()
+        })
     }
 
 
@@ -183,15 +195,31 @@ export class Appointments extends Component {
         return (
             <div className="container">
                 <Heading text="Appointments" />
-                <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">
-                    <Button onClick={this.setYesterdayDate} > {"<< Previous Day"}</Button>
-                    <Button>{this.state.date.toDateString()}</Button>
-                    <Button onClick={this.setTommorowDate} >{"Next Day >>"}</Button>
-                </ButtonGroup>
+                <Button variant="contained" color="primary" className="mr-5" onClick={this.setYesterdayDate} > {"<< Previous Day"}</Button>
+                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                    <KeyboardDatePicker
+                        disableToolbar
+                        variant="inline"
+                        format="dd/MM/yyyy"
+                        id="date-picker-inline"
+                        label="Select Date"
+                        value={this.state.date}
+                        // invalidDateMessage=""
+                        format="dd/MM/yyyy"
+                        maxDateMessage=""
+                        minDateMessage=""
+                        onChange={this.handleDateChange}
+                        KeyboardButtonProps={{
+                            'aria-label': 'change date',
+                        }}
+                    />
+                </MuiPickersUtilsProvider>
+                
+                <Button variant="contained" color="primary" className="ml-5" onClick={this.setTommorowDate} >{"Next Day >>"}</Button>
 
                 {this.state.Loading ? <CircularProgress />
                     :
-                    <div style={{ height: window.innerHeight / 2, overflow: "scroll", overflowX:"hidden" }}>
+                    <div style={{ height: window.innerHeight / 2, overflow: "scroll", overflowX: "hidden" }}>
                         <table class="table table-striped mt-4" >
                             <thead>
                                 <tr>

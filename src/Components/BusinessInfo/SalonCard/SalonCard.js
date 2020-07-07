@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import Axios from '../../../Axios';
 import { withRouter } from 'react-router-dom';
 import { CircularProgress } from '@material-ui/core';
+import SalonResults from '../../SearchResults/SalonResultCards/SalonResultCards';
 
 
 
@@ -61,7 +62,9 @@ class SalonCard extends Component {
       Promise.allSettled(promise)
         .then(res => {
           // console.log(images)
-          this.setState({ userDetails: details, Loading: false, coverImages: images })
+          this.setState({ userDetails: details, Loading: false, coverImages: images },()=>{
+            
+          })
         })
   }
 
@@ -76,9 +79,9 @@ class SalonCard extends Component {
           </div>
           :
           <ul className='list-group mb-4'>
-            {this.props.salon.map((salon, index) => (
-              <div className="row" onClick={() => this.props.history.push('/saloninfo/' + salon.id)}>
-                <Card className="my-4 col-4">
+            {this.props.salon.sort().map((salon, index) => (
+              <div key={index} className="row mx-auto" onClick={() => this.props.history.push('/saloninfo/' + salon.id)} style={{width: window.innerWidth/1.12}}>
+                <Card className={window.innerWidth > 768 ? "my-4 col-4" : "col-12"}>
                   <CardActionArea>
                     <CardMedia
                       component="img"
@@ -89,7 +92,7 @@ class SalonCard extends Component {
                     />
                   </CardActionArea>
                 </Card>
-                <Card className="my-4 col-8">
+                <Card className={window.innerWidth > 768?"my-4 col-8":"col-12 mb-5"}>
                   <CardActionArea>
                     <CardContent>
                       <Typography gutterBottom variant="h4" component="h2">
@@ -103,6 +106,9 @@ class SalonCard extends Component {
                       </Typography>
                       <Typography variant="body2" color="primary" component="p">
                         {this.state.userDetails[salon.user].name + ":" + this.state.userDetails[salon.user].mobile}
+                      </Typography>
+                      <Typography variant="body2" color="primary" component="p">
+                        {salon.safety_feature}
                       </Typography>
                     </CardContent>
                   </CardActionArea>

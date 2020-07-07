@@ -61,7 +61,7 @@ const Navigator = (props) => {
 
     return (
         <div>
-            <div className={"navigation-bar"}>
+            <div className={"navigation-bar pb-3"}>
                 <div>
                     <nav className="navbar navbar-expand-lg" style={{ backgroundColor: Colors.primary }}>
                         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">

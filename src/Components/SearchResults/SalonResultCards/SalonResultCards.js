@@ -21,7 +21,7 @@ const SalonResults = (props) => {
 
   const setSalonData=()=>{
     const ids = props.business_ids
-    // console.log(ids)
+    console.log(ids)
     const salonsList = []
     const promise = []
     for (var key in ids) {
@@ -53,9 +53,9 @@ const SalonResults = (props) => {
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
   return (
-    <div className='container mt-5'>
+    <div className='mt-3'>
       {!loading
-        ? <SalonCard salon={salons} />
+        ? <SalonCard salon={salons.sort()} />
         : null}
 
       {/* {salons.length > salonsPerPage

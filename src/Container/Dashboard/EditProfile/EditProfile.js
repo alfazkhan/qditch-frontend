@@ -17,7 +17,8 @@ class EditProfile extends Component {
             address: this.props.data['address'],
 
         },
-        menuItems: null
+        menuItems: null,
+        currentType: this.props.data['business_type']
     }
 
     componentDidMount() {
@@ -94,7 +95,7 @@ class EditProfile extends Component {
                                 <tr>
                                     <th scope="row">Business Type</th>
                                     <FormControl variant="" className="col-sm">
-                                        <InputLabel>{(this.state.values.type).toUpperCase()}</InputLabel>
+                                        <InputLabel className="text-uppercase" >Current Type: {this.state.currentType} </InputLabel>
                                         <Select
                                             name='type'
                                             onChange={this.valuesChangeHandler}

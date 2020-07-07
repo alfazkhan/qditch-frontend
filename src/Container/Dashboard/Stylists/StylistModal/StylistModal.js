@@ -13,7 +13,7 @@ const StylistModal = (props) => {
                             // value={this.state.currentNumber}
                             onChange={props.change}
                             label="Title"
-                            className="col-8"
+                            className="col-12"
                             required
                             placeholder="title"
                             margin="none"

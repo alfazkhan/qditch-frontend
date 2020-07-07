@@ -16,7 +16,7 @@ class Results extends Component {
         results: null,
         Loading: true,
         genderArray: [],
-        serviceArray:[],
+        serviceArray: [],
     }
 
     componentDidMount() {
@@ -44,27 +44,27 @@ class Results extends Component {
         return a1.filter(function (n) { return a2.indexOf(n) !== -1; });
     }
 
-    salonServiceFilterHandler=(e)=>{
+    salonServiceFilterHandler = (e) => {
         console.log(e.target.value)
-        this.setState({Loading: true})
-        if(e.target.value === "All"){
-            this.setState({serviceArray: []},()=>{
+        this.setState({ Loading: true })
+        if (e.target.value === "All") {
+            this.setState({ serviceArray: [] }, () => {
                 this.resultsRender()
             })
             return 1
         }
 
         const data = {
-            "service" : e.target.value
+            "service": e.target.value
         }
 
-        Axios.post('api/service/get_busienss_service_filter/',data)
-        .then(res=>{
-            console.log(res.data.business)
-            this.setState({Loading:false,serviceArray:res.data.business},()=>{
-                this.resultsRender()
+        Axios.post('api/service/get_busienss_service_filter/', data)
+            .then(res => {
+                console.log(res.data.business)
+                this.setState({ Loading: false, serviceArray: res.data.business }, () => {
+                    this.resultsRender()
+                })
             })
-        })
 
     }
 
@@ -72,8 +72,8 @@ class Results extends Component {
     salonTypeFilterHandler = (e) => {
         this.setState({ Loading: true })
 
-        if(e.target.value === "All"){
-            this.setState({genderArray: []},()=>{
+        if (e.target.value === "All") {
+            this.setState({ genderArray: [] }, () => {
                 this.resultsRender()
             })
             return 1
@@ -85,7 +85,7 @@ class Results extends Component {
         }
         Axios.post('api/users/business_type_filter/', data)
             .then(res => {
-                console.log(res.data.business)                
+                console.log(res.data.business)
                 this.setState({ genderArray: res.data.business, Loading: false }, () => {
                     this.resultsRender()
                 })
@@ -97,24 +97,41 @@ class Results extends Component {
     }
 
     resultsRender = () => {
-        let finalArray= this.state.businessIDs
-        if(this.state.genderArray.length > 0){
-            finalArray = this.getArraysIntersection(this.state.businessIDs,this.state.genderArray)
-        }
-
-        if(this.state.serviceArray.length > 0){
-            finalArray = this.getArraysIntersection(this.state.businessIDs,this.state.serviceArray)
-        }
+        let finalArray = this.state.businessIDs
         
+        if (this.state.serviceArray.length > 0 && this.state.genderArray.length > 0){
+            finalArray = this.getArraysIntersection(this.state.businessIDs, this.getArraysIntersection(this.state.serviceArray,this.state.genderArray))
+        }
+        else if (this.state.genderArray.length > 0) {
+            finalArray = this.getArraysIntersection(this.state.businessIDs, this.state.genderArray)
+        }
+        else if (this.state.serviceArray.length > 0) {
+            finalArray = this.getArraysIntersection(this.state.businessIDs, this.state.serviceArray)
+        }
 
-        const results = <SalonResultCards business_ids={finalArray} />
+
+        let results
+
+        console.log(finalArray.sort())
+
+        if (finalArray.length > 0) {
+            results = <SalonResultCards business_ids={finalArray} />
+        } else {
+            results = (
+                <div className="mx-auto mt-5">
+                    <h1 className="text-muted">No Results...</h1>
+                    <h4 className="text-muted"> No Salons available for the Selected Filters </h4>
+                </div>
+            )
+        }
+
         this.setState({ results: results, Loading: false })
     }
 
 
     render() {
         return (
-            <div className="container">
+            <div className="container-fluid" style={{width: '90%'}}>
                 <Heading text={this.state.categoryName} />
                 {/* {this.state.Loading
                     ? <CircularProgress /> */}
@@ -175,6 +192,7 @@ class Results extends Component {
 
                     </div>
                     <div className="row">
+
                         {this.state.results}
                     </div>
                 </div>
