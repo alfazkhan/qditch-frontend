@@ -49,39 +49,53 @@ export class Services extends Component {
         const allCat = this.state.categoriesName
         const allServ = this.state.allServices
 
-        const all = this.state.allServices
-                const services = this.state.services
-                for (var key in business_services) {
-                    promise.push(
-                        Axios.get('api/service/business_services/' + business_services[key] + '/')
-                            .then(res => {
-                                // console.log(res.data)
-                                const data = {
-                                    "service": all[res.data.service].name,
-                                    "service_id": res.data.id,
-                                    "category": allCat[all[res.data.service].category].name,
-                                    "duration": res.data.business_service_duration,
-                                    "price": res.data.business_service_price
-                                }
-                                services.push(data)
-                                // console.log(data)
+        const services = 
 
-                                const num = this.state.dataLoaded + 1
-                                this.setState({ dataLoaded: num, services: services })
-                                // if (this.state.dataLoaded === business_services.length) {
+        // const all = this.state.allServices
+        //         const services = this.state.services
+        //         for (var key in business_services) {
+        //             promise.push(
+        //                 Axios.get('api/service/business_services/' + business_services[key] + '/')
+        //                     .then(res => {
+        //                         // console.log(res.data)
+        //                         const data = {
+        //                             "service": all[res.data.service].name,
+        //                             "service_id": res.data.id,
+        //                             "category": allCat[all[res.data.service].category].name,
+        //                             "duration": res.data.business_service_duration,
+        //                             "price": res.data.business_service_price
+        //                         }
+        //                         services.push(data)
+        //                         // console.log(data)
 
-                                //     this.loadCustomTableData()
-                                // }
+        //                         const num = this.state.dataLoaded + 1
+        //                         this.setState({ dataLoaded: num, services: services })
+        //                         // if (this.state.dataLoaded === business_services.length) {
 
-                            })
-                            .catch(e => {
+        //                         //     this.loadCustomTableData()
+        //                         // }
 
-                            })
+        //                     })
+        //                     .catch(e => {
 
-                    )
+        //                     })
+
+        //             )
 
 
+        //         }
+
+        promise[0] = Axios.get('api/service/services/')
+            .then(res => {
+
+                for (var key in res.data) {
+                    // console.log(key)
+                    allServ[res.data[key].id] = { ...allServ[res.data[key].id], "category": res.data[key].categories, "name":res.data[key].name }
                 }
+                this.setState({ allServices: allServ }, () => {
+                    // console.log(this.state.allServices[1])
+                })
+            })
 
         promise[1] = Axios.get('api/category/categories/')
             .then(res => {
@@ -95,16 +109,7 @@ export class Services extends Component {
             })
 
 
-        promise[0] = Axios.get('api/service/services/')
-            .then(res => {
-
-                for (var key in res.data) {
-                    // console.log(res.data[key])
-                    allServ[res.data[key].id] = {"category": res.data[key].categories, "name":res.data[key].name }
-                }
-                this.setState({ allServices: allServ }, () => {
-                })
-            })
+        
 
 
         Promise.allSettled(promise)
@@ -238,21 +243,20 @@ export class Services extends Component {
         const allServices = this.state.allServices
         const allCat = this.state.categoriesName
         // console.log(allCat)
-        // console.log(allServices[1])
 
-        // console.log(Object.values(allServices))
-        for(var key in allServices){
-        }
+        // console.log(allServices)
+        
 
         for (var key = 0; key < services.length; key++) {
             const id = services[key].id
-            console.log(services[key])
+            // console.log(allServices[services[key].service].category)
+            // console.log()
             
             List.push(
                 <tr>
                     <th scope="row">{key + 1}</th>
                     <td>{services[key].service_name}</td>
-                    <td>{services[key].category}</td>
+                    <td>{allCat[allServices[services[key].service].category].name}</td>
                     <td> {services[key].business_service_duration} </td>
                     <td>{services[key].business_service_price} </td>
                     <td><button id={"edit-custom-service:" + key + ':' + id} type="button" class="btn btn-primary" onClick={(e) => this.toggleModal(e, "ServiceEdit")}>Edit</button></td>
@@ -262,7 +266,7 @@ export class Services extends Component {
 
         }
 
-        this.setState({ lists: List }, () => {
+        this.setState({ lists: List,services: services }, () => {
 
         })
 
@@ -353,23 +357,29 @@ export class Services extends Component {
     }
 
     toggleModal = (e, action) => {
-        // console.log(e.target.id.split(':')[1])
+        console.log(e.target.id)
         const id = e.target.id.split(':')[1]
         let data = this.state.serviceValues
+
+        const allCat = this.state.categoriesName
+        const allServices = this.state.allServices
+        const services = this.state.data['business_services']
+
         let currentValue = ''
         switch (action) {
             case "ServiceEdit":
+                console.log(this.state.data['business_services'])
                 data = {
-                    category: this.state.services[id].category,
+                    category: allCat[allServices[services[id].service].category].name,
                     mode: "ServiceEdit",
                     id: e.target.id.split(':')[2]
                 }
                 currentValue = this.state.services[e.target.id.split(':')[1]]
-                console.log(currentValue)
-                currentValue = <div> Service: {currentValue.service} ,
-                     Category:  {currentValue.category}  ,
-                    Price:  {currentValue.price}  ,
-                     Duration:  {currentValue.duration} </div>
+                console.log(allServices[currentValue.service])
+                currentValue = <div> Service: {allServices[currentValue.service].name} ,
+                     Category:  {allCat[allServices[currentValue.service].category].name}  ,
+                    Price:  {currentValue.business_service_price}  ,
+                     Duration:  {currentValue.business_service_duration} </div>
                 break;
             case "CustomEdit":
                 data = {
