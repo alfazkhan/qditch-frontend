@@ -15,7 +15,8 @@ class Results extends Component {
         categoryName: '',
         results: null,
         Loading: true,
-        filteredArray: []
+        genderArray: [],
+        serviceArray:[],
     }
 
     componentDidMount() {
@@ -43,20 +44,49 @@ class Results extends Component {
         return a1.filter(function (n) { return a2.indexOf(n) !== -1; });
     }
 
+    salonServiceFilterHandler=(e)=>{
+        console.log(e.target.value)
+        this.setState({Loading: true})
+        if(e.target.value === "All"){
+            this.setState({serviceArray: []},()=>{
+                this.resultsRender()
+            })
+            return 1
+        }
+
+        const data = {
+            "service" : e.target.value
+        }
+
+        Axios.post('api/service/get_busienss_service_filter/',data)
+        .then(res=>{
+            console.log(res.data.business)
+            this.setState({Loading:false,serviceArray:res.data.business},()=>{
+                this.resultsRender()
+            })
+        })
+
+    }
+
+
     salonTypeFilterHandler = (e) => {
         this.setState({ Loading: true })
+
+        if(e.target.value === "All"){
+            this.setState({genderArray: []},()=>{
+                this.resultsRender()
+            })
+            return 1
+        }
+
         console.log(e.target.value)
         const data = {
             "type": e.target.value
         }
         Axios.post('api/users/business_type_filter/', data)
             .then(res => {
-                console.log(res.data.business)
-                const businessIDs = this.state.businessIDs
-                console.log(businessIDs)
-                let intersection = this.getArraysIntersection(businessIDs, res.data.business)
-                console.log(intersection)
-                this.setState({ filteredArray: intersection, Loading: false }, () => {
+                console.log(res.data.business)                
+                this.setState({ genderArray: res.data.business, Loading: false }, () => {
                     this.resultsRender()
                 })
 
@@ -64,12 +94,20 @@ class Results extends Component {
             .catch(e => {
                 console.log(e.response)
             })
-
-
     }
 
     resultsRender = () => {
-        const results = <SalonResultCards business_ids={this.state.filteredArray.length > 0 ? this.state.filteredArray : this.state.businessIDs} />
+        let finalArray= this.state.businessIDs
+        if(this.state.genderArray.length > 0){
+            finalArray = this.getArraysIntersection(this.state.businessIDs,this.state.genderArray)
+        }
+
+        if(this.state.serviceArray.length > 0){
+            finalArray = this.getArraysIntersection(this.state.businessIDs,this.state.serviceArray)
+        }
+        
+
+        const results = <SalonResultCards business_ids={finalArray} />
         this.setState({ results: results, Loading: false })
     }
 
@@ -89,9 +127,7 @@ class Results extends Component {
                                 onChange={(e) => this.salonTypeFilterHandler(e)}
                                 label="Saloon Type Filter"
                             >
-                                <MenuItem value="" disabled>
-                                    <em>None</em>
-                                </MenuItem>
+                                <MenuItem value={'All'}>All</MenuItem>
                                 <MenuItem value={'male'}>Male</MenuItem>
                                 <MenuItem value={'female'}>Female</MenuItem>
                                 <MenuItem value={'unisex'}>Unisex</MenuItem>
@@ -102,37 +138,37 @@ class Results extends Component {
                             <InputLabel>Salon Service Filter</InputLabel>
                             <Select
                                 // value={age}
-                                onChange={(e) => this.salonTypeFilterHandler(e)}
+                                onChange={(e) => this.salonServiceFilterHandler(e)}
                                 label="Saloon Service Filter"
                             >
-                                <MenuItem value="" disabled>
-                                    <em>None</em>
+                                <MenuItem value="All">
+                                    All
                                 </MenuItem>
 
-                                <MenuItem value={'Haircut'}>Haircut</MenuItem>
-                                <MenuItem value={'Hair wash'}>Hair wash</MenuItem>
-                                <MenuItem value={'Hair colour'}>Hair colour</MenuItem>
-                                <MenuItem value={'Highlights'}>Highlights</MenuItem>
-                                <MenuItem value={'Shave'}>Shave</MenuItem>
-                                <MenuItem value={'Beard trim/styling'}>Beard trim/styling</MenuItem>
-                                <MenuItem value={'Blow-dry'}>Blow-dry</MenuItem>
-                                <MenuItem value={'Facial'}>Facial</MenuItem>
-                                <MenuItem value={'De-Tan'}>De-Tan</MenuItem>
-                                <MenuItem value={'Clean Up'}>Clean Up</MenuItem>
-                                <MenuItem value={'Face Mask'}>Face Mask</MenuItem>
-                                <MenuItem value={'Nail Spa'}>Nail Spa</MenuItem>
-                                <MenuItem value={'Hand Spa'}>Hand Spa</MenuItem>
-                                <MenuItem value={'Foot Spa'}>Foot Spa</MenuItem>
-                                <MenuItem value={'Bridal makeup'}>Bridal makeup</MenuItem>
-                                <MenuItem value={'Traditional makeup'}>Traditional makeup</MenuItem>
-                                <MenuItem value={'Threading'}>Threading</MenuItem>
-                                <MenuItem value={'Full body wax'}>Full body wax</MenuItem>
-                                <MenuItem value={'Upper lip'}>Upper lip</MenuItem>
-                                <MenuItem value={'Manicure'}>Manicure</MenuItem>
-                                <MenuItem value={'Pedicure'}>Pedicure</MenuItem>
-                                <MenuItem value={'Head Massage'}>Head Massage</MenuItem>
-                                <MenuItem value={'Quick Massage'}>Quick Massage</MenuItem>
-                                <MenuItem value={'Body Massage'}>Body Massage</MenuItem>
+                                <MenuItem value={'1'}>Haircut</MenuItem>
+                                <MenuItem value={'2'}>Hair wash</MenuItem>
+                                <MenuItem value={'3'}>Hair colour</MenuItem>
+                                <MenuItem value={'4'}>Highlights</MenuItem>
+                                <MenuItem value={'5'}>Shave</MenuItem>
+                                <MenuItem value={'6'}>Beard trim/styling</MenuItem>
+                                <MenuItem value={'7'}>Blow-dry</MenuItem>
+                                <MenuItem value={'8'}>Facial</MenuItem>
+                                <MenuItem value={'9'}>De-Tan</MenuItem>
+                                <MenuItem value={'10'}>Clean Up</MenuItem>
+                                <MenuItem value={'11'}>Face Mask</MenuItem>
+                                <MenuItem value={'12'}>Nail Spa</MenuItem>
+                                <MenuItem value={'13'}>Hand Spa</MenuItem>
+                                <MenuItem value={'14'}>Foot Spa</MenuItem>
+                                <MenuItem value={'15'}>Bridal makeup</MenuItem>
+                                <MenuItem value={'16'}>Traditional makeup</MenuItem>
+                                <MenuItem value={'17'}>Threading</MenuItem>
+                                <MenuItem value={'18'}>Full body wax</MenuItem>
+                                <MenuItem value={'19'}>Upper lip</MenuItem>
+                                <MenuItem value={'20'}>Manicure</MenuItem>
+                                <MenuItem value={'21'}>Pedicure</MenuItem>
+                                <MenuItem value={'22'}>Head Massage</MenuItem>
+                                <MenuItem value={'23'}>Quick Massage</MenuItem>
+                                <MenuItem value={'24'}>Body Massage</MenuItem>
 
                             </Select>
                         </FormControl>
