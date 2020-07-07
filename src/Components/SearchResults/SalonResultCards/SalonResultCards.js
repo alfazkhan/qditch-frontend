@@ -10,12 +10,13 @@ const SalonResults = (props) => {
   const [salonsPerPage] = useState(10);
 
   useEffect(() => {
-    const ids = props.business_ids.sort()
-    // console.log(ids)
+    const ids = props.business_ids[0].business
+    console.log(ids)
     const salonsList = salons
     const promise = []
     setLoading(true);
     for (var key in ids) {
+      // console.log(ids[0].business)
       promise[key] = Axios.get('api/users/business/' + ids[key] + '/')
         .then(res => {
           salonsList.push(res.data)
