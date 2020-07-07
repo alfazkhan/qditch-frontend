@@ -104,7 +104,7 @@ export class Services extends Component {
                 }
                 this.setState({ categoriesName: allCat }, () => {
                     // console.log(this.state.categoriesName)
-                    this.loadCustomTableData()
+                    // this.loadCustomTableData()
                 })
             })
 
@@ -120,6 +120,9 @@ export class Services extends Component {
                     })
                     this.loadCustomTableData()
                     return true
+                }
+                else{
+                    this.loadCustomTableData()
                 }
                 // const all = this.state.allServices
                 // const services = this.state.services

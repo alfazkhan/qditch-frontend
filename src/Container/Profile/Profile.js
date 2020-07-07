@@ -12,6 +12,7 @@ import { Loader } from '../../Components/Loader/Loader'
 import * as actionTypes from '../../store/Action/Action'
 import * as Validator from '../../Validator'
 import axios from 'axios'
+import ScheduleModal from './ScheduleModal';
 
 
 
@@ -44,7 +45,11 @@ class Profile extends Component {
         messages: [],
         errors: false,
         success: false,
-        successMessages: []
+        successMessages: [],
+
+
+        scheduleModal: false,
+        scheduleModalContent: []
     }
 
     componentDidMount() {
@@ -150,6 +155,21 @@ class Profile extends Component {
         //     .catch((error) => {
         //       console.log(error.response)
         //     })
+
+    }
+
+    scheduleModalHandler = () => {
+
+        const scheduleModalContent = (
+            <ScheduleModal handleClose={()=>this.setState({scheduleModal:false})}
+            user_id = {this.props.user_id}
+            />
+        )
+
+        this.setState({
+            scheduleModal: true,
+            scheduleModalContent: scheduleModalContent
+        })
 
     }
 
@@ -357,9 +377,15 @@ class Profile extends Component {
                             <Button variant="contained" color="primary" className="my-3 px-auto" style={{ width: '100%' }} onClick={this.editProfileHandler}>
                                 Change Password
                             </Button>
-                            <Button variant="contained" color="secondary" className="px-auto" style={{ width: '100%' }} onClick={this.deleteProfileHandler}>
+                            <Button variant="contained" color="secondary" className="mb-3 px-auto" style={{ width: '100%' }} onClick={this.deleteProfileHandler}>
                                 Delete My Profile
                             </Button>
+                            <Button variant="contained" className="px-auto" style={{ width: '100%', backgroundColor: Colors.success, color: '#fff' }} onClick={this.scheduleModalHandler}>
+                                View My Appointments
+                            </Button>
+                            {this.state.scheduleModal
+                                ? this.state.scheduleModalContent
+                                : null}
                         </Box>
                     </Box>
 
