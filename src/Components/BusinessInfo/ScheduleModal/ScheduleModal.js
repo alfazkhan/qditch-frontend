@@ -110,47 +110,49 @@ export class ScheduleModal extends Component {
         }
 
         const times = startTimes.concat(endTimes).sort()
+        console.log(startTimes)
+        console.log(endTimes)
         if (times.length >= 2) {
 
-            if (this.formatAMPM(openingTime) !== this.formatAMPM(times[0])) {
+            // if (this.formatAMPM(openingTime) !== this.formatAMPM(times[0])) {
                 tableRows.push(
                     <tr className="text-success">
                         <td> {this.formatAMPM(openingTime)} </td>
-                        <td> {this.formatAMPM(times[0])} </td>
+                        <td> {this.formatAMPM(startTimes[0])} </td>
                         <td> Available </td>
                     </tr>
                 )
-            }
+            // }
 
-            for (var i = 0; i < times.length; i += 2) {
+            for (var i = 0; i < startTimes.length; i += 1) {
 
-                if (this.formatAMPM(times[i]) !== this.formatAMPM(times[i + 1])) {
+                // if (this.formatAMPM(times[i]) !== this.formatAMPM(times[i + 1])) {
                     tableRows.push(
                         <tr className="text-danger">
-                            <td> {this.formatAMPM(times[i])} </td>
-                            <td> {this.formatAMPM(times[i + 1])} </td>
+                            <td> {this.formatAMPM(startTimes[i])} </td>
+                            <td> {this.formatAMPM(endTimes[i])} </td>
                             <td>Not Available </td>
                         </tr>
                     )
-                }
+                // }
 
-                if (times.length !== i + 2) {
-                    if (this.formatAMPM(times[i + 1]) !== this.formatAMPM(times[i + 2])) {
+                if (startTimes.length !== i + 1) {
+                    // if (this.formatAMPM(times[i + 1]) !== this.formatAMPM(times[i + 2])) {
                         tableRows.push(
                             <tr className="text-success">
-                                <td> {this.formatAMPM(times[i + 1])} </td>
-                                <td> {this.formatAMPM(times[i + 2])} </td>
+                                <td> {this.formatAMPM(endTimes[i])} </td>
+                                <td> {this.formatAMPM(startTimes[i + 1])} </td>
                                 <td>Available </td>
                             </tr>
                         )
-                    }
+                    // }
                 }
             }
 
 
             tableRows.push(
                 <tr className="text-success">
-                    <td> {this.formatAMPM(times[times.length - 1])} </td>
+                    <td> {this.formatAMPM(endTimes[endTimes.length - 1])} </td>
                     <td> {this.formatAMPM(closingTime)} </td>
                     <td> Available </td>
                 </tr>
