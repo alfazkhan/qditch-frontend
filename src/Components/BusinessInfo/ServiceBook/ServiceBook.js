@@ -199,22 +199,14 @@ export class ServiceBook extends Component {
     handleTimeChange = (e) => {
         let time = e.toString().split(' ')
         const currentTime = new Date()
-        
-        if (parseInt(this.state.startDate.split('/')[0]) === currentTime.getDate() && parseInt(this.state.startDate.split('/')[1]) === currentTime.getMonth() ) {
-            if (e.getHours() < currentTime.getHours()) {
-                this.setState({
-                    error: true,
-                    errorMessages: "You Can't select Past Time"
-                })
-                if (e.getMinutes() < currentTime.getMinutes()) {
-                    this.setState({
-                        error: true,
-                        errorMessages: "You Can't select Past Time"
-                    })
-                    return 1
-                }
-                return 1
-            }
+        console.log(currentTime > e)
+        console.log(e)
+        if (e < currentTime) {
+            this.setState({
+                error: true,
+                errorMessages: "You Can't select Past Time"
+            })
+            return 1
         }
         time = time[4]
         //validation
@@ -257,7 +249,7 @@ export class ServiceBook extends Component {
     submitHandler = () => {
         // console.table(this.state
         const currentTime = new Date()
-        
+
         // if (parseInt(this.state.startDate.split('/')[0]) === currentTime.getDate()) {
         //     if (this.state.startTime.split(':')[0] < currentTime.getHours()) {
         //         this.setState({
@@ -308,7 +300,7 @@ export class ServiceBook extends Component {
                         responseModal: true,
                         responseMessage: messages,
                         bookingSuccess: false
-                    },()=>{
+                    }, () => {
                         console.log("object")
                     })
                 }
@@ -404,7 +396,7 @@ export class ServiceBook extends Component {
                         className="mt-4"
                         fullWidth
                         style={{ backgroundColor: this.state.serviceSelected.length > 0 || this.state.customServiceSelected.length > 0 ? Colors.success : 'grey', color: '#fff' }}
-                        onClick={this.state.serviceSelected.length > 0 || this.state.customServiceSelected.length > 0?this.submitHandler:null}
+                        onClick={this.state.serviceSelected.length > 0 || this.state.customServiceSelected.length > 0 ? this.submitHandler : null}
                     >
                         Book Now
                 </Button>
