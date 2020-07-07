@@ -10,13 +10,21 @@ const SalonResults = (props) => {
   const [salonsPerPage] = useState(10);
 
   useEffect(() => {
-    const ids = props.business_ids[0].business
-    console.log(ids)
-    const salonsList = salons
-    const promise = []
     setLoading(true);
+    
+    
+
+    setSalonData()
+
+
+  }, [props.business_ids]);
+
+  const setSalonData=()=>{
+    const ids = props.business_ids
+    // console.log(ids)
+    const salonsList = []
+    const promise = []
     for (var key in ids) {
-      // console.log(ids[0].business)
       promise[key] = Axios.get('api/users/business/' + ids[key] + '/')
         .then(res => {
           salonsList.push(res.data)
@@ -31,13 +39,10 @@ const SalonResults = (props) => {
     Promise.allSettled(promise)
       .then(res => {
         setSalons(salonsList)
+        // console.log(salonsList)
         setLoading(false);
       })
-
-
-
-
-  }, [salons]);
+  }
 
   // Get current posts
   const indexOfLastSalon = currentPage * salonsPerPage;

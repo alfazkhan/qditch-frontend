@@ -92,8 +92,11 @@ class SalonCard extends Component {
                 <Card className="my-4 col-8">
                   <CardActionArea>
                     <CardContent>
-                      <Typography gutterBottom variant="h5" component="h2">
+                      <Typography gutterBottom variant="h4" component="h2">
                         <strong> {salon.business_name} </strong>
+                      </Typography>
+                      <Typography gutterBottom variant="h6" component="h2">
+                        <strong className="text-uppercase" > ({salon.business_type}) </strong>
                       </Typography>
                       <Typography variant="body2" color="textPrimary" component="p">
                         {salon.address}
