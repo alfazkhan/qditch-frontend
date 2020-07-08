@@ -316,20 +316,23 @@ export class ServiceBook extends Component {
         return (
             <div className="container">
                 <div className="row">
+
                     <Paper className="col" elevation={3} style={{ backgroundColor: '#333' }}>
-                        <table class="table table-striped">
-                            <thead>
-                                <tr style={{ color: '#fff' }}>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col">Price</th>
-                                    <th scope="col">Duration</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {this.state.serviceTableList}
-                            </tbody>
-                        </table>
+                        <div style={{ overflowX: "scroll" }}>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr style={{ color: '#fff' }}>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col">Duration</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {this.state.serviceTableList}
+                                </tbody>
+                            </table>
+                        </div>
                     </Paper>
                     <table class="table table-striped">
                         <thead>

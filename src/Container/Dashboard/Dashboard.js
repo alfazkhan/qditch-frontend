@@ -34,7 +34,7 @@ const actions = [
   { icon: <AccessTimeIcon />, name: 'Timings', index: 4 },
   { icon: <FaceIcon />, name: 'Stylists', index: 3 },
   { icon: <BusinessIcon />, name: 'My Business', index: 2 },
-  { icon: <ListAltIcon />, name: 'Appointmnts', index: 1 },
+  { icon: <ListAltIcon />, name: 'Appointments', index: 1 },
   { icon: <AmpStoriesIcon />, name: 'Services', index: 0 },
 ];
 
@@ -79,8 +79,8 @@ const styles = {
   },
   fab: {
     position: 'fixed',
-    bottom: 50,
-    right: 50
+    bottom: 25,
+    right: 20
   }
 }
 

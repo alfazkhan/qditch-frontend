@@ -18,16 +18,28 @@ class SalonCard extends Component {
   state = {
     userDetails: {},
     Loading: true,
-    coverImages: {}
+    coverImages: {},
+    salonServices: {}
   }
 
   componentDidMount() {
     let promise = []
     const details = this.state.userDetails
     const images = this.state.coverImages
+    const salonServices = this.state.salonServices
+
 
     const salonData = this.props.salon
-    // console.log(salonData)
+    for(var key in salonData){
+      console.log(salonData[key].business_services.length)
+      salonServices[salonData[key].id] = (
+        <tr>
+          <td>
+
+          </td>
+        </tr>
+      )  
+    }
 
     for (var key in salonData) {
       const url = 'api/users/user_data/'
