@@ -6,6 +6,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Button } from '@material-ui/core';
 import StylistModal from './StylistModal/StylistModal';
+import Heading from '../../../Components/Heading/Heading';
 
 
 export class Stylists extends Component {
@@ -207,8 +208,8 @@ export class Stylists extends Component {
                 <tr>
                     <th scope="row">{key + 1}</th>
                     <td>{names[key].name}</td>
-                    <td><button type="button" id={key+':'+id} class="btn btn-primary" onClick={(e)=>this.toggleModal(e,"Edit")} >Edit</button> </td>
-                    <td ><button id={id + ':' + key} onClick={this.deleteHandler} type="button" class="btn btn-danger">Delete</button> </td>
+                    <td><button type="button" id={key+':'+id} class="btn btn-primary btn-sm" onClick={(e)=>this.toggleModal(e,"Edit")} >Edit</button> </td>
+                    <td ><button id={id + ':' + key} onClick={this.deleteHandler} type="button" class="btn btn-danger btn-sm">Delete</button> </td>
                 </tr>
             )
         }
@@ -219,6 +220,7 @@ export class Stylists extends Component {
     render() {
         return (
             <div className="container">
+                <Heading text="Salon Stylists" />
                 {this.state.errors
                     ? <div class="alert alert-danger alert-dismissible fade show text-left" role="alert">
                         {this.state.messages.map(function (item, i) {

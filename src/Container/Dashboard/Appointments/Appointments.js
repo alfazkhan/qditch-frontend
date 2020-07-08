@@ -39,7 +39,7 @@ export class Appointments extends Component {
 
     }
 
-    handleDateChange=(e)=>{
+    handleDateChange = (e) => {
         const date = this.state.date
         console.log(e.getDate())
         date.setDate(e.getDate())
@@ -177,7 +177,7 @@ export class Appointments extends Component {
                     <td>{this.formatAMPM(startTime)}</td>
                     <td>{this.formatAMPM(endTime)}</td>
                     <td>{appointments[key].service !== null ? business_services[appointments[key].service].price + '₹' : custom_business_services[appointments[key].custom_service].price + '₹'}</td>
-                    <td className={appointments[key].status === "confirm" ? "text-success" : "text-danger"} >{appointments[key].status}</td>
+                    <td className={appointments[key].status === "confirm" ? "text-success text-uppercase" : "text-danger text-uppercase"} >{appointments[key].status}</td>
                 </tr>
             )
         }
@@ -195,31 +195,34 @@ export class Appointments extends Component {
         return (
             <div className="container">
                 <Heading text="Appointments" />
-                <Button variant="contained" color="primary" className="mr-5" onClick={this.setYesterdayDate} > {"<< Previous Day"}</Button>
-                <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <KeyboardDatePicker
-                        disableToolbar
-                        variant="inline"
-                        format="dd/MM/yyyy"
-                        id="date-picker-inline"
-                        label="Select Date"
-                        value={this.state.date}
-                        // invalidDateMessage=""
-                        format="dd/MM/yyyy"
-                        maxDateMessage=""
-                        minDateMessage=""
-                        onChange={this.handleDateChange}
-                        KeyboardButtonProps={{
-                            'aria-label': 'change date',
-                        }}
-                    />
-                </MuiPickersUtilsProvider>
-                
-                <Button variant="contained" color="primary" className="ml-5" onClick={this.setTommorowDate} >{"Next Day >>"}</Button>
+                <div className="row">
+                    <Button variant="contained" color="primary" className="col-2 h-75 my-auto" onClick={this.setYesterdayDate} > {window.innerWidth > 768?"<< Previous Day":"<<"}</Button>
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <KeyboardDatePicker
+                            disableToolbar
+                            className={window.innerWidth > 768?"col-6 mx-auto":"col mr-2 ml-2"}
+                            variant="inline"
+                            format="dd/MM/yyyy"
+                            id="date-picker-inline"
+                            label="Select Date"
+                            value={this.state.date}
+                            // invalidDateMessage=""
+                            format="dd/MM/yyyy"
+                            maxDateMessage=""
+                            minDateMessage=""
+                            onChange={this.handleDateChange}
+                            KeyboardButtonProps={{
+                                'aria-label': 'change date',
+                            }}
+                        />
+                    </MuiPickersUtilsProvider>
+
+                    <Button variant="contained" color="primary" className="col-2 h-75 my-auto" onClick={this.setTommorowDate} >{window.innerWidth > 768?"Next Day >>":">>"}</Button>
+                </div>
 
                 {this.state.Loading ? <CircularProgress />
                     :
-                    <div style={{ height: window.innerHeight / 2, overflow: "scroll", overflowX: "hidden" }}>
+                    <div style={{ height: window.innerHeight / 2, overflow: "scroll" }}>
                         <table class="table table-striped mt-4" >
                             <thead>
                                 <tr>

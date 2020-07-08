@@ -72,40 +72,34 @@ class SalonCard extends Component {
 
   render() {
     return (
-      <div>
+      <div className="container" >
         {this.state.Loading
-          ? <div className="row">
-            <CircularProgress className="mx-auto" style={styles.Loader} />
-          </div>
+          ? 
+            <CircularProgress className="mt-5"  style={styles.Loader} />
+            
           :
           <ul className='list-group mb-4'>
             {this.props.salon.sort().map((salon, index) => (
-              <div key={index} className="row mx-auto" onClick={() => this.props.history.push('/saloninfo/' + salon.id)} style={{width: window.innerWidth/1.12}}>
+              <div key={index} className="row" onClick={() => this.props.history.push('/saloninfo/' + salon.id)} style={{width: window.innerWidth/1.12}}>
                 <Card className={window.innerWidth > 768 ? "my-4 col-4" : "col-12"}>
                   <CardActionArea>
                     <CardMedia
                       component="img"
                       alt="Contemplative Reptile"
                       height="200"
-                      image={"https://master.qditch.com" + this.state.coverImages[salon.id]}
+                      image={this.state.coverImages[salon.id]?"https://master.qditch.com" + this.state.coverImages[salon.id]:"https://images.pexels.com/photos/705255/pexels-photo-705255.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"}
                       title={salon.business_name}
                     />
                   </CardActionArea>
                 </Card>
-                <Card className={window.innerWidth > 768?"my-4 col-8":"col-12 mb-5"}>
+                <Card className={window.innerWidth > 768?"my-4 col-8":"col-12 mb-3"}>
                   <CardActionArea>
                     <CardContent>
                       <Typography gutterBottom variant="h4" component="h2">
                         <strong> {salon.business_name} </strong>
                       </Typography>
-                      <Typography gutterBottom variant="h6" component="h2">
-                        <strong className="text-uppercase" > ({salon.business_type}) </strong>
-                      </Typography>
                       <Typography variant="body2" color="textPrimary" component="p">
                         {salon.address}
-                      </Typography>
-                      <Typography variant="body2" color="primary" component="p">
-                        {this.state.userDetails[salon.user].name + ":" + this.state.userDetails[salon.user].mobile}
                       </Typography>
                       <Typography variant="body2" color="primary" component="p">
                         {salon.safety_feature}
@@ -115,7 +109,7 @@ class SalonCard extends Component {
                   <CardActions className="mt-auto">
                     <Button className="ml-auto mt-5" size="small" color="primary">
                       Book Appointment Now
-            </Button>
+                    </Button>
                   </CardActions>
                 </Card>
 
@@ -134,8 +128,8 @@ const styles = {
     marginTop: window.innerHeight / 6,
     width: window.innerWidth < 768 ? '100%' : '50%',
   },
-  Loader: {
-    marginTop: '40px'
+  Loader:{
+    marginLeft: window.innerWidth/2.5
   }
 }
 

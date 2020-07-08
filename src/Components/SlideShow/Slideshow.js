@@ -35,13 +35,14 @@ const Slideshow = (props) => {
         if (e.target.id === "") {
             return true
         }
+        console.log(e.target.id)
         props.history.push('/results/' + categories[e.target.id] + '/' + e.target.id)
 
     }
 
     return (
         <div>
-            <div id="carouselExampleIndicators" className="carousel slide carousel-fade" data-ride="carousel" data-interval="5000" pause="false" wrap="true">
+            <div id="carouselExampleIndicators" className="carousel slide carousel-fade" data-ride="carousel" data-interval="3000" pause="false" wrap="true">
                 <ol className="carousel-indicators">
                     <li data-target="#carouselExampleIndicators" data-slide-to="0" className="active"></li>
                     <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
@@ -110,31 +111,31 @@ const Slideshow = (props) => {
                 <div className="mt-5">
                     < div className="row mx-auto my-3">
                         <div className="col-1" />
-                        <Chip id="Hair" onClick={clickHandler} label="Hair" className="col-4" color="primary" />
+                        <div onClick={clickHandler} className="col-4" style={styles.chip} id="Hair">Hair</div>
                         <div className="col-2" />
-                        <Chip id="Skin" onClick={clickHandler} label="Skin" className="col-4" color="primary" />
+                        <div onClick={clickHandler} className="col-4" style={styles.chip} id="Skin">Skin</div>
                         <div className="col-1" />
                     </div>
                     < div className="row mx-auto my-3">
                         <div className="col-1" />
-                        <Chip id="Spa" onClick={clickHandler} label="Spa" className="col-4" color="primary" />
+                        <div onClick={clickHandler} className="col-4" style={styles.chip} id="Spa">Spa</div>
                         <div className="col-2" />
-                        <Chip id="Makeup" onClick={clickHandler} label="Makeup" className="col-4" color="primary" />
+                        <div onClick={clickHandler} className="col-4" style={styles.chip} id="Makeup">Makeup</div>
                         <div className="col-1" />
                     </div>
                     < div className="row mx-auto my-3">
                         <div className="col-1" />
-                        <Chip id="Eyebrows" onClick={clickHandler} label="Eyebrows" className="col-4" color="primary" />
+                        <div onClick={clickHandler} className="col-4" style={styles.chip} id="Eyebrows">Eyebrows</div>
                         <div className="col-2" />
-                        <Chip id="Hair Removal" onClick={clickHandler} label="Hair Removal" className="col-4" color="primary" />
+                        <div onClick={clickHandler} className="col-4" style={styles.chip} id="Hair Removal">Hair Removal</div>
                         <div className="col-1" />
                     </div>
                     < div className="row mx-auto my-3">
                         <div className="col-1" />
-                        <Chip id="Nails" onClick={clickHandler} label="Nails" className="col-4" color="primary" />
+                        <div onClick={clickHandler} className="col-4" style={styles.chip} id="Nails">Nails</div>
                         <div className="col-2" />
-                        <Chip label="Massage" className="col-4" color="primary" />
-                        <div id="Massage" onClick={clickHandler} className="col-1" />
+                        <div onClick={clickHandler} className="col-4" style={styles.chip} id="Massage" >Massage</div>
+                        <div   className="col-1" />
                     </div>
                     
                 </div>
@@ -179,6 +180,13 @@ const styles = {
         top: 1000
         // marginBottom: '1rem',
     },
+    chip:{
+        backgroundColor:'#3142a0',
+        border: '1px solid black',
+        color: 'white',
+        borderRadius: '5px',
+        height: 30
+    }
 
 }
 

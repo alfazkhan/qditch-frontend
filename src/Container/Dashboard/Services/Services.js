@@ -49,53 +49,53 @@ export class Services extends Component {
         const allCat = this.state.categoriesName
         const allServ = this.state.allServices
 
-        const services = 
+        const services =
 
-        // const all = this.state.allServices
-        //         const services = this.state.services
-        //         for (var key in business_services) {
-        //             promise.push(
-        //                 Axios.get('api/service/business_services/' + business_services[key] + '/')
-        //                     .then(res => {
-        //                         // console.log(res.data)
-        //                         const data = {
-        //                             "service": all[res.data.service].name,
-        //                             "service_id": res.data.id,
-        //                             "category": allCat[all[res.data.service].category].name,
-        //                             "duration": res.data.business_service_duration,
-        //                             "price": res.data.business_service_price
-        //                         }
-        //                         services.push(data)
-        //                         // console.log(data)
+            // const all = this.state.allServices
+            //         const services = this.state.services
+            //         for (var key in business_services) {
+            //             promise.push(
+            //                 Axios.get('api/service/business_services/' + business_services[key] + '/')
+            //                     .then(res => {
+            //                         // console.log(res.data)
+            //                         const data = {
+            //                             "service": all[res.data.service].name,
+            //                             "service_id": res.data.id,
+            //                             "category": allCat[all[res.data.service].category].name,
+            //                             "duration": res.data.business_service_duration,
+            //                             "price": res.data.business_service_price
+            //                         }
+            //                         services.push(data)
+            //                         // console.log(data)
 
-        //                         const num = this.state.dataLoaded + 1
-        //                         this.setState({ dataLoaded: num, services: services })
-        //                         // if (this.state.dataLoaded === business_services.length) {
+            //                         const num = this.state.dataLoaded + 1
+            //                         this.setState({ dataLoaded: num, services: services })
+            //                         // if (this.state.dataLoaded === business_services.length) {
 
-        //                         //     this.loadCustomTableData()
-        //                         // }
+            //                         //     this.loadCustomTableData()
+            //                         // }
 
-        //                     })
-        //                     .catch(e => {
+            //                     })
+            //                     .catch(e => {
 
-        //                     })
+            //                     })
 
-        //             )
+            //             )
 
 
-        //         }
+            //         }
 
-        promise[0] = Axios.get('api/service/services/')
-            .then(res => {
+            promise[0] = Axios.get('api/service/services/')
+                .then(res => {
 
-                for (var key in res.data) {
-                    // console.log(key)
-                    allServ[res.data[key].id] = { ...allServ[res.data[key].id], "category": res.data[key].categories, "name":res.data[key].name }
-                }
-                this.setState({ allServices: allServ }, () => {
-                    // console.log(this.state.allServices[1])
+                    for (var key in res.data) {
+                        // console.log(key)
+                        allServ[res.data[key].id] = { ...allServ[res.data[key].id], "category": res.data[key].categories, "name": res.data[key].name }
+                    }
+                    this.setState({ allServices: allServ }, () => {
+                        // console.log(this.state.allServices[1])
+                    })
                 })
-            })
 
         promise[1] = Axios.get('api/category/categories/')
             .then(res => {
@@ -109,7 +109,7 @@ export class Services extends Component {
             })
 
 
-        
+
 
 
         Promise.allSettled(promise)
@@ -121,7 +121,7 @@ export class Services extends Component {
                     this.loadCustomTableData()
                     return true
                 }
-                else{
+                else {
                     this.loadCustomTableData()
                 }
                 // const all = this.state.allServices
@@ -157,7 +157,7 @@ export class Services extends Component {
                 // }
             })
 
-            
+
 
 
     }
@@ -198,7 +198,7 @@ export class Services extends Component {
         console.log(action)
         // eslint-disable-next-line no-restricted-globals
         let allow = confirm("Are you Sure you Want to Delete this Service?")
-        const url = action === "delete-service" ? 'api/service/business_services/' + id  : 'api/service/custom_business_services/' + id 
+        const url = action === "delete-service" ? 'api/service/business_services/' + id : 'api/service/custom_business_services/' + id
         // console.log(allow)
         // if (action === "delete-service") {
         //     const lists = this.state.lists
@@ -248,13 +248,13 @@ export class Services extends Component {
         // console.log(allCat)
 
         // console.log(allServices)
-        
+
 
         for (var key = 0; key < services.length; key++) {
             const id = services[key].id
             // console.log(allServices[services[key].service].category)
             // console.log()
-            
+
             List.push(
                 <tr>
                     <th scope="row">{key + 1}</th>
@@ -262,14 +262,14 @@ export class Services extends Component {
                     <td>{allCat[allServices[services[key].service].category].name}</td>
                     <td> {services[key].business_service_duration} </td>
                     <td>{services[key].business_service_price} </td>
-                    <td><button id={"edit-custom-service:" + key + ':' + id} type="button" class="btn btn-primary" onClick={(e) => this.toggleModal(e, "ServiceEdit")}>Edit</button></td>
-                    <td ><button id={"delete-service:" + id + ':' + key} onClick={this.deleteHandler} type="button" class="btn btn-danger">Delete</button> </td>
+                    <td><button id={"edit-custom-service:" + key + ':' + id} type="button" class="btn btn-primary btn-sm" onClick={(e) => this.toggleModal(e, "ServiceEdit")}>Edit</button></td>
+                    <td ><button id={"delete-service:" + id + ':' + key} onClick={this.deleteHandler} type="button" class="btn btn-danger btn-sm">Delete</button> </td>
                 </tr>
             )
 
         }
 
-        this.setState({ lists: List,services: services }, () => {
+        this.setState({ lists: List, services: services }, () => {
 
         })
 
@@ -290,8 +290,8 @@ export class Services extends Component {
                     <td>{customServices[key].category}</td>
                     <td> {customServices[key].business_service_duration} </td>
                     <td>{customServices[key].business_service_price} </td>
-                    <td><button type="button" id={"edit-service:" + key + ':' + id} class="btn btn-primary" onClick={(e) => this.toggleModal(e, "CustomEdit")}>Edit</button> </td>
-                    <td ><button id={"delete-custom-service:" + id} onClick={this.deleteHandler} type="button" class="btn btn-danger">Delete</button> </td>
+                    <td><button type="button" id={"edit-service:" + key + ':' + id} class="btn btn-primary btn-sm" onClick={(e) => this.toggleModal(e, "CustomEdit")}>Edit</button> </td>
+                    <td ><button id={"delete-custom-service:" + id} onClick={this.deleteHandler} type="button" class="btn btn-danger btn-sm">Delete</button> </td>
                 </tr>
             )
 
@@ -602,43 +602,47 @@ export class Services extends Component {
                 {this.state.Loading ? <CircularProgress /> :
                     <div>
                         <Heading text="Saloon Services" />
-                        <table class="table table-borderless">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Service</th>
-                                    <th scope="col">Category</th>
-                                    <th scope="col">Duration</th>
-                                    <th scope="col">Price</th>
-                                    <th scope="col"></th>
-                                    <th scope="col"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {this.state.lists}
-                            </tbody>
-                        </table>
+                        <div style={{ overflowX: "scroll" }}>
+                            <table class="table table-striped" style={{ overflowX: "scroll" }}>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Service</th>
+                                        <th scope="col">Category</th>
+                                        <th scope="col">Duration</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {this.state.lists}
+                                </tbody>
+                            </table>
+                        </div>
                         <Button variant="contained" size="small" color="primary" className="mt-4 mb-3" onClick={(e) => this.toggleModal(e, "Add")}>
                             &#x2b; Add New Service
                         </Button>
 
                         <Heading text="Saloon Custom Services" />
-                        <table class="table table-borderless">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Service</th>
-                                    <th scope="col">Category</th>
-                                    <th scope="col">Duration</th>
-                                    <th scope="col">Price</th>
-                                    <th scope="col"></th>
-                                    <th scope="col"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {this.state.customList}
-                            </tbody>
-                        </table>
+                        <div style={{ overflowX: "scroll" }}>
+                            <table class="table table-striped" style={{ overflowX: "scroll" }}>
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Service</th>
+                                        <th scope="col">Category</th>
+                                        <th scope="col">Duration</th>
+                                        <th scope="col">Price</th>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {this.state.customList}
+                                </tbody>
+                            </table>
+                        </div>
                         <Button variant="contained" size="small" color="secondary" className="mt-4 mb-3" onClick={(e) => this.toggleModal(e, "CustomAdd")}>
                             &#x2b; Add New Custom Service
                         </Button>

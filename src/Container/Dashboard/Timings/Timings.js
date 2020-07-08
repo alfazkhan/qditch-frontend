@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { CircularProgress, Button, DialogTitle, Dialog, DialogActions} from '@material-ui/core'
 import Axios from '../../../Axios'
 import TimingModal from './TimingModal/TimingModal'
+import Heading from '../../../Components/Heading/Heading'
 
 
 class Timings extends Component {
@@ -166,6 +167,7 @@ class Timings extends Component {
     render() {
         return (
             <div className="container">
+                <Heading text="Salon Timings" />
                 {this.state.Loading ? <CircularProgress /> :
                 <div>
                     {this.state.Modal? this.state.modalContent:null}

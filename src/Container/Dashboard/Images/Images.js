@@ -63,7 +63,7 @@ export class Images extends Component {
         const id = e.target.id.split(':')[1]
         let url = 'api/images/business_image/' + id + '/'
 
-        
+
         // eslint-disable-next-line no-restricted-globals
         let allow = confirm("Are you Sure you Want to Delete this Image?")
 
@@ -146,14 +146,14 @@ export class Images extends Component {
             else {
                 imageList.push(
                     <tr>
-                        <td><img src={"https://" + images[key].url.split('//')[1]} width="auto" height={100} style={styles.Image} /></td>
+                        <td><img src={"https://" + images[key].url.split('//')[1]} width="auto" height={window.innerHeight/12} style={styles.Image} /></td>
                         <td>
                             <label for={"image-edit:" + images[key].id}>
-                                <div type="button" class="btn btn-primary mt-4">Edit Image</div>
+                                <div type="button" class="btn btn-primary btn-sm mt-4">Edit Image</div>
                             </label>
                             <input id={"image-edit:" + images[key].id} type="file" style={{ display: "none" }} onChange={this.imageEditHandler} />
                         </td>
-                        <td ><button id={"delete-service:" + images[key].id} onClick={this.deleteImageHandler} type="button" class="btn btn-danger mt-4">Delete</button> </td>
+                        <td ><button id={"delete-service:" + images[key].id} onClick={this.deleteImageHandler} type="button" class="btn btn-danger btn-sm mt-4">Delete</button> </td>
                     </tr>
                 )
             }
@@ -181,29 +181,31 @@ export class Images extends Component {
                     : null
                 }
                 {this.state.Loading ? <CircularProgress /> :
-                    <table class="table table-bordered table-sm">
-                        <thead>
-                            <tr>
-                                <th scope="col">Images</th>
-                                <th scope="col"></th>
-                                <th scope="col"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><img src={this.state.coverImage} style={styles.coverImage} width="auto" height={300} /></td>
-                                <td>
-                                    <label for={"cover-image-edit:" + this.state.coverImageID}>
-                                        <div type="button" class="btn btn-primary mt-5">Edit Cover Image</div>
-                                    </label>
-                                    <input id={"cover-image-edit:" + this.state.coverImageID} type="file" style={{ display: "none" }} onChange={this.imageEditHandler} />
-                                </td>
-                            </tr>
-                            <tr><div className="my-5"></div></tr>
-                            {this.state.imageList}
+                    <div style={{ overflowX: "scroll" }}>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Images</th>
+                                    <th scope="col"></th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><img src={this.state.coverImage} style={styles.coverImage} width="auto" height={window.innerHeight/6} /></td>
+                                    <td>
+                                        <label for={"cover-image-edit:" + this.state.coverImageID}>
+                                            <div type="button" class="btn btn-primary btn-sm mt-5">Edit Cover Image</div>
+                                        </label>
+                                        <input id={"cover-image-edit:" + this.state.coverImageID} type="file" style={{ display: "none" }} onChange={this.imageEditHandler} />
+                                    </td>
+                                </tr>
+                                <tr><div className="my-5"></div></tr>
+                                {this.state.imageList}
 
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 }
             </div>
         )
