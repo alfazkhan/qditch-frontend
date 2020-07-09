@@ -273,6 +273,7 @@ class BasicDetails extends Component {
                         autoComplete="phone"
                         className="col-md"
                         onChange={(e) => { this.valueChangeHandler(e) }}
+                        helperText="We don't send Promotional Messages"
 
                     />
 

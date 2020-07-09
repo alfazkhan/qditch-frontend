@@ -87,6 +87,64 @@ export class Images extends Component {
 
     }
 
+
+    changeCoverImageHandler = (e) => {
+        // console.log(e.target.id)
+
+        const id = e.target.id.split(':')[1]
+        let url = 'api/images/change_cover_image/'
+
+        const data = {
+            "business_image_id" : id
+        }
+console.log(data)
+
+        // eslint-disable-next-line no-restricted-globals
+        let allow = confirm("Are you Sure you Want to Set this Image as Cover Image?")
+
+        if (allow) {
+            this.setState({
+                Loading: true
+            })
+            Axios.post(url,data)
+                .then(res => {
+                    console.log(res.data)
+                    this.props.reload()
+                    this.setState({
+                        Loading: false
+                    })
+                })
+                .catch(e => {
+                    console.log(e.response.data)
+                })
+        }
+
+
+    }
+
+    imageAddHandler=(e)=>{
+        this.setState({
+            Loading: true
+        })
+        console.log(e.target.files[0])
+        const url = 'api/images/business_image/'
+        var data = new FormData();
+        data.append('blob_data', e.target.files[0]);
+        data.append('business', this.props.data['id']);
+        data.append('cover','false');
+
+        Axios.post(url,data)
+        .then(res=>{
+            console.log(res.data)
+            this.props.reload()
+        })
+        .catch(e=>{
+            console.log(e.response)
+            this.props.reload()
+        })
+
+    }
+
     imageEditHandler = (e) => {
         console.log(e.target.id)
         const messages = []
@@ -146,7 +204,7 @@ export class Images extends Component {
             else {
                 imageList.push(
                     <tr>
-                        <td><img src={"https://" + images[key].url.split('//')[1]} width="auto" height={window.innerHeight/12} style={styles.Image} /></td>
+                        <td><img src={"https://" + images[key].url.split('//')[1]} width="auto" height={window.innerHeight / 12} style={styles.Image} /></td>
                         <td>
                             <label for={"image-edit:" + images[key].id}>
                                 <div type="button" class="btn btn-primary btn-sm mt-4">Edit Image</div>
@@ -154,6 +212,7 @@ export class Images extends Component {
                             <input id={"image-edit:" + images[key].id} type="file" style={{ display: "none" }} onChange={this.imageEditHandler} />
                         </td>
                         <td ><button id={"delete-service:" + images[key].id} onClick={this.deleteImageHandler} type="button" class="btn btn-danger btn-sm mt-4">Delete</button> </td>
+                        <td ><button id={"make-cover:" + images[key].id} onClick={this.changeCoverImageHandler} type="button" class="btn btn-success btn-sm mt-4">Make Cover Image</button> </td>
                     </tr>
                 )
             }
@@ -192,7 +251,7 @@ export class Images extends Component {
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><img src={this.state.coverImage} style={styles.coverImage} width="auto" height={window.innerHeight/6} /></td>
+                                    <td><img src={this.state.coverImage} style={styles.coverImage} width="auto" height={window.innerHeight / 6} /></td>
                                     <td>
                                         <label for={"cover-image-edit:" + this.state.coverImageID}>
                                             <div type="button" class="btn btn-primary btn-sm mt-5">Edit Cover Image</div>
@@ -202,11 +261,21 @@ export class Images extends Component {
                                 </tr>
                                 <tr><div className="my-5"></div></tr>
                                 {this.state.imageList}
-
                             </tbody>
                         </table>
                     </div>
                 }
+
+                {this.state.imageList.length < 5
+                    ?
+                    <div>
+                        <label for={"add-image"}>
+                            <div type="button" class="btn btn-success btn-sm mt-5">Add Image</div>
+                        </label>
+                        <input type="file" id="add-image" style={{ display: "none" }} onChange={this.imageAddHandler} />
+                    </div>
+                    : null}
+
             </div>
         )
     }

@@ -3,6 +3,7 @@ import { Avatar, FormControl, InputLabel, Select } from '@material-ui/core'
 import Axios from '../../Axios'
 import { withRouter, Link } from 'react-router-dom'
 import './Categories.css'
+import Colors from '../../Constants/Colors'
 
 const Categories = (props) => {
 
@@ -33,31 +34,31 @@ const Categories = (props) => {
     }
 
     return (
-        <div className="container-fluid mb-5 mx-auto" style={{ backgroundColor: "rgba(255,255,255,0)" }}>
+        <div className="container-fluid mx-auto" style={{ backgroundColor: Colors.primary }}>
             <div className="row">
-                <div className="col " onClick={clickHandler} >
-                    <Avatar variant="square" className="mx-5 category-button" id="Hair" style={styles.Avatar}>Hair</Avatar>
+                <div className="col my-3" onClick={clickHandler} >
+                    <Link  className="navbar-link text-bold" id="Hair" style={styles.Avatar}>Hair</Link>
                 </div>
-                <div className="col " onClick={clickHandler} >
-                    <Avatar variant="square" className="mx-5 category-button" id="Skin" style={styles.Avatar}>Skin</Avatar>
+                <div className="col my-3" onClick={clickHandler} >
+                    <Link  className="navbar-link text-bold" id="Skin" style={styles.Avatar}>Skin</Link>
                 </div>
-                <div className="col " onClick={clickHandler} >
-                    <Avatar variant="square" className="mx-5 category-button" id="Spa" style={styles.Avatar}>Spa</Avatar>
+                <div className="col my-3" onClick={clickHandler} >
+                    <Link  className="navbar-link text-bold" id="Spa" style={styles.Avatar}>Spa</Link>
                 </div>
-                <div className="col " onClick={clickHandler} >
-                    <Avatar variant="square" className="mx-5 category-button" id="Makeup" style={styles.Avatar}>Makeup</Avatar>
+                <div className="col my-3" onClick={clickHandler} >
+                    <Link  className="navbar-link text-bold" id="Makeup" style={styles.Avatar}>Makeup</Link>
                 </div>
-                <div className="col " onClick={clickHandler} >
-                    <Avatar variant="square" className="mx-5 category-button" id="Eyebrows" style={styles.Avatar}>Eyebrows</Avatar>
+                <div className="col my-3" onClick={clickHandler} >
+                    <Link  className="navbar-link text-bold" id="Eyebrows" style={styles.Avatar}>Eyebrows</Link>
                 </div>
-                <div className="col " onClick={clickHandler} >
-                    <Avatar variant="square" className="mx-5 category-button" id="Hair Removal" style={styles.Avatar}>Hair Removal</Avatar>
+                <div className="col my-3" onClick={clickHandler} >
+                    <Link  className="navbar-link text-bold" id="Hair Removal" style={styles.Avatar}>Hair Removal</Link>
                 </div>
-                <div className="col " onClick={clickHandler} >
-                    <Avatar variant="square" className="mx-5 category-button" id="Nails" style={styles.Avatar}>Nails</Avatar>
+                <div className="col my-3" onClick={clickHandler} >
+                    <Link  className="navbar-link text-bold" id="Nails" style={styles.Avatar}>Nails</Link>
                 </div>
-                <div className="col " onClick={clickHandler} >
-                    <Avatar variant="square" className="mx-5 category-button" id="Massage" style={styles.Avatar}>Massage</Avatar>
+                <div className="col my-3" onClick={clickHandler} >
+                    <Link  className="navbar-link text-bold" id="Massage" style={styles.Avatar}>Massage</Link>
                 </div>
             </div>
            
@@ -71,6 +72,8 @@ const styles = {
     Avatar: {
         height: 70,
         width: 100,
+        color: '#CF3C37',
+        fontSize: 20,
     }
 }
 

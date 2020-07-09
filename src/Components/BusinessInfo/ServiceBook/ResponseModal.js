@@ -43,15 +43,17 @@ class ResponseModal extends Component {
 
             console.log(custom_service)
 
-            List.push(<h1>{this.props.business_name}</h1>)
+            List.push(<h1 className="text-center">{this.props.business_name}</h1>)
+            List.push(<h3 className="my-2 text-center">{this.props.Message[0].booking_id}</h3>)
 
             const start = this.props.Message[0].start_time.split('T')
             const startTime =  new Date(2020,6,2,start[1].slice(0, -1).split(':')[0],start[1].slice(0, -1).split(':')[1])
             const end = this.props.Message[0].end_time.split('T')
             const endTime =  new Date(2020,6,2,end[1].slice(0, -1).split(':')[0],end[1].slice(0, -1).split(':')[1])
 
-            List.push(<h4> {this.props.Message[0].start_time.split('T')[0]} </h4>)
-            List.push(<strong> {this.formatAMPM(startTime) +" - "+ this.formatAMPM(endTime)} </strong>)
+            List.push(<h4 className="text-center"> {this.props.Message[0].start_time.split('T')[0]} </h4>)
+            List.push(<strong className="my-2 text-center"> {this.formatAMPM(startTime) +" - "+ this.formatAMPM(endTime)} </strong>)
+
 
 
 
@@ -118,6 +120,7 @@ class ResponseModal extends Component {
                             <div className="row">
                                 {this.props.status ? <CheckCircleIcon className="mx-auto" style={styles.successIcon} /> : <HighlightOffIcon className="mx-auto" style={styles.failedIcon} />}
                             </div>
+
                             <DialogContentText id="alert-dialog-description" className="mt-5">
 
                                 {this.state.MessageList}

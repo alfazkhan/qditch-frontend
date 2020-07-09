@@ -42,6 +42,7 @@ const Slideshow = (props) => {
 
     return (
         <div>
+            
             <div id="carouselExampleIndicators" className="carousel slide carousel-fade" data-ride="carousel" data-interval="3000" pause="false" wrap="true">
                 <ol className="carousel-indicators">
                     <li data-target="#carouselExampleIndicators" data-slide-to="0" className="active"></li>
@@ -62,11 +63,7 @@ const Slideshow = (props) => {
                     <div className="carousel-item">
                         <img className="d-block w-100" src={Slide4} style={styles.thumbpost_center} alt="First slide" />
                     </div>
-                    {window.innerWidth > 1000
-                        ? <div class="carousel-caption d-none d-md-block" style={{ top: 300 }}>
-                            <Categories />
-                        </div>
-                        : null}
+
 
                 </div>
 
@@ -82,31 +79,6 @@ const Slideshow = (props) => {
             </div>
 
             {window.innerWidth <= 1000
-
-                // ? <div className='row text-center mx-1 my-3' style={{ backgroundColor: '#fff' }}>
-                //     <FormControl variant="filled" className={"text-center"} style={{ width: '100%' }} >
-                //         <InputLabel className="text-center" >Search By Category</InputLabel>
-                //         <Select
-                //             fullWidth
-                //             value={""}
-                //             className="text-center"
-                //             inputProps={{
-                //                 name: 'age',
-                //                 id: 'filled-age-native-simple',
-                //             }}
-                //             style={{ color: '#fff' }}
-                //         >
-                //             <MenuItem id="Hair" onClick={clickHandler}>Hair</MenuItem>
-                //             <MenuItem id="Skin" onClick={clickHandler}>Skin</MenuItem>
-                //             <MenuItem id="Spa" onClick={clickHandler}>Spa</MenuItem>
-                //             <MenuItem id="Makeup" onClick={clickHandler}>Makeup</MenuItem>
-                //             <MenuItem id="Eyebrows" onClick={clickHandler}>Eyebrows</MenuItem>
-                //             <MenuItem id="Hair Removal" onClick={clickHandler}>Hair Removal</MenuItem>
-                //             <MenuItem id="Nails" onClick={clickHandler}>Nails</MenuItem>
-                //             <MenuItem id="Massage" onClick={clickHandler}>Massage</MenuItem>
-                //         </Select>
-                //     </FormControl>
-                // </div>
                 ?
                 <div className="mt-5">
                     < div className="row mx-auto my-3">
@@ -135,9 +107,9 @@ const Slideshow = (props) => {
                         <div onClick={clickHandler} className="col-4" style={styles.chip} id="Nails">Nails</div>
                         <div className="col-2" />
                         <div onClick={clickHandler} className="col-4" style={styles.chip} id="Massage" >Massage</div>
-                        <div   className="col-1" />
+                        <div className="col-1" />
                     </div>
-                    
+
                 </div>
                 : null}
 
@@ -180,8 +152,8 @@ const styles = {
         top: 1000
         // marginBottom: '1rem',
     },
-    chip:{
-        backgroundColor:'#3142a0',
+    chip: {
+        backgroundColor: '#3142a0',
         border: '1px solid black',
         color: 'white',
         borderRadius: '5px',

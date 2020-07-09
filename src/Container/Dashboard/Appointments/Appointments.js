@@ -66,7 +66,7 @@ export class Appointments extends Component {
         const id = this.props.data['id']
         let date = this.state.date.toString().split(' ')
         date = date[2] + '/' + this.getMonthFromString(date[1]) + '/' + date[3]
-        console.log(date)
+        // console.log(date)
         const promise = []
         const data = {
             "business": id,
@@ -108,7 +108,7 @@ export class Appointments extends Component {
         promise[0] = Axios.post('api/booking/business_bookings/', data)
             .then(res => {
                 appointmentData = res.data
-                console.log(res.data)
+                // console.log(res.data)
 
             })
             .catch(e => {
@@ -120,13 +120,14 @@ export class Appointments extends Component {
             .then(res => {
                 const appointments = {}
                 for (var key in appointmentData) {
-                    console.log(appointmentData[key].user_name)
+                    // console.log(appointmentData[key].user_name)
                     appointments[appointmentData[key].id] = { ...appointments[appointmentData[key].id], service: appointmentData[key]['service'] }
                     appointments[appointmentData[key].id] = { ...appointments[appointmentData[key].id], custom_service: appointmentData[key]['custom_service'] }
                     appointments[appointmentData[key].id] = { ...appointments[appointmentData[key].id], user: appointmentData[key]['user_name'] }
                     appointments[appointmentData[key].id] = { ...appointments[appointmentData[key].id], start_time: appointmentData[key]['start_time'] }
                     appointments[appointmentData[key].id] = { ...appointments[appointmentData[key].id], end_time: appointmentData[key]['end_time'] }
                     appointments[appointmentData[key].id] = { ...appointments[appointmentData[key].id], status: appointmentData[key]['status'] }
+                    appointments[appointmentData[key].id] = { ...appointments[appointmentData[key].id], booking_id: appointmentData[key]['booking_id'] }
                 }
                 this.setState({ appointments: appointments }, () => {
                     this.setAppointmentTable()
@@ -162,14 +163,34 @@ export class Appointments extends Component {
 
         const appointmentList = []
 
+        let booking_id = 123
+
         for (var key in appointments) {
-            console.log(appointments[key])
+            // console.log(appointments[key])
             // console.log(business_services[appointments[key].service])
             const start = appointments[key].start_time.split('T')
             const startTime = new Date(2020, 6, 2, start[1].slice(0, -1).split(':')[0], start[1].slice(0, -1).split(':')[1])
             const end = appointments[key].end_time.split('T')
             const endTime = new Date(2020, 6, 2, end[1].slice(0, -1).split(':')[0], end[1].slice(0, -1).split(':')[1])
+            const current_booking_id = appointments[key].booking_id
+            if (current_booking_id !== booking_id) {
+                booking_id = current_booking_id
+                appointmentList.push(
 
+                    <tr className="table-warning">
+                        <th>{current_booking_id}</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        {appointments[key].status === "confirm"
+                            ?
+                            <th><div type="button" onClick={this.cancelBookingHandler} id={current_booking_id} class="btn btn-danger btn-sm">Cancel Appointment</div></th>
+                            : <th></th>}
+                    </tr>
+
+                )
+            }
             appointmentList.push(
                 <tr>
                     <th scope="row">{appointments[key].service !== null ? business_services[appointments[key].service].name : custom_business_services[appointments[key].custom_service].name}</th>
@@ -180,12 +201,42 @@ export class Appointments extends Component {
                     <td className={appointments[key].status === "confirm" ? "text-success text-uppercase" : "text-danger text-uppercase"} >{appointments[key].status}</td>
                 </tr>
             )
+
         }
 
         this.setState({
             appointmentList: appointmentList,
             Loading: false
         })
+
+    }
+
+    cancelBookingHandler = (e) => {
+        console.log(e.target.id)
+
+        // eslint-disable-next-line no-restricted-globals
+        let allow = confirm("Are you Sure you Want cancel this Appointment?")
+
+        if (allow) {
+
+        this.setState({Loading: true})
+        const url = 'api/booking/booking_cancelled_by_business/'
+        const data = {
+            "booking_id": e.target.id
+        }
+
+        Axios.post(url, data)
+            .then(res => {
+                console.log(res.data)
+                this.setState({Loading: false})
+                this.props.reload()
+            })
+            .catch(e => {
+                console.log(e.response)
+                this.setState({Loading: false})
+            })
+        }
+
 
     }
 
@@ -196,11 +247,11 @@ export class Appointments extends Component {
             <div className="container">
                 <Heading text="Appointments" />
                 <div className="row">
-                    <Button variant="contained" color="primary" className="col-2 h-75 my-auto" onClick={this.setYesterdayDate} > {window.innerWidth > 768?"<< Previous Day":"<<"}</Button>
+                    <Button variant="contained" color="primary" className="col-2 h-75 my-auto" onClick={this.setYesterdayDate} > {window.innerWidth > 768 ? "<< Previous Day" : "<<"}</Button>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <KeyboardDatePicker
                             disableToolbar
-                            className={window.innerWidth > 768?"col-6 mx-auto":"col mr-2 ml-2"}
+                            className={window.innerWidth > 768 ? "col-6 mx-auto" : "col mr-2 ml-2"}
                             variant="inline"
                             format="dd/MM/yyyy"
                             id="date-picker-inline"
@@ -217,13 +268,13 @@ export class Appointments extends Component {
                         />
                     </MuiPickersUtilsProvider>
 
-                    <Button variant="contained" color="primary" className="col-2 h-75 my-auto" onClick={this.setTommorowDate} >{window.innerWidth > 768?"Next Day >>":">>"}</Button>
+                    <Button variant="contained" color="primary" className="col-2 h-75 my-auto" onClick={this.setTommorowDate} >{window.innerWidth > 768 ? "Next Day >>" : ">>"}</Button>
                 </div>
 
                 {this.state.Loading ? <CircularProgress />
                     :
-                    <div style={{ height: window.innerHeight / 2, overflow: "scroll" }}>
-                        <table class="table table-striped mt-4" >
+                    <div style={{ height: window.innerHeight, overflow: "scroll" }}>
+                        <table class="table mt-4" >
                             <thead>
                                 <tr>
                                     <th scope="col">Service</th>

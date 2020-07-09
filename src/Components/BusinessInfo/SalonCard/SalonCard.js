@@ -111,10 +111,19 @@ class SalonCard extends Component {
                         <strong> {salon.business_name} </strong>
                       </Typography>
                       <Typography variant="body2" color="textPrimary" component="p">
-                        {salon.address}
+                        {salon.line1}
                       </Typography>
-                      <Typography variant="body2" color="primary" component="p">
-                        {salon.safety_feature}
+                      <Typography variant="body2" color="textPrimary" component="p">
+                        {salon.line2}
+                      </Typography>
+                      <Typography variant="body2" color="textPrimary" component="p">
+                        {salon.area}
+                      </Typography>
+                      <Typography variant="body2" color="textPrimary" component="p">
+                        {salon.city}
+                      </Typography>
+                      <Typography variant="body2" color="textPrimary" component="p">
+                        {salon.pincode}
                       </Typography>
                     </CardContent>
                   </CardActionArea>

@@ -198,6 +198,11 @@ class ServiceSelect extends Component {
 
         }
         // eslint-disable-next-line no-restricted-globals
+        if(event.target.value === "")
+        {
+            return 1
+        }
+        // eslint-disable-next-line no-restricted-globals
         if (this.isLetter(event.target.value[event.target.value.length - 1])) {
             // console.log("Yes")
             // eslint-disable-next-line no-restricted-globals

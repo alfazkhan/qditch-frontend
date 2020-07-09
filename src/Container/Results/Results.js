@@ -5,7 +5,8 @@ import {
 import Axios from '../../Axios';
 import Heading from '../../Components/Heading/Heading';
 import SalonResultCards from '../../Components/SearchResults/SalonResultCards/SalonResultCards';
-import { FormControl, InputLabel, Select, MenuItem, CircularProgress } from '@material-ui/core';
+import { FormControl, InputLabel, Select, MenuItem, CircularProgress, Card } from '@material-ui/core';
+import Colors from '../../Constants/Colors';
 
 
 class Results extends Component {
@@ -17,6 +18,7 @@ class Results extends Component {
         Loading: true,
         genderArray: [],
         serviceArray: [],
+        cityArray: []
     }
 
     componentDidMount() {
@@ -68,6 +70,30 @@ class Results extends Component {
 
     }
 
+    cityFilterHandler = (e) => {
+        console.log(e.target.value)
+        this.setState({ Loading: true })
+        if (e.target.value === "All") {
+            this.setState({ cityArray: [] }, () => {
+                this.resultsRender()
+            })
+            return 1
+        }
+
+        const data = {
+            "city": e.target.value
+        }
+
+        Axios.post('api/users/city_filter/', data)
+            .then(res => {
+                console.log(res.data.business)
+                this.setState({ Loading: false, cityArray: res.data.business }, () => {
+                    this.resultsRender()
+                })
+            })
+
+    }
+
 
     salonTypeFilterHandler = (e) => {
         this.setState({ Loading: true })
@@ -98,15 +124,15 @@ class Results extends Component {
 
     resultsRender = () => {
         let finalArray = this.state.businessIDs
-        
-        if (this.state.serviceArray.length > 0 && this.state.genderArray.length > 0){
-            finalArray = this.getArraysIntersection(this.state.businessIDs, this.getArraysIntersection(this.state.serviceArray,this.state.genderArray))
+
+        if (this.state.genderArray.length > 0) {
+            finalArray = this.getArraysIntersection(finalArray, this.state.genderArray)
         }
-        else if (this.state.genderArray.length > 0) {
-            finalArray = this.getArraysIntersection(this.state.businessIDs, this.state.genderArray)
+        if (this.state.serviceArray.length > 0) {
+            finalArray = this.getArraysIntersection(finalArray, this.state.serviceArray)
         }
-        else if (this.state.serviceArray.length > 0) {
-            finalArray = this.getArraysIntersection(this.state.businessIDs, this.state.serviceArray)
+        if (this.state.cityArray.length > 0) {
+            finalArray = this.getArraysIntersection(finalArray, this.state.cityArray)
         }
 
 
@@ -128,11 +154,17 @@ class Results extends Component {
         this.setState({ results: results, Loading: false })
     }
 
+    randomColor = () => {
+        return '#' + Math.floor(Math.random() * 16777215).toString(16);
+    }
+
 
     render() {
         return (
-            <div className="container-fluid" style={{width: '90%'}}>
-                <Heading text={this.state.categoryName} />
+            <div className="container-fluid" style={{ width: '90%' }}>
+                <Card className="my-4 w-75 mx-auto" elevation={5}>
+                    <h1>{this.state.categoryName}</h1>
+                </Card>
                 {/* {this.state.Loading
                     ? <CircularProgress /> */}
                 <div>
@@ -148,6 +180,21 @@ class Results extends Component {
                                 <MenuItem value={'male'}>Male</MenuItem>
                                 <MenuItem value={'female'}>Female</MenuItem>
                                 <MenuItem value={'unisex'}>Unisex</MenuItem>
+                            </Select>
+                        </FormControl>
+
+                        <FormControl variant="outlined" className="col-md">
+                            <InputLabel>City</InputLabel>
+                            <Select
+                                // value={age}
+                                onChange={(e) => this.cityFilterHandler(e)}
+                                label="City"
+                            >
+                                <MenuItem value={'All'}>All</MenuItem>
+                                <MenuItem value={'1'}>Noida</MenuItem>
+                                <MenuItem value={'2'}>Indore</MenuItem>
+                                <MenuItem value={'3'}>Mumbai</MenuItem>
+                                <MenuItem value={'4'}>Chennai</MenuItem>
                             </Select>
                         </FormControl>
 

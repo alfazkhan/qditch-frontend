@@ -161,8 +161,8 @@ class Profile extends Component {
     scheduleModalHandler = () => {
 
         const scheduleModalContent = (
-            <ScheduleModal handleClose={()=>this.setState({scheduleModal:false})}
-            user_id = {this.props.user_id}
+            <ScheduleModal handleClose={() => this.setState({ scheduleModal: false })}
+                user_id={this.props.user_id}
             />
         )
 
@@ -364,22 +364,25 @@ class Profile extends Component {
                             </Box>
                             <CardActions>
                                 <Box>
-                                    <Button color="secondary" size="large" onClick={this.props.logout} >Logout</Button>
+                                    <Button color="secondary" size="large" onClick={this.deleteProfileHandler}  >Delete My Account</Button>
                                 </Box>
-                                {this.props.business_user
-                                    ? <Box className="ml-auto">
-                                        <Button color="primary" size="large" onClick={() => this.props.history.push('/admin/dashboard')}>Dashboard</Button>
-                                    </Box>
-                                    : null}
+                                <Box className="ml-auto">
+                                    <Button color="primary" size="large" onClick={this.editProfileHandler} >Edit Password</Button>
+                                </Box>
+
                             </CardActions>
                         </Card>
                         <Box>
-                            <Button variant="contained" color="primary" className="my-3 px-auto" style={{ width: '100%' }} onClick={this.editProfileHandler}>
-                                Change Password
+                            {this.props.business_user
+                                ?
+                                <Button variant="contained" color="primary" className="my-3 px-auto" style={{ width: '100%' }} onClick={() => this.props.history.push('/admin/dashboard')}>
+                                    Go to Dashboard
                             </Button>
-                            <Button variant="contained" color="secondary" className="mb-3 px-auto" style={{ width: '100%' }} onClick={this.deleteProfileHandler}>
-                                Delete My Profile
-                            </Button>
+                                : null
+                            }
+                            <Button variant="contained" color="secondary" className="mb-3 px-auto" style={{ width: '100%' }} onClick={this.props.logout}>
+                                Logout
+                                </Button>
                             <Button variant="contained" className="px-auto" style={{ width: '100%', backgroundColor: Colors.success, color: '#fff' }} onClick={this.scheduleModalHandler}>
                                 View My Appointments
                             </Button>

@@ -45,8 +45,15 @@ export class ServiceBook extends Component {
     }
 
     componentDidMount() {
+
+        let time = new Date()
+        const currentTime = new Date( time.getFullYear(),time.getMonth(), time.getDate(), time.getHours()+1 )
+
+
+
+        //console.log(currentTime)
+
         const services = this.props.data['business_services']
-        console.log(this.props.data)
         const custom_services = this.props.data['custom_business_services']
 
         let date = new Date().toString().split(' ')
@@ -57,7 +64,8 @@ export class ServiceBook extends Component {
             services: services,
             custom_services: custom_services,
             startDate: startDate,
-            startTime: date[4]
+            startTime: currentTime.toString().split(' ')[4],
+            time: currentTime
         }, () => {
             this.setServiceTable()
         })
@@ -85,17 +93,15 @@ export class ServiceBook extends Component {
         for (var key in services) {
             list.push(
                 <tr style={{ color: '#fff' }}>
-                    <th scope="row">
-                        <FormControlLabel
-                            value={["services", services[key].id, services[key].business_service_price, services[key].business_service_duration]}
-                            control={<Checkbox style={{ color: '#fff' }} />}
-                            // label={Categories[i]}
-                            // labelPlacement="end"
-                            // index={i}
-                            onChange={this.serviceSelectHandler}
-                        />
-                    </th>
-
+                    {this.props.user_id
+                        ? <th scope="row">
+                            <FormControlLabel
+                                value={["services", services[key].id, services[key].business_service_price, services[key].business_service_duration]}
+                                control={<Checkbox style={{ color: '#fff' }} />}
+                                onChange={this.serviceSelectHandler}
+                            />
+                        </th>
+                        : null}
                     <td>{services[key].service_name}</td>
                     <td>{services[key].business_service_price} &#8377;</td>
                     <td>{this.timeConvert(services[key].business_service_duration)}</td>
@@ -106,17 +112,15 @@ export class ServiceBook extends Component {
         for (var key in custom_services) {
             list.push(
                 <tr style={{ color: '#fff' }}>
-                    <th scope="row">
-                        <FormControlLabel
-                            value={["custom-services", custom_services[key].id, custom_services[key].business_service_price, custom_services[key].business_service_duration]}
-                            control={<Checkbox style={{ color: '#fff' }} />}
-                            // label={Categories[i]}
-                            // labelPlacement="end"
-                            // index={i}
-
-                            onChange={this.serviceSelectHandler}
-                        />
-                    </th>
+                    {this.props.user_id
+                        ? <th scope="row">
+                            <FormControlLabel
+                                value={["custom-services", custom_services[key].id, custom_services[key].business_service_price, custom_services[key].business_service_duration]}
+                                control={<Checkbox style={{ color: '#fff' }} />}
+                                onChange={this.serviceSelectHandler}
+                            />
+                        </th>
+                        : null}
                     <td>{custom_services[key].service_name}</td>
                     <td>{custom_services[key].business_service_price} &#8377;</td>
                     <td>{this.timeConvert(custom_services[key].business_service_duration)}</td>
@@ -203,8 +207,8 @@ export class ServiceBook extends Component {
         const date = new Date()
 
         const currentTime = new Date(startDate[2], startDate[1] - 1, startDate[0], e.getHours(), e.getMinutes())
-        // console.log("Selected Time with Date: ", currentTime)
-        // console.log("current Time: ",date)
+        console.log("Selected Time with Date: ", currentTime)
+        console.log("current Time: ", date)
         if (currentTime < date) {
             this.setState({
                 error: true,
@@ -322,7 +326,9 @@ export class ServiceBook extends Component {
                             <table class="table table-striped">
                                 <thead>
                                     <tr style={{ color: '#fff' }}>
-                                        <th scope="col">#</th>
+                                        {this.props.user_id
+                                            ? <th scope="col">#</th>
+                                            : null}
                                         <th scope="col">Name</th>
                                         <th scope="col">Price</th>
                                         <th scope="col">Duration</th>
@@ -334,47 +340,51 @@ export class ServiceBook extends Component {
                             </table>
                         </div>
                     </Paper>
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">
-                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                        <KeyboardDatePicker
-                                            disableToolbar
-                                            variant="inline"
-                                            format="dd/MM/yyyy"
-                                            id="date-picker-inline"
-                                            label="Select Date"
-                                            disablePast
-                                            value={this.state.date}
-                                            // invalidDateMessage=""
-                                            format="dd/MM/yyyy"
-                                            maxDateMessage=""
-                                            minDateMessage=""
-                                            onChange={this.handleDateChange}
-                                            KeyboardButtonProps={{
-                                                'aria-label': 'change date',
-                                            }}
-                                        />
-                                    </MuiPickersUtilsProvider>
-                                </th>
-                                <th scope="col">
-                                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                        <KeyboardTimePicker
-                                            id="time-picker"
-                                            label="Select Time"
-                                            value={this.state.time}
-                                            onChange={this.handleTimeChange}
-                                            // invalidDateMessage=""
-                                            KeyboardButtonProps={{
-                                                'aria-label': 'change time',
-                                            }}
-                                        />
-                                    </MuiPickersUtilsProvider>
-                                </th>
-                            </tr>
-                        </thead>
-                    </table>
+                    {this.props.user_id
+                        ? <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">
+                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                            <KeyboardDatePicker
+                                                disableToolbar
+                                                variant="inline"
+                                                format="dd/MM/yyyy"
+                                                id="date-picker-inline"
+                                                label="Select Date"
+                                                disablePast
+                                                value={this.state.date}
+                                                // invalidDateMessage=""
+                                                format="dd/MM/yyyy"
+                                                maxDateMessage=""
+                                                minDateMessage=""
+                                                onChange={this.handleDateChange}
+                                                KeyboardButtonProps={{
+                                                    'aria-label': 'change date',
+                                                }}
+                                            />
+                                        </MuiPickersUtilsProvider>
+                                    </th>
+                                    <th scope="col">
+                                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                            <KeyboardTimePicker
+                                                id="time-picker"
+                                                label="Select Time"
+                                                value={this.state.time}
+                                                onChange={this.handleTimeChange}
+                                                minutesStep={5}
+                                                // invalidDateMessage=""
+                                                KeyboardButtonProps={{
+                                                    'aria-label': 'change time',
+                                                }}
+                                            />
+                                        </MuiPickersUtilsProvider>
+                                    </th>
+                                </tr>
+                            </thead>
+                        </table>
+                        : null}
+
                 </div>
 
                 {this.state.serviceSelected.length > 0 || this.state.customServiceSelected.length > 0
@@ -408,7 +418,9 @@ export class ServiceBook extends Component {
                         Book Now
                 </Button>
                     :
-                    <strong className="text-danger">*Please Sign in/Sign up to book an Appointment</strong>
+                    <div className="mt-4">
+                        <strong className="text-danger">*Please Sign in/Sign up to book an Appointment</strong>
+                    </div>
                 }
 
                 {this.state.responseModal

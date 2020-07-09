@@ -1,7 +1,7 @@
 const Colors = {
-    primary : '#70C2DF',
+    primary : '#B8F2E6',
     success: '#5CB85C',
-    LinksColor: '#fff',
+    LinksColor: '#000',
     danger: '#D9534F'
 }
 

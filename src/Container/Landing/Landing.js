@@ -35,7 +35,13 @@ export class Landing extends Component {
                     : null
                 } */}
 
+                {window.innerWidth > 1000
+                    ? <div class="" style={{ top: 0 }}>
+                        <Categories />
+                    </div>
+                    : null}
                 <Slideshow />
+
                 {/* <Categories/> */}
             </div>
         )
