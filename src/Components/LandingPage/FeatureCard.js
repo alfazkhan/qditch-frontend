@@ -27,7 +27,7 @@ export class FeatureCard extends Component {
                             <Typography component="h5" variant="h5">
                                <strong> {this.props.heading}</strong>
                             </Typography>
-                            <Typography variant="subtitle1" color="textSecondary" className="mt-5">
+                            <Typography variant="subtitle1" color="textSecondary" className="mt-4">
                                 {this.props.text}
                             </Typography>
                         </CardContent>
@@ -50,7 +50,7 @@ export class FeatureCard extends Component {
 const styles = {
     root: {
         display: 'flex',
-        height: 200
+        height: window.innerWidth < 768 ? 300 : 200
     },
     details: {
         display: 'flex',
@@ -58,7 +58,7 @@ const styles = {
     },
     content: {
         flex: '1 0 auto',
-        width: window.innerWidth / 2.5
+        width: window.innerWidth / 2
     },
     cover: {
         width: window.innerWidth / 3
