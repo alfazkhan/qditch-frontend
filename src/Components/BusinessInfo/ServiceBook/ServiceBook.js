@@ -47,7 +47,7 @@ export class ServiceBook extends Component {
     componentDidMount() {
 
         let time = new Date()
-        const currentTime = new Date( time.getFullYear(),time.getMonth(), time.getDate(), time.getHours()+1 )
+        const currentTime = new Date(time.getFullYear(), time.getMonth(), time.getDate(), time.getHours() + 1)
 
 
 
@@ -91,41 +91,45 @@ export class ServiceBook extends Component {
         const list = []
 
         for (var key in services) {
-            list.push(
-                <tr style={{ color: '#fff' }}>
-                    {this.props.user_id && !services[key].disabled
-                        ? <th scope="row">
-                            <FormControlLabel
-                                value={["services", services[key].id, services[key].business_service_price, services[key].business_service_duration]}
-                                control={<Checkbox style={{ color: '#fff' }} />}
-                                onChange={this.serviceSelectHandler}
-                            />
-                        </th>
-                        : null}
-                    <td>{services[key].service_name}</td>
-                    <td>{services[key].business_service_price} &#8377;</td>
-                    <td>{this.timeConvert(services[key].business_service_duration)}</td>
-                </tr>
+            if (!services[key].disable) {
+                list.push(
+                    <tr style={{ color: '#fff' }}>
+                        {this.props.user_id
+                            ? <th scope="row">
+                                <FormControlLabel
+                                    value={["services", services[key].id, services[key].business_service_price, services[key].business_service_duration]}
+                                    control={<Checkbox style={{ color: '#fff' }} />}
+                                    onChange={this.serviceSelectHandler}
+                                />
+                            </th>
+                            : null}
+                        <td>{services[key].service_name}</td>
+                        <td>{services[key].business_service_price} &#8377;</td>
+                        <td>{this.timeConvert(services[key].business_service_duration)}</td>
+                    </tr>
 
-            )
+                )
+            }
         }
         for (var key in custom_services) {
-            list.push(
-                <tr style={{ color: '#fff' }}>
-                    {this.props.user_id && custom_services[key]
-                        ? <th scope="row">
-                            <FormControlLabel
-                                value={["custom-services", custom_services[key].id, custom_services[key].business_service_price, custom_services[key].business_service_duration]}
-                                control={<Checkbox style={{ color: '#fff' }} />}
-                                onChange={this.serviceSelectHandler}
-                            />
-                        </th>
-                        : null}
-                    <td>{custom_services[key].service_name}</td>
-                    <td>{custom_services[key].business_service_price} &#8377;</td>
-                    <td>{this.timeConvert(custom_services[key].business_service_duration)}</td>
-                </tr>
-            )
+            if (!custom_services[key].disable) {
+                list.push(
+                    <tr style={{ color: '#fff' }}>
+                        {this.props.user_id
+                            ? <th scope="row">
+                                <FormControlLabel
+                                    value={["custom-services", custom_services[key].id, custom_services[key].business_service_price, custom_services[key].business_service_duration]}
+                                    control={<Checkbox style={{ color: '#fff' }} />}
+                                    onChange={this.serviceSelectHandler}
+                                />
+                            </th>
+                            : null}
+                        <td>{custom_services[key].service_name}</td>
+                        <td>{custom_services[key].business_service_price} &#8377;</td>
+                        <td>{this.timeConvert(custom_services[key].business_service_duration)}</td>
+                    </tr>
+                )
+            }
         }
 
         this.setState({

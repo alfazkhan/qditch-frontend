@@ -14,62 +14,97 @@ class EditProfile extends Component {
         values: {
             name: this.props.data['business_name'],
             type: this.props.data['business_type'],
-            address: this.props.data['address'],
+            line1: this.props.data['line1'],
+            line2: this.props.data['line2'],
+            city: this.props.data['city'],
+            area: this.props.data['area'],
+            pincode: this.props.data['pincode'],
 
         },
         menuItems: null,
-        currentType: this.props.data['business_type']
+        currentType: this.props.data['business_type'],
+        currentCity: this.props.data['city_name']
     }
 
     componentDidMount() {
-
+        const values = this.state.values
+        console.log(this.props.data)
 
 
     }
 
     valuesChangeHandler = (e) => {
         const values = this.state.values
-        if(e.target.name === "type"){
+        console.log(e.target.value)
+        if (e.target.name === "type") {
             // console.log(e.target.value)
             values['type'] = e.target.value
-            this.setState({values:values})
+            this.setState({ values: values })
             return true
         }
 
-        if(e.target.id === "name"){
+        if (e.target.id === "name") {
             values['name'] = e.target.value
-            this.setState({values:values})
+            this.setState({ values: values })
             return true
         }
 
-        if(e.target.id === "address"){
-            values['address'] = e.target.value
-            this.setState({values:values})
+        if (e.target.id === "line1") {
+            values['line1'] = e.target.value
+            this.setState({ values: values })
+            return true
+        }
+
+        if (e.target.id === "line2") {
+            values['line2'] = e.target.value
+            this.setState({ values: values })
+            return true
+        }
+
+        if (e.target.id === "city") {
+            values['city'] = e.target.value
+            this.setState({ values: values })
+            return true
+        }
+
+        if (e.target.id === "area") {
+            values['area'] = e.target.value
+            this.setState({ values: values })
+            return true
+        }
+
+        if (e.target.id === "pincode") {
+            values['pincode'] = e.target.value
+            this.setState({ values: values })
             return true
         }
 
     }
 
 
-    submitDataHandler=()=>{
+    submitDataHandler = () => {
         console.log(this.state.values)
-        const url = 'api/users/business/'+ this.props.data['id'] + '/'
+        const url = 'api/users/business/' + this.props.data['id'] + '/'
         const data = {
             "business_name": this.state.values.name,
             "business_type": this.state.values.type,
-            "address": this.state.values.address
+            "line1": this.state.values.line1,
+            "line2": this.state.values.line2,
+            "area": this.state.values.area,
+            "city": this.state.values.city,
+            "pincode": this.state.values.pincode,
         }
-        this.setState({Loading:true})
-        Axios.patch(url,data)
-        .then(res=>{
-            this.setState({Loading:false})
-            this.props.reload()
-            console.log(res.data)
-        })
-        .catch(e=>{
-            this.setState({Loading:false})
-            console.log(e.response)
-        })
+        this.setState({ Loading: true })
+        Axios.patch(url, data)
+            .then(res => {
+                this.setState({ Loading: false })
+                this.props.reload()
+                console.log(res.data)
+            })
+            .catch(e => {
+                this.setState({ Loading: false })
+                console.log(e.response)
+            })
     }
 
     render() {
@@ -115,15 +150,87 @@ class EditProfile extends Component {
                                     </FormControl>
                                 </tr>
                                 <tr>
-                                    <th scope="row">Business Address</th>
+                                    <th scope="row">Address</th>
                                     <td>
                                         <TextField
-                                            multiline
+                                            label="Line 1"
+                                            id="line1"
                                             fullWidth
-                                            rows={4}
-                                            defaultValue={this.state.values.address}
+                                            defaultValue={this.state.values.line1}
                                             onChange={this.valuesChangeHandler}
-                                            id="address"
+                                            variant="outlined"
+                                            className="col-md"
+                                        // margin="normal"
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"></th>
+                                    <td>
+                                        <TextField
+                                            label="Line 2"
+                                            multiline
+                                            id="line2"
+                                            onChange={this.valuesChangeHandler}
+                                            defaultValue={this.state.values.line2}
+                                            rows={1}
+                                            variant="outlined"
+                                            className="col-md"
+                                        // margin="normal"
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"></th>
+                                    <td>
+
+                                        <TextField
+                                            label="Area"
+                                            multiline
+                                            id="area"
+                                            defaultValue={this.state.values.area}
+                                            onChange={this.valuesChangeHandler}
+                                            rows={1}
+                                            variant="outlined"
+                                            className="col-md"
+                                        // margin="normal"
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"></th>
+                                    <td>
+
+                                        <FormControl variant="outlined" className="col-md mb-3">
+                                            <InputLabel>Current City: {this.state.currentCity}</InputLabel>
+                                            <Select
+                                                name="city"
+                                                onChange={(e) => this.valuesChangeHandler(e)}
+                                                label="City"
+                                            >
+                                                <MenuItem value="" disabled>
+                                                    <em>None</em>
+                                                </MenuItem>
+                                                <MenuItem value={'1'}>Noida</MenuItem>
+                                                <MenuItem value={'2'}>Indore</MenuItem>
+                                                <MenuItem value={'3'}>Mumbai</MenuItem>
+                                                <MenuItem value={'4'}>Chennai</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"></th>
+                                    <td>
+
+                                        <TextField
+                                            label="Pincode"
+                                            id="pincode"
+                                            defaultValue={this.state.values.pincode}
+                                            onChange={this.valuesChangeHandler}
+                                            variant="outlined"
+                                            className="col-md"
+                                        // margin="normal"
                                         />
                                     </td>
                                 </tr>
@@ -134,7 +241,7 @@ class EditProfile extends Component {
 
                 <div>
 
-                    <Button variant="contained" size="large" style={{ backgroundColor: Colors.success, color: 'white' }} className="mt-2 mb-3" onClick={this.submitDataHandler}>
+                    <Button variant="contained" size="large" style={{ backgroundColor: Colors.success, color: 'white' }} className="mt-2" onClick={this.submitDataHandler}>
                         Save
                     </Button>
                 </div>

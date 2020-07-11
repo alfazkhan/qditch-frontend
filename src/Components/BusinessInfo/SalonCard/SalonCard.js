@@ -30,28 +30,29 @@ class SalonCard extends Component {
 
 
     const salonData = this.props.salon
-    console.log(salonData)
+    // console.log(salonData)
     for (var key in salonData) {
-      console.log(salonData[key].id)
       const serviceList = []
       for (var index in salonData[key].business_services) {
-        // console.log(salonData[key].business_services[index])
-        serviceList.push(
-          <tr>
-            <td className="text-left">{salonData[key].business_services[index].service_name}</td>
-            <td className="text-right">{salonData[key].business_services[index].business_service_price} ₹</td>
-          </tr>
-        )
+        if (!salonData[key].business_services[index].disable) {
+          serviceList.push(
+            <tr>
+              <td className="text-left">{salonData[key].business_services[index].service_name}</td>
+              <td className="text-right">{salonData[key].business_services[index].business_service_price} ₹</td>
+            </tr>
+          )
+        }
       }
 
       for (var index in salonData[key].custom_business_services) {
-        // console.log(salonData[key].custom_business_services[index])
-        serviceList.push(
-          <tr>
-            <td className="text-left">{salonData[key].custom_business_services[index].service_name}</td>
-            <td className="text-right">{salonData[key].custom_business_services[index].business_service_price} ₹</td>
-          </tr>
-        )
+        if (!salonData[key].custom_business_services[index].disable) {
+          serviceList.push(
+            <tr>
+              <td className="text-left">{salonData[key].custom_business_services[index].service_name}</td>
+              <td className="text-right">{salonData[key].custom_business_services[index].business_service_price} ₹</td>
+            </tr>
+          )
+        }
       }
 
       salonServices[salonData[key].id] = serviceList
@@ -136,14 +137,14 @@ class SalonCard extends Component {
                         {salon.area}
                       </Typography>
                       <Typography variant="body2" color="textPrimary" component="p">
-                        {salon.city}
+                        {salon.city_name}
                       </Typography>
                       <Typography variant="body2" color="textPrimary" component="p">
                         {salon.pincode}
                       </Typography>
 
                       <table className="table mt-5">
-                        {this.state.salonServices[salon.id].slice(0,4)}
+                        {this.state.salonServices[salon.id].slice(0, 4)}
                       </table>
 
                     </CardContent>

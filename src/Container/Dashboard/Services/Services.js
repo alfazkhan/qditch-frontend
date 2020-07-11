@@ -178,7 +178,8 @@ export class Services extends Component {
                 business_service_duration: custom_services_data[key].business_service_duration,
                 business_service_price: custom_services_data[key].business_service_price,
                 category: allCat[custom_services_data[key].category].name,
-                service_id: custom_services_data[key].id
+                service_id: custom_services_data[key].id,
+                disable: custom_services_data[key].disable
             }
             // console.log(data)
             customServices.push(data)
@@ -217,29 +218,31 @@ export class Services extends Component {
 
     }
 
-    disableServiceHandler=(e)=>{
+    disableServiceHandler = (e) => {
         const id = e.target.id.split(':')[1]
         const action = e.target.id.split(':')[0]
         const index = e.target.id.split(':')[2]
         console.log(e.target.id)
-        // eslint-disable-next-line no-restricted-globals
-        // let allow = confirm("Are you Sure you Want to Disable this Service?")
-        // const url = action === "disable-service" ? 'api/service/business_services/' + id : 'api/service/custom_business_services/' + id
-        // if (allow) {
-        //     this.setState({ Loading: true })
-        //     Axios.delete(url)
-        //         .then(res => {
+        //eslint-disable-next-line no-restricted-globals
+        let allow = confirm("Are you Sure you Want to Disable this Service?")
+        const url = action === "disable-service" ? 'api/service/business_services/' + id +'/' : 'api/service/custom_business_services/' + id+'/'
+        if (allow) {
+            const data = {
+                disable : e.target.id.split(':')[3] === "true" ? false : true   
+            }
+            console.log(data)
+            this.setState({ Loading: true })
+            Axios.patch(url,data)
+                .then(res => {
 
-        //             // setTimeout(()=>{
-        //             this.props.reload()
-        //             this.setState({ Loading: false })
-        //             // this.initialValuesHandler()
-        //             // },1000)
-        //         })
-        //         .catch(e => {
-        //             this.setState({ Loading: false })
-        //         })
-        // }
+                    this.props.reload()
+                    this.setState({ Loading: false })
+                })
+                .catch(e => {
+                    console.log(e.response.data)
+                    this.setState({ Loading: false })
+                })
+        }
     }
 
 
@@ -257,8 +260,7 @@ export class Services extends Component {
 
         for (var key = 0; key < services.length; key++) {
             const id = services[key].id
-            // console.log(allServices[services[key].service].category)
-            // console.log()
+            console.log(services[key].disable)
 
             List.push(
                 <tr>
@@ -267,8 +269,15 @@ export class Services extends Component {
                     <td>{allCat[allServices[services[key].service].category].name}</td>
                     <td> {services[key].business_service_duration} </td>
                     <td>{services[key].business_service_price} </td>
-                    <td><button id={"edit-custom-service:" + key + ':' + id} type="button" class="btn btn-primary btn-sm" onClick={(e) => this.toggleModal(e, "ServiceEdit")}>Edit</button></td>
-                    {/* <td ><button id={"disable-service:" + id + ':' + key} onClick={this.disableServiceHandler} type="button" class="btn btn-danger btn-sm">Disable</button> </td> */}
+                    <td><button id={"edit-custom-service:" + key + ':' + id }
+                        type="button" class="btn btn-primary btn-sm" onClick={(e) => this.toggleModal(e, "ServiceEdit")}>Edit</button></td>
+                    <td ><button id={"disable-service:" + id + ':' + key + ':' + services[key].disable}
+                        onClick={this.disableServiceHandler}
+                        type="button"
+                        class={services[key].disable ? "btn-success btn btn-sm" : "btn-danger  btn btn-sm"}>
+                        {services[key].disable ? "Enable" : "Disable"}
+                    </button>
+                    </td>
                     <td ><button id={"delete-service:" + id + ':' + key} onClick={this.deleteHandler} type="button" class="btn btn-danger btn-sm">Delete</button> </td>
                 </tr>
             )
@@ -289,6 +298,7 @@ export class Services extends Component {
         // console.log(customServices)
         for (var key = 0; key < customServices.length; key++) {
             const id = customServices[key].service_id
+            console.log(customServices[key])
             List.push(
                 <tr>
                     <th scope="row">{key + 1}</th>
@@ -297,7 +307,14 @@ export class Services extends Component {
                     <td> {customServices[key].business_service_duration} </td>
                     <td>{customServices[key].business_service_price} </td>
                     <td><button type="button" id={"edit-service:" + key + ':' + id} class="btn btn-primary btn-sm" onClick={(e) => this.toggleModal(e, "CustomEdit")}>Edit</button> </td>
-                    {/* <td ><button id={"disable-custom-service:" + id} onClick={this.disableServiceHandler} type="button" class="btn btn-danger btn-sm">Delete</button> </td> */}
+                    <td ><button id={"disable-custom-service:" + id + ':' + key + ':' + customServices[key].disable}
+                        onClick={this.disableServiceHandler}
+                        type="button"
+                        class={customServices[key].disable ? "btn-success  btn btn-sm" : "btn-danger btn btn-sm"}
+                    >
+                        {customServices[key].disable ? "Enable" : "Disable"}
+                    </button>
+                    </td>
                     <td ><button id={"delete-custom-service:" + id} onClick={this.deleteHandler} type="button" class="btn btn-danger btn-sm">Delete</button> </td>
                 </tr>
             )
