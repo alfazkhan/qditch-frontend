@@ -120,7 +120,7 @@ export class Appointments extends Component {
             .then(res => {
                 const appointments = {}
                 for (var key in appointmentData) {
-                    // console.log(appointmentData[key].user_name)
+                    // console.log(appointmentData[key])
                     appointments[appointmentData[key].id] = { ...appointments[appointmentData[key].id], service: appointmentData[key]['service'] }
                     appointments[appointmentData[key].id] = { ...appointments[appointmentData[key].id], custom_service: appointmentData[key]['custom_service'] }
                     appointments[appointmentData[key].id] = { ...appointments[appointmentData[key].id], user: appointmentData[key]['user_name'] }
@@ -128,6 +128,7 @@ export class Appointments extends Component {
                     appointments[appointmentData[key].id] = { ...appointments[appointmentData[key].id], end_time: appointmentData[key]['end_time'] }
                     appointments[appointmentData[key].id] = { ...appointments[appointmentData[key].id], status: appointmentData[key]['status'] }
                     appointments[appointmentData[key].id] = { ...appointments[appointmentData[key].id], booking_id: appointmentData[key]['booking_id'] }
+                    appointments[appointmentData[key].id] = { ...appointments[appointmentData[key].id], stylist: appointmentData[key]['stylist'] }
                 }
                 this.setState({ appointments: appointments }, () => {
                     this.setAppointmentTable()
@@ -195,6 +196,7 @@ export class Appointments extends Component {
                 <tr>
                     <th scope="row">{appointments[key].service !== null ? business_services[appointments[key].service].name : custom_business_services[appointments[key].custom_service].name}</th>
                     <td> {appointments[key].user} </td>
+                    <td> {appointments[key].stylist} </td>
                     <td>{this.formatAMPM(startTime)}</td>
                     <td>{this.formatAMPM(endTime)}</td>
                     <td>{appointments[key].service !== null ? business_services[appointments[key].service].price + '₹' : custom_business_services[appointments[key].custom_service].price + '₹'}</td>
@@ -279,6 +281,7 @@ export class Appointments extends Component {
                                 <tr>
                                     <th scope="col">Service</th>
                                     <th scope="col">User</th>
+                                    <th scope="col">Stylist</th>
                                     <th scope="col">Start</th>
                                     <th scope="col">End</th>
                                     <th scope="col">Cost</th>

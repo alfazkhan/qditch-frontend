@@ -88,7 +88,7 @@ const styles = {
 class Dashboard extends Component {
 
   state = {
-    value: 1,
+    value: 0,
     business_id: null,
     Loading: false,
     Data: null,
@@ -175,7 +175,7 @@ class Dashboard extends Component {
                 <Appointments data={this.state.Data} reload={this.initialDataHandler} />
               </TabPanel>
               <TabPanel value={this.state.value} index={2}>
-                <MyBusiness data={this.state.Data} />
+                <MyBusiness data={this.state.Data} reload={this.initialDataHandler} />
               </TabPanel>
               <TabPanel value={this.state.value} index={3}>
                 <Stylists data={this.state.Data} reload={this.initialDataHandler} />

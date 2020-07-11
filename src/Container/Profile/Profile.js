@@ -386,6 +386,7 @@ class Profile extends Component {
                             <Button variant="contained" className="px-auto" style={{ width: '100%', backgroundColor: Colors.success, color: '#fff' }} onClick={this.scheduleModalHandler}>
                                 View My Appointments
                             </Button>
+                            
                             {this.state.scheduleModal
                                 ? this.state.scheduleModalContent
                                 : null}

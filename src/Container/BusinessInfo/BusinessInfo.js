@@ -7,6 +7,8 @@ import SalonTimingsCard from '../../Components/BusinessInfo/SalonTimingsCard/Sal
 import Heading from '../../Components/Heading/Heading'
 import ServiceBook from '../../Components/BusinessInfo/ServiceBook/ServiceBook'
 import SalonInfoCard from '../../Components/BusinessInfo/SalonInfocard/SalonInfoCard'
+import FeedbackList from '../../Components/Feedback/FeedbackList/FeedbackList'
+import FeedbackCreate from '../../Components/Feedback/FeedbackCreate/FeedbackCreate'
 
 
 class BusinessInfo extends Component {
@@ -15,7 +17,11 @@ class BusinessInfo extends Component {
         business_data: null,
         Loading: true,
         timeModal: false,
-        modalContent: null
+        modalContent: null,
+
+        createReviewModal: false,
+
+        reviewsListModel: false
     }
 
     componentDidMount() {
@@ -32,7 +38,7 @@ class BusinessInfo extends Component {
             .catch(e => {
                 console.log(e.response)
             })
-            window.scrollTo(0,0)
+        window.scrollTo(0, 0)
 
     }
 
@@ -66,20 +72,50 @@ class BusinessInfo extends Component {
                         <CircularProgress className="mx-auto" style={styles.Loader} />
                     </div>
                     :
-                    <div className="container-fluid my-5" style={{width: '90%'}}>
+                    <div className="container-fluid my-5" style={{ width: '90%' }}>
                         <div className="row mx-auto">
                             <Button onClick={() => this.props.history.goBack()} color="default" variant="contained" className="mr-auto" >{"<< Back"}</Button>
                         </div>
                         <div className="row my-3">
-                            <div className={window.innerWidth > 768?"col-8 my-auto":"col-12"}>
+                            <div className={window.innerWidth > 768 ? "col-8 my-auto" : "col-12"}>
                                 <BusinessSlideshow images={this.state.business_data['business_images']} />
                             </div>
-                            <div className={window.innerWidth > 768?"col-4 my-auto":"col-12"}>
+                            <div className={window.innerWidth > 768 ? "col-4 my-auto" : "col-12"}>
                                 <SalonInfoCard data={this.state.business_data} />
                             </div>
                         </div>
 
-                        {window.innerWidth <= 1000
+                        <div className="row mb-3">
+                            <div className={window.innerWidth > 768 ? "col-4" : "col-12"}>
+                                <Button variant='contained' fullWidth className="bg-warning" style={{ color: 'white' }} onClick={() => this.setState({ reviewsListModel: true })}>
+                                    <i class="fa fa-star mr-3" aria-hidden="true"></i>
+                                        All Reviews
+                                </Button>
+                                {this.state.reviewsListModel
+                                    ? <FeedbackList onClose={() => this.setState({ reviewsListModel: false })}
+                                        feedbacks={this.state.business_data['feedbacks']}
+                                    />
+                                    : null}
+                            </div>
+
+                            {JSON.parse(localStorage.getItem('state')).userLoggedIn
+                                ? <div className={window.innerWidth > 768 ? "col-4" : "col-12"}>
+                                    <Button variant='contained' fullWidth className="bg-info" style={{ color: 'white' }} onClick={() => this.setState({ createReviewModal: true })}>
+                                        <i class="fa fa-plus mr-3" aria-hidden="true"></i>
+                                Write a Review
+                            </Button>
+                                    {this.state.createReviewModal
+                                        ?
+                                        <FeedbackCreate onClose={() => this.setState({ createReviewModal: false })}
+                                            business_id={this.state.business_data['id']}
+                                        />
+                                        : null}
+                                </div>
+                                : null}
+
+                        </div>
+
+                        {window.innerWidth < 768
                             ? <div className="row my-4">
                                 <Button onClick={this.timeModalhandler} color="primary" variant="contained" fullWidth >View Salon Timings</Button>
                                 {this.state.timeModal
@@ -93,7 +129,7 @@ class BusinessInfo extends Component {
 
 
                         <div className="row">
-                            <div className={window.innerWidth > 768?"col-8":"col-12"}>
+                            <div className={window.innerWidth > 768 ? "col-8" : "col-12"}>
                                 <ServiceBook data={this.state.business_data} />
                             </div>
                             {window.innerWidth > 1000

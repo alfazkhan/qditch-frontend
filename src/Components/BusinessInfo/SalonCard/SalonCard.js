@@ -30,15 +30,31 @@ class SalonCard extends Component {
 
 
     const salonData = this.props.salon
-    for(var key in salonData){
-      console.log(salonData[key].business_services.length)
-      salonServices[salonData[key].id] = (
-        <tr>
-          <td>
+    console.log(salonData)
+    for (var key in salonData) {
+      console.log(salonData[key].id)
+      const serviceList = []
+      for (var index in salonData[key].business_services) {
+        // console.log(salonData[key].business_services[index])
+        serviceList.push(
+          <tr>
+            <td className="text-left">{salonData[key].business_services[index].service_name}</td>
+            <td className="text-right">{salonData[key].business_services[index].business_service_price} ₹</td>
+          </tr>
+        )
+      }
 
-          </td>
-        </tr>
-      )  
+      for (var index in salonData[key].custom_business_services) {
+        // console.log(salonData[key].custom_business_services[index])
+        serviceList.push(
+          <tr>
+            <td className="text-left">{salonData[key].custom_business_services[index].service_name}</td>
+            <td className="text-right">{salonData[key].custom_business_services[index].business_service_price} ₹</td>
+          </tr>
+        )
+      }
+
+      salonServices[salonData[key].id] = serviceList
     }
 
     for (var key in salonData) {
@@ -65,19 +81,19 @@ class SalonCard extends Component {
       promise.push(Axios.post(url2, data)
         .then(res => {
           // console.log(res.data)
-          images[res.data.business]=res.data['cover_photo'] 
+          images[res.data.business] = res.data['cover_photo']
         })
         .catch(e => {
           console.log(e.response)
         }))
-      }
-      Promise.allSettled(promise)
-        .then(res => {
-          // console.log(images)
-          this.setState({ userDetails: details, Loading: false, coverImages: images },()=>{
-            
-          })
+    }
+    Promise.allSettled(promise)
+      .then(res => {
+        // console.log(images)
+        this.setState({ userDetails: details, Loading: false, coverImages: images }, () => {
+
         })
+      })
   }
 
 
@@ -86,25 +102,25 @@ class SalonCard extends Component {
     return (
       <div className="container" >
         {this.state.Loading
-          ? 
-            <CircularProgress className="mt-5"  style={styles.Loader} />
-            
+          ?
+          <CircularProgress className="mt-5" style={styles.Loader} />
+
           :
           <ul className='list-group mb-4'>
             {this.props.salon.sort().map((salon, index) => (
-              <div key={index} className="row" onClick={() => this.props.history.push('/saloninfo/' + salon.id)} style={{width: window.innerWidth/1.12}}>
+              <div key={index} className="row" onClick={() => this.props.history.push('/saloninfo/' + salon.id)} style={{ width: window.innerWidth / 1.12 }}>
                 <Card className={window.innerWidth > 768 ? "my-4 col-4" : "col-12"}>
                   <CardActionArea>
                     <CardMedia
                       component="img"
                       alt="Contemplative Reptile"
                       height="200"
-                      image={this.state.coverImages[salon.id]?"https://master.qditch.com" + this.state.coverImages[salon.id]:"https://images.pexels.com/photos/705255/pexels-photo-705255.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"}
+                      image={this.state.coverImages[salon.id] ? "https://master.qditch.com" + this.state.coverImages[salon.id] : "https://images.pexels.com/photos/705255/pexels-photo-705255.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"}
                       title={salon.business_name}
                     />
                   </CardActionArea>
                 </Card>
-                <Card className={window.innerWidth > 768?"my-4 col-8":"col-12 mb-3"}>
+                <Card className={window.innerWidth > 768 ? "my-4 col-8" : "col-12 mb-3"}>
                   <CardActionArea>
                     <CardContent>
                       <Typography gutterBottom variant="h4" component="h2">
@@ -125,6 +141,11 @@ class SalonCard extends Component {
                       <Typography variant="body2" color="textPrimary" component="p">
                         {salon.pincode}
                       </Typography>
+
+                      <table className="table mt-5">
+                        {this.state.salonServices[salon.id].slice(0,4)}
+                      </table>
+
                     </CardContent>
                   </CardActionArea>
                   <CardActions className="mt-auto">
@@ -149,8 +170,8 @@ const styles = {
     marginTop: window.innerHeight / 6,
     width: window.innerWidth < 768 ? '100%' : '50%',
   },
-  Loader:{
-    marginLeft: window.innerWidth/2.5
+  Loader: {
+    marginLeft: window.innerWidth / 2.5
   }
 }
 

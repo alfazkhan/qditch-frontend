@@ -93,7 +93,7 @@ export class ServiceBook extends Component {
         for (var key in services) {
             list.push(
                 <tr style={{ color: '#fff' }}>
-                    {this.props.user_id
+                    {this.props.user_id && !services[key].disabled
                         ? <th scope="row">
                             <FormControlLabel
                                 value={["services", services[key].id, services[key].business_service_price, services[key].business_service_duration]}
@@ -112,7 +112,7 @@ export class ServiceBook extends Component {
         for (var key in custom_services) {
             list.push(
                 <tr style={{ color: '#fff' }}>
-                    {this.props.user_id
+                    {this.props.user_id && custom_services[key]
                         ? <th scope="row">
                             <FormControlLabel
                                 value={["custom-services", custom_services[key].id, custom_services[key].business_service_price, custom_services[key].business_service_duration]}

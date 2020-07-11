@@ -10,6 +10,12 @@ import * as actionTypes from '../../../../store/Action/Action'
 import Axios from '../../../../Axios'
 import Heading from '../../../../Components/Heading/Heading'
 import * as Validator from '../../../../Validator'
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import OtpInput from 'react-otp-input';
 
 
 
@@ -30,7 +36,12 @@ class BasicDetails extends Component {
         emails: [],
         Request: 'register',
         errors: false,
-        messages: []
+        messages: [],
+
+
+        otpModal: false,
+        modalContent: [],
+        otpValue: null
     }
 
     componentDidMount() {
@@ -56,13 +67,13 @@ class BasicDetails extends Component {
         if (param === 'gender') {
             newValues.gender = field
         } else if (event.target.id === "mobile_number") {
-            
+
             if (this.state.values.mobile_number.length >= 0) {
                 Validator.isNumber(event.target.value)
                     ? newValues.mobile_number = event.target.value
-                    : newValues.mobile_number=  event.target.value.slice(0, -1)
+                    : newValues.mobile_number = event.target.value.slice(0, -1)
             }
-        }else if(event.target.value[event.target.value.length-1] === " "){
+        } else if (event.target.value[event.target.value.length - 1] === " ") {
             // console.log("Yes")
         }
         else {
@@ -111,7 +122,7 @@ class BasicDetails extends Component {
             Validator.equalValues(values['email'], emails[key]) ? messages.push("Email Already Associated with a User") : console.log()
         }
         //Gender
-        !Validator.isPresent(values['gender']) ? messages.push("Gender Can't be Empty"):console.log()
+        !Validator.isPresent(values['gender']) ? messages.push("Gender Can't be Empty") : console.log()
 
         //Phone
         !Validator.isPresent(values['mobile_number']) ? messages.push("Mobile Number Field is Empty")
@@ -136,63 +147,153 @@ class BasicDetails extends Component {
 
     }
 
-    errorHandler = () => {
+    otpValueHandler = (e) => {
+        if(e.target.value.length > 4){
+            e.target.value = e.target.value.slice(0, -1)
+            return 1
+        }
 
+        if(!Validator.isNumber(e.target.value)){
+            e.target.value = ""
+            return 1
+        }
+        this.setState({
+            otpValue: e.target.value
+        })
+    }
+
+    otpSumbmitHandler=()=>{
+
+        const otp = this.state.otpValue
+        
+        const data = {
+            "user": this.state.values.email,
+            "value": otp 
+        }
+
+        console.log(data)
+
+        const url= 'api/users/verify_otp/'
+        Axios.post(url,data)
+        .then(res=>{
+            console.log(res.data)
+            if(res.data.exist){
+                this.submitHandler()
+            }
+        })
+        .catch(e=>{
+            console.log(e.response)
+        })
+
+    }
+
+    otpHandler = () => {
+        if (this.validateData()) {
+            const data = {
+                "user": this.state.values.email
+            }
+            Axios.post('api/users/otp/',data)
+            .catch(e=>{
+                this.setState({
+                    otpModal: false
+                })
+            })
+
+            const modalContent = (
+                <Dialog
+                    open={true}
+                    onClose={() => { this.setState({ otpModal: false }) }}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{"Confirm Email"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description" className="mx-auto">
+                            {"An Email was Sent to " + this.state.values.email + " contains 4 Digit OTP"}
+                            <TextField
+                                variant="outlined"
+                                margin="normal"
+                                autoFocus
+                                label="OTP"
+                                value={this.state.otpValue}
+                                autoComplete="lname"
+                                className="col-md mx-auto"
+                                onChange={this.otpValueHandler}
+
+                            />
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => { this.props.history.push('/')}} color="secondary">
+                            Cancel
+                        </Button>
+                        <Button onClick={this.otpSumbmitHandler} color="primary" autoFocus>
+                            Submit
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+            )
+
+            this.setState({
+                otpModal: true,
+                modalContent: modalContent
+            })
+        }
     }
 
     submitHandler = () => {
         console.table(this.state.values)
-        if (this.validateData()) {
 
-            const url = 'api/users/user/'
-            const url2 = 'api/users/user_details/'
-            const gender = this.state.values.gender === 'Male' ? 'M' : 'F'
-            var data = JSON.stringify({
-                "email": this.state.values.email.toString(),
-                "password": this.state.values.password,
-            });
-            this.props.toggleLoading(true)
-            if (this.state.Request === 'register') {
-                Axios.post(url, data)
-                    .then((response) => {
-                        // console.table(response.data);
-                        var data2 = JSON.stringify({
-                            "first_name": this.state.values.first_name.toString(),
-                            "last_name": this.state.values.last_name.toString(),
-                            "mobile_number": this.state.values.mobile_number.toString(),
-                            "gender": gender.toString(),
-                            "role": this.state.values.role.toString(),
-                            "users": response.data.user.toString()
-                        })
-                        Axios.post(url2, data2)
-                            .then(response2 => {
-                                console.log(response2.data)
-                                this.props.onTokenRecieve(response.data.token)
-                                this.props.onUserRegister(response.data.user)
-                                this.props.onUserDetailId(response2.data.id)
-                                if (this.props.Mode === 'Business') {
-                                    this.props.onBusinessRegister(response.data.user)
-                                }
-                                this.props.toggleLoading(false)
-                                this.changeScreen()
-                            })
-                            .catch((error) => {
-                                this.props.toggleLoading(false)
-                                console.log(error.response.data);
-                                // const error = error.response.data
 
-                            });
+        const url = 'api/users/user/'
+        const url2 = 'api/users/user_details/'
+        const gender = this.state.values.gender === 'Male' ? 'M' : 'F'
+        var data = JSON.stringify({
+            "email": this.state.values.email.toString(),
+            "password": this.state.values.password,
+        });
+        this.props.toggleLoading(true)
+        if (this.state.Request === 'register') {
+            Axios.post(url, data)
+                .then((response) => {
+                    // console.table(response.data);
+                    var data2 = JSON.stringify({
+                        "first_name": this.state.values.first_name.toString(),
+                        "last_name": this.state.values.last_name.toString(),
+                        "mobile_number": this.state.values.mobile_number.toString(),
+                        "gender": gender.toString(),
+                        "role": this.state.values.role.toString(),
+                        "users": response.data.user.toString()
                     })
-                    .catch((error) => {
-                        this.props.toggleLoading(false)
-                        // console.log(error.response.data);
-                        const messages = []
-                        // messages.push(error.response.data)
-                        // this.setState({messages:messages,errors:true})
-                    });
-            }
+                    Axios.post(url2, data2)
+                        .then(response2 => {
+                            console.log(response2.data)
+                            this.props.onTokenRecieve(response.data.token)
+                            this.props.onUserRegister(response.data.user)
+                            this.props.onUserDetailId(response2.data.id)
+                            if (this.props.Mode === 'Business') {
+                                this.props.onBusinessRegister(response.data.user)
+                            }
+                            this.props.toggleLoading(false)
+                            this.changeScreen()
+                        })
+                        .catch((error) => {
+                            this.props.toggleLoading(false)
+                            console.log(error.response.data);
+                            // const error = error.response.data
 
+                        });
+                })
+                .catch((error) => {
+                    this.props.toggleLoading(false)
+                    // console.log(error.response.data);
+                    const messages = []
+                    // messages.push(error.response.data)
+                    // this.setState({messages:messages,errors:true})
+                });
         }
+
+
 
     }
 
@@ -208,16 +309,16 @@ class BasicDetails extends Component {
                             return <li key={i}>{item}</li>
                         })}
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true" onClick={()=>{
+                            <span aria-hidden="true" onClick={() => {
                                 const error = !this.state.errors
-                                this.setState({errors:error})
+                                this.setState({ errors: error })
                             }}>&times;</span>
                         </button>
                     </div>
                     : null
                 }
 
-                <Heading text={this.state.Mode === 'User'?"User Details":"Business Owner Info"} />
+                <Heading text={this.state.Mode === 'User' ? "User Details" : "Business Owner Info"} />
                 <div className="row">
                     <TextField
                         variant="outlined"
@@ -320,9 +421,10 @@ class BasicDetails extends Component {
                     />
                 </div>
                 <div className="submitButton text-right">
-                    <Button variant="contained" size="large" style={{ backgroundColor: Colors.success, color: 'white' }} onClick={this.submitHandler}>
+                    <Button variant="contained" size="large" style={{ backgroundColor: Colors.success, color: 'white' }} onClick={this.otpHandler}>
                         Next
                     </Button>
+                    {this.state.otpModal ? this.state.modalContent : null}
                 </div>
             </div>
         )

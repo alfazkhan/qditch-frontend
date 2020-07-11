@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { CircularProgress } from '@material-ui/core'
+import { CircularProgress, Button } from '@material-ui/core'
 import Axios from '../../../Axios'
+import Heading from '../../../Components/Heading/Heading'
 
 class MyBusiness extends Component {
 
@@ -8,51 +9,78 @@ class MyBusiness extends Component {
         data: { ...this.props.data },
         saloonName: '',
         saloonType: '',
-        safetyFeatures: [],
         Loading: false,
-        safetyFeatures_id: [],
-        safetyList: [],
-        num:1
+
+        num: 1,
+
+        feedbacks: []
     }
 
     componentDidMount() {
+
+
         this.setState({
             saloonName: this.state.data['business_name'],
             saloonType: this.state.data['business_type'].toUpperCase()
         })
 
-        this.setState({ safetyFeatures_id: this.props.data['business_safety_features'] }, () => {
-            const ids = this.state.safetyFeatures_id
-            const safetyList = this.state.safetyList
-            for (var i in ids) {
-                Axios.get('api/safety_feature/safety_features/' + ids[i] + '/')
-                    .then(res => {
-                        safetyList.push(
-                            <tr>
-                                <th scope="row">{this.state.num}</th>
-                                <td>{res.data.safety_feature}</td>
-                            </tr>
-                        )
-                        const n = this.state.num + 1
-                        this.setState({ safetyList: safetyList, num : n }, () => {
-                            this.setTable()
-                        })
-                    })
-                    .catch(e => {
-                        console.log(e.response)
-                    })
+        console.log(this.state.data.feedbacks)
+        const feedbacks = []
 
-            }
+        for (var key in this.state.data.feedbacks) {
+            // console.log(this.state.data.feedbacks[key])
+            feedbacks.push(
+                <tr>
+                    <td>{key}</td>
+                    <td> {this.state.data.feedbacks[key].user_name}</td>
+                    <td> {this.state.data.feedbacks[key].rating}  <i class="fa fa-star" aria-hidden="true" ></i></td>
+                    <td> {this.state.data.feedbacks[key].review}</td>
+                    <td> <button id={this.state.data.feedbacks[key].id} className="btn btn-sm btn-danger" onClick={this.deleteReviewHandler} >Delete</button> </td>
+                    
+                </tr>
+            )
+        }
 
+        this.setState({
+            feedbacks: feedbacks
         })
+
+
     }
     onlyUnique = (value, index, self) => {
         return self.indexOf(value) === index;
     }
 
+    deleteReviewHandler=(e)=>{
+        console.log(e.target.id)
+        const id = e.target.id
+        let url = 'api/feedback/feedback/' + id + '/'
+
+
+        // eslint-disable-next-line no-restricted-globals
+        let allow = confirm("Are you Sure you Want to Delete this Review?")
+
+        if (allow) {
+            this.setState({
+                Loading: true
+            })
+            Axios.delete(url)
+                .then(res => {
+                    console.log(res.data)
+                    this.props.reload()
+                    this.setState({
+                        Loading: false
+                    })
+                })
+                .catch(e => {
+                    console.log(e.response)
+                })
+        }
+    }
+
     setTable = () => {
-       
-        this.setState({  Loading: false })
+
+        this.setState({ Loading: false })
 
     }
 
@@ -66,15 +94,22 @@ class MyBusiness extends Component {
                             <h1>{this.state.saloonName}</h1>
                             <h4>{this.state.saloonType}</h4>
                         </div>
+                        <div>
+
+                        </div>
+                        <h4 className="mt-5">User Reviews</h4> 
                         <table class="table table-striped">
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Safety Feature</th>
+                                    <th scope="col">User</th>
+                                    <th scope="col">Rating</th>
+                                    <th scope="col">Review</th>
+                                    <th scope="col"></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {this.state.safetyList}
+                                {this.state.feedbacks}
                             </tbody>
                         </table>
 

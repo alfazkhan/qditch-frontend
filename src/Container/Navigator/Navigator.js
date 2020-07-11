@@ -19,6 +19,7 @@ import { Logout } from '../Auth/Login/Logout';
 import Logo from '../../Assets/Logo.png'
 import Profile from '../Profile/Profile';
 import FaceIcon from '@material-ui/icons/Face';
+import DownloadBooking from '../DownloadBooking/DownloadBooking';
 const styles = {
     navlink: {
         color: Colors.LinksColor
@@ -121,6 +122,7 @@ const Navigator = (props) => {
                         <Route path="/admin/dashboard/" exact children={<Dashboard />} />
                         <Route path='/logout' exact children={<Logout />} />
                         <Route path='/profile' exact children={<Profile logout={props.logout} />} />
+                        <Route path='/download-booking-data/' exact children={<DownloadBooking />} />
 
                     </Switch>
                 </div>

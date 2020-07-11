@@ -199,25 +199,6 @@ export class Services extends Component {
         // eslint-disable-next-line no-restricted-globals
         let allow = confirm("Are you Sure you Want to Delete this Service?")
         const url = action === "delete-service" ? 'api/service/business_services/' + id : 'api/service/custom_business_services/' + id
-        // console.log(allow)
-        // if (action === "delete-service") {
-        //     const lists = this.state.lists
-        //     lists.splice(index, 1)
-        //     this.setState({
-        //         lists: lists
-        //     })
-        // } else {
-        //     const lists = this.state.customList
-        //     lists.splice(index, 1)
-        //     this.setState({
-        //         customList: lists
-        //     })
-        // }
-
-
-
-
-
         if (allow) {
             this.setState({ Loading: true })
             Axios.delete(url)
@@ -234,7 +215,31 @@ export class Services extends Component {
                 })
         }
 
+    }
 
+    disableServiceHandler=(e)=>{
+        const id = e.target.id.split(':')[1]
+        const action = e.target.id.split(':')[0]
+        const index = e.target.id.split(':')[2]
+        console.log(e.target.id)
+        // eslint-disable-next-line no-restricted-globals
+        // let allow = confirm("Are you Sure you Want to Disable this Service?")
+        // const url = action === "disable-service" ? 'api/service/business_services/' + id : 'api/service/custom_business_services/' + id
+        // if (allow) {
+        //     this.setState({ Loading: true })
+        //     Axios.delete(url)
+        //         .then(res => {
+
+        //             // setTimeout(()=>{
+        //             this.props.reload()
+        //             this.setState({ Loading: false })
+        //             // this.initialValuesHandler()
+        //             // },1000)
+        //         })
+        //         .catch(e => {
+        //             this.setState({ Loading: false })
+        //         })
+        // }
     }
 
 
@@ -263,6 +268,7 @@ export class Services extends Component {
                     <td> {services[key].business_service_duration} </td>
                     <td>{services[key].business_service_price} </td>
                     <td><button id={"edit-custom-service:" + key + ':' + id} type="button" class="btn btn-primary btn-sm" onClick={(e) => this.toggleModal(e, "ServiceEdit")}>Edit</button></td>
+                    {/* <td ><button id={"disable-service:" + id + ':' + key} onClick={this.disableServiceHandler} type="button" class="btn btn-danger btn-sm">Disable</button> </td> */}
                     <td ><button id={"delete-service:" + id + ':' + key} onClick={this.deleteHandler} type="button" class="btn btn-danger btn-sm">Delete</button> </td>
                 </tr>
             )
@@ -291,6 +297,7 @@ export class Services extends Component {
                     <td> {customServices[key].business_service_duration} </td>
                     <td>{customServices[key].business_service_price} </td>
                     <td><button type="button" id={"edit-service:" + key + ':' + id} class="btn btn-primary btn-sm" onClick={(e) => this.toggleModal(e, "CustomEdit")}>Edit</button> </td>
+                    {/* <td ><button id={"disable-custom-service:" + id} onClick={this.disableServiceHandler} type="button" class="btn btn-danger btn-sm">Delete</button> </td> */}
                     <td ><button id={"delete-custom-service:" + id} onClick={this.deleteHandler} type="button" class="btn btn-danger btn-sm">Delete</button> </td>
                 </tr>
             )

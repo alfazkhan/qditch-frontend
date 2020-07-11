@@ -16,16 +16,17 @@ class ServiceSelect extends Component {
         ],
         List: [],
         selectedServices: {},
-        // prices: [],
-        // durations: [],
         elementNumber: 0,
         Services: [],
-        // Service_Category: [],
         business_id: '',
         category_names: {},
         selectedCategories: [],
+
+
         messages: [],
         errors: false,
+
+
         customServices: [],
         custom: false,
         customServicesList: [],
@@ -79,6 +80,35 @@ class ServiceSelect extends Component {
     addServiceField = () => {
         const catNames = this.state.category_names
         const elementNumber = this.state.elementNumber + 1
+        const errors = this.state.errors
+        const messages = []
+        console.log(this.state.selectedServices[elementNumber-1])
+        if(this.state.List.length > Object.keys(this.state.selectedServices).length){
+            messages.push("Please Fill Data in Existing Fields before adding new Field")
+            this.setState({
+                errors: true,
+                messages: messages
+            })
+            return 1
+        }else if(this.state.selectedServices[elementNumber-1]){
+            if(typeof this.state.selectedServices[elementNumber-1].price === "undefined" || this.state.selectedServices[elementNumber-1].price === "" ){
+                messages.push("Please Fill Data in Existing Fields before adding new Field")
+                this.setState({
+                    errors: true,
+                    messages: messages
+                }) 
+                return 1
+            }
+            if(typeof this.state.selectedServices[elementNumber-1].duration === "undefined" || this.state.selectedServices[elementNumber-1].duration === "" ){
+                messages.push("Please Fill Data in Existing Fields before adding new Field")
+                this.setState({
+                    errors: true,
+                    messages: messages
+                }) 
+                return 1
+            }
+        }
+
         this.setState({ elementNumber: elementNumber }, () => {
             const List = this.state.List
             const serviceItem = (
@@ -149,27 +179,31 @@ class ServiceSelect extends Component {
     validateData = () => {
 
         const messages = []
-        // const prices = this.state.prices
+        const selectedServices = this.state.selectedServices
         // const durations = this.state.durations
         //Services
-        !Validator.isPresent(this.state.selectedServices) ? messages.push("Select Atleast One Service") : console.log()
+        !Validator.isPresent(selectedServices) ? messages.push("Select Atleast One Service") : console.log()
         //Prices
-        // !Validator.isPresent(this.state.prices) ? messages.push("Invalid Price") : console.log()
-        // for (var key in prices) {
-        //     !parseInt(prices[key]) ? messages.push("Invalid Price Value of " + this.ordinal(parseInt(key) + 1) + " Service Selected") : console.log()
-        // }
-        // //Duration
-        // !Validator.isPresent(this.state.durations) ? messages.push("Invalid Duration") : console.log()
-        // for (var key in durations) {
-        //     !parseInt(durations[key]) ? messages.push("Invalid Time Value of " + this.ordinal(parseInt(key) + 1) + " Service Selected") : console.log()
-        // }
+        for(var key in selectedServices){
+            if(selectedServices[key].price === ""){
+                messages.push("Enter Valid Price Value at "+this.ordinal(key)+" Service") 
+            }
+        }        
+
+        // Duration
+        for(var key in selectedServices){
+            if(selectedServices[key].duration === ""){
+                messages.push("Enter Valid Duration Value at "+this.ordinal(key)+" Service") 
+            }
+        } 
+        
 
         if (messages.length !== 0) {
             this.setState({ messages: messages, errors: true })
             return false
         }
         this.setState({ errors: false })
-        return true
+        return false
 
     }
 
@@ -198,23 +232,23 @@ class ServiceSelect extends Component {
 
         }
         // eslint-disable-next-line no-restricted-globals
-        if(event.target.value === "")
-        {
-            return 1
-        }
-        // eslint-disable-next-line no-restricted-globals
-        if (this.isLetter(event.target.value[event.target.value.length - 1])) {
-            // console.log("Yes")
+        if(event.target.value !== "")
+        {   
             // eslint-disable-next-line no-restricted-globals
-            event.target.value = ""
-            return null
+            if (this.isLetter(event.target.value[event.target.value.length - 1])) {
+                // console.log("Yes")
+                // eslint-disable-next-line no-restricted-globals
+                event.target.value = ""
+                return null
+            }
+            
         }
         value = e.target.value
         const info = e.target.id.split(':')
         index = info[0]
         name = info[1]
 
-        console.log(name, index, value)
+        // console.log(name, index, value)
 
         switch (name) {
             case 'prices':

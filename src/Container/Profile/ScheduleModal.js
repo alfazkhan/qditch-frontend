@@ -145,7 +145,7 @@ export class ScheduleModal extends Component {
                         <th></th>
                         <th></th>
                         <th></th>
-                        <th><div type="button" id={current_booking_id} class="btn btn-danger btn-sm">Cancel Appointment</div></th>
+                        <th><div type="button" id={current_booking_id} onClick={this.cancelBookingHandler} class="btn btn-danger btn-sm">Cancel Appointment</div></th>
                     </tr>
 
                 )
@@ -168,6 +168,38 @@ export class ScheduleModal extends Component {
         })
     }
 
+    
+
+    cancelBookingHandler = (e) => {
+        console.log(e.target.id)
+
+        // eslint-disable-next-line no-restricted-globals
+        let allow = confirm("Are you Sure you Want cancel this Appointment?")
+
+        if (allow) {
+
+            this.setState({ Loading: true })
+            const url = 'api/booking/booking_cancelled_by_user/'
+            const data = {
+                "booking_id": e.target.id
+            }
+
+            Axios.post(url, data)
+                .then(res => {
+                    console.log(res.data)
+                    this.setState({ Loading: false })
+                    this.props.handleClose()
+                })
+                .catch(e => {
+                    console.log(e.response)
+                    this.setState({ Loading: false })
+                    this.props.handleClose()
+                })
+        }
+
+
+    }
+
 
     getMonthFromString = (mon) => {
         return new Date(Date.parse(mon + " 1, 2012")).getMonth() + 1
@@ -176,7 +208,7 @@ export class ScheduleModal extends Component {
 
     render() {
         return (
-            <div>
+            <div id="booking-data">
                 <Dialog
                     open={true}
                     onClose={this.props.handleClose}

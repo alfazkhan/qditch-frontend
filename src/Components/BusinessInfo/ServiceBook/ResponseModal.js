@@ -7,8 +7,9 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
-import { render } from '@testing-library/react';
 import { CircularProgress } from '@material-ui/core';
+import html2canvas from 'html2canvas'
+import { withRouter } from 'react-router-dom';
 
 class ResponseModal extends Component {
 
@@ -21,6 +22,7 @@ class ResponseModal extends Component {
     }
 
     componentDidMount() {
+    
 
         if (this.props.status) {
 
@@ -44,15 +46,15 @@ class ResponseModal extends Component {
             console.log(custom_service)
 
             List.push(<h1 className="text-center">{this.props.business_name}</h1>)
-            List.push(<h3 className="my-2 text-center">{this.props.Message[0].booking_id}</h3>)
+            List.push(<h3 className="my-2 text-center">ID: {this.props.Message[0].booking_id}</h3>)
 
             const start = this.props.Message[0].start_time.split('T')
-            const startTime =  new Date(2020,6,2,start[1].slice(0, -1).split(':')[0],start[1].slice(0, -1).split(':')[1])
+            const startTime = new Date(2020, 6, 2, start[1].slice(0, -1).split(':')[0], start[1].slice(0, -1).split(':')[1])
             const end = this.props.Message[0].end_time.split('T')
-            const endTime =  new Date(2020,6,2,end[1].slice(0, -1).split(':')[0],end[1].slice(0, -1).split(':')[1])
+            const endTime = new Date(2020, 6, 2, end[1].slice(0, -1).split(':')[0], end[1].slice(0, -1).split(':')[1])
 
             List.push(<h4 className="text-center"> {this.props.Message[0].start_time.split('T')[0]} </h4>)
-            List.push(<strong className="my-2 text-center"> {this.formatAMPM(startTime) +" - "+ this.formatAMPM(endTime)} </strong>)
+            List.push(<strong className="my-2 text-center"> {this.formatAMPM(startTime) + " - " + this.formatAMPM(endTime)} </strong>)
 
 
 
@@ -60,9 +62,9 @@ class ResponseModal extends Component {
             for (var key in this.props.Message) {
                 List.push(
                     <div>
-                        <li>{this.props.Message[key].business_service 
-                        ? service[this.props.Message[key].business_service].name  
-                        : custom_service[this.props.Message[key].custom_business_service].name}  </li>
+                        <li>{this.props.Message[key].business_service
+                            ? service[this.props.Message[key].business_service].name
+                            : custom_service[this.props.Message[key].custom_business_service].name}  </li>
                     </div>
                 )
             }
@@ -89,6 +91,10 @@ class ResponseModal extends Component {
         }
     }
 
+    downloadBookingHandler = () => {
+        this.props.history.push({ pathname: "/download-booking-data", search: this.props.Message[0].booking_id })
+    }
+
 
 
     formatAMPM = (date) => {
@@ -105,7 +111,7 @@ class ResponseModal extends Component {
 
     render() {
         return (
-            <div>
+            <div id="booking-data">
                 {this.state.Loading
                     ? <CircularProgress />
                     : <Dialog
@@ -136,7 +142,10 @@ class ResponseModal extends Component {
       </Button> */}
                             <Button onClick={this.props.close} color="primary" autoFocus>
                                 Close
-                </Button>
+                            </Button>
+                            <Button onClick={this.downloadBookingHandler} color="primary" autoFocus>
+                                Download
+                            </Button>
                         </DialogActions>
                     </Dialog>
                 }
@@ -160,4 +169,4 @@ const styles = {
     }
 }
 
-export default ResponseModal
+export default withRouter( ResponseModal)
