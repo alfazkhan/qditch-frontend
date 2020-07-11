@@ -9,6 +9,7 @@ import Axios from '../../Axios'
 import { withRouter } from 'react-router-dom'
 import Colors from '../../Constants/Colors'
 import Chip from '@material-ui/core/Chip';
+import Heading from '../Heading/Heading'
 
 const Slideshow = (props) => {
 
@@ -81,6 +82,7 @@ const Slideshow = (props) => {
             {window.innerWidth <= 1000
                 ?
                 <div className="mt-5">
+                    <Heading text="We Provide" />
                     < div className="row mx-auto my-3">
                         <div className="col-1" />
                         <div onClick={clickHandler} className="col-4" style={styles.chip} id="Hair">Hair</div>

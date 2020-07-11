@@ -100,6 +100,7 @@ export class ServiceBook extends Component {
                                     value={["services", services[key].id, services[key].business_service_price, services[key].business_service_duration]}
                                     control={<Checkbox style={{ color: '#fff' }} />}
                                     onChange={this.serviceSelectHandler}
+                                    className="w-25"
                                 />
                             </th>
                             : null}

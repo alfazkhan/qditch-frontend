@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+
 import { withRouter } from 'react-router-dom'
 import Axios from '../../Axios'
 import { CircularProgress, Button, Paper, Dialog, DialogContent, DialogTitle, DialogActions } from '@material-ui/core'
@@ -98,7 +100,7 @@ class BusinessInfo extends Component {
                                     : null}
                             </div>
 
-                            {JSON.parse(localStorage.getItem('state')).userLoggedIn
+                            {this.props.userLoggedIn
                                 ? <div className={window.innerWidth > 768 ? "col-4" : "col-12"}>
                                     <Button variant='contained' fullWidth className="bg-info" style={{ color: 'white' }} onClick={() => this.setState({ createReviewModal: true })}>
                                         <i class="fa fa-plus mr-3" aria-hidden="true"></i>
@@ -157,4 +159,18 @@ const styles = {
 }
 
 
-export default withRouter(BusinessInfo)
+
+const mapStateToProps = (state) => ({
+
+    userLoggedIn: state.userLoggedIn
+    
+})
+
+const mapDispatchToProps = {
+    
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(BusinessInfo))
+
+
+
