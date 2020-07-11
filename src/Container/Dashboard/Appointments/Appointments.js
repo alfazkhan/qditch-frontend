@@ -116,7 +116,7 @@ export class Appointments extends Component {
             })
 
 
-        Promise.allSettled(promise)
+        Promise.all(promise)
             .then(res => {
                 const appointments = {}
                 for (var key in appointmentData) {

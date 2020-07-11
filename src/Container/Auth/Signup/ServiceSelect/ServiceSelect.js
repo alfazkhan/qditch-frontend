@@ -325,7 +325,7 @@ class ServiceSelect extends Component {
                 )
             }
 
-            Promise.allSettled(promises)
+            Promise.all(promises)
                 .then(res => {
                     this.props.toggleLoading(false)
                     console.log("All Data Sent")

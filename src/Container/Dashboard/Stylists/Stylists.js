@@ -43,7 +43,7 @@ export class Stylists extends Component {
                         console.log(e.response)
                     })
             }
-            Promise.allSettled(promise)
+            Promise.all(promise)
                 .then(res => {
                     this.setState({ names: names }, () => {
                         this.setTableValues()

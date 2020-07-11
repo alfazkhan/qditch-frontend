@@ -56,7 +56,7 @@ export class ScheduleModal extends Component {
                 console.log(e.response)
             })
 
-        Promise.allSettled(promise)
+        Promise.all(promise)
             .then(res => {
                 this.setTable()
 

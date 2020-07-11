@@ -28,7 +28,7 @@ export class SalonInfoCard extends Component {
 
         // console.log(safetyFeatures)
 
-        Promise.allSettled(promise)
+        Promise.all(promise)
             .then(res => {
                 // console.log(safetyFeatures)
                 this.setState({ safetyFeatures: safetyFeatures, Loading: false })

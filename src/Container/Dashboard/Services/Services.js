@@ -112,7 +112,7 @@ export class Services extends Component {
 
 
 
-        Promise.allSettled(promise)
+        Promise.all(promise)
             .then(res => {
                 if (business_services.length === 0) {
                     this.setState({

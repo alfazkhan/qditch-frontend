@@ -23,7 +23,7 @@ class BusinessSlideshow extends Component {
                 })
         }
 
-        Promise.allSettled(promise)
+        Promise.all(promise)
             .then(res => {
                 this.setState({images:imagesURL})
             })

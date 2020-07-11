@@ -36,7 +36,7 @@ const SalonResults = (props) => {
     }
 
   
-    Promise.allSettled(promise)
+    Promise.all(promise)
       .then(res => {
         setSalons(salonsList)
         // console.log(salonsList)
