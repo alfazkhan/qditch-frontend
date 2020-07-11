@@ -35,9 +35,8 @@ class EditProfile extends Component {
 
     valuesChangeHandler = (e) => {
         const values = this.state.values
-        console.log(e.target.value)
         if (e.target.name === "type") {
-            // console.log(e.target.value)
+            
             values['type'] = e.target.value
             this.setState({ values: values })
             return true
@@ -61,13 +60,15 @@ class EditProfile extends Component {
             return true
         }
 
-        if (e.target.id === "city") {
+        if (e.target.name === "city") {
+            // console.log(e.target.value)
             values['city'] = e.target.value
-            this.setState({ values: values })
+            this.setState({ values: values },()=>console.table(this.state.values))
             return true
         }
 
         if (e.target.id === "area") {
+            
             values['area'] = e.target.value
             this.setState({ values: values })
             return true
@@ -205,7 +206,7 @@ class EditProfile extends Component {
                                             <InputLabel>Current City: {this.state.currentCity}</InputLabel>
                                             <Select
                                                 name="city"
-                                                onChange={(e) => this.valuesChangeHandler(e)}
+                                                onChange={this.valuesChangeHandler}
                                                 label="City"
                                             >
                                                 <MenuItem value="" disabled>

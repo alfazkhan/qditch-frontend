@@ -14,15 +14,15 @@ export class Stylists extends Component {
     state = {
         stylists: [],
         names: [],
-        nameList: [],
+        nameList: {},
         Loading: true,
         Modal: false,
         messages: [],
         modalContent: null,
-        stylistValue : {
+        stylistValue: {
             title: "null",
             name: "null",
-            mode : "null",
+            mode: "null",
             id: "null"
         }
     }
@@ -67,10 +67,10 @@ export class Stylists extends Component {
         const url = 'api/stylist/stylist_details/' + id
         console.log(allow)
         if (allow) {
-            list.splice(index, 1)
-            this.setState({
-                nameList: list
-            })
+            // list.splice(index, 1)
+            // this.setState({
+            //     nameList: list
+            // })
             this.setState({ Loading: true })
             Axios.delete(url)
                 .then(res => {
@@ -85,39 +85,39 @@ export class Stylists extends Component {
         }
     }
 
-    changeValuesHandler = (e) =>{
+    changeValuesHandler = (e) => {
         // console.log(e.target)
         const value = this.state.stylistValue
-        if(e.target.value === " "){
+        if (e.target.value === " ") {
             e.target.value = ""
             return true
         }
-        if(e.target.name === "Stylist Title"){
+        if (e.target.name === "Stylist Title") {
             value["title"] = e.target.value
-        }else{
+        } else {
             value["name"] = e.target.value
         }
 
         this.setState({
-            stylistValue : value
+            stylistValue: value
         })
 
 
     }
 
-    toggleModal = (e,action) => {
+    toggleModal = (e, action) => {
         // console.log(e.target.id,action)
         const value = this.state.stylistValue
         let currentValue = ''
-        if(action ==="Edit"){
+        if (action === "Edit") {
             value["mode"] = "Edit"
             value["id"] = e.target.id.split(':')[1]
             currentValue = this.state.names[e.target.id.split(':')[0]].name
 
-        }else{
+        } else {
             value["mode"] = "Add"
         }
-        
+
         const Modal = !this.state.Modal
         const modal = <Dialog
             open={true}
@@ -128,8 +128,8 @@ export class Stylists extends Component {
             maxWidth="md"
         >
             <DialogTitle id="alert-dialog-title">{"Stylist"}</DialogTitle>
-            {action ==="Edit"? <strong className="mx-auto"> Enter New Value for: {currentValue} </strong> :null}
-            
+            {action === "Edit" ? <strong className="mx-auto"> Enter New Value for: {currentValue} </strong> : null}
+
             <StylistModal values={this.state.serviceValues} change={this.changeValuesHandler} />
             <DialogActions>
                 <Button onClick={() => this.setState({ Modal: false })} color="secondary">
@@ -142,7 +142,7 @@ export class Stylists extends Component {
         </Dialog>
 
         this.setState({
-            modalContent: modal,serviceValues:value
+            modalContent: modal, serviceValues: value
         }, () => {
             this.setState({ Modal: Modal })
         })
@@ -152,48 +152,48 @@ export class Stylists extends Component {
         const values = this.state.stylistValue
         const messages = []
         console.log(values)
-        let url,data
-        if(values.title === "null"){
+        let url, data
+        if (values.title === "null") {
             messages.push("Please Enter Title")
-            this.setState({messages:messages,errors:true,Modal: false})
+            this.setState({ messages: messages, errors: true, Modal: false })
             return true
         }
-        if(values.name === "null"){
+        if (values.name === "null") {
             messages.push("Please Enter Name")
-            this.setState({messages:messages,errors:true,Modal: false})
+            this.setState({ messages: messages, errors: true, Modal: false })
             return true
         }
         data = {
             "business": this.props.data['id'],
             "name": values.title + " " + values.name
         }
-        this.setState({Loading: true})
-        switch(values.mode){
+        this.setState({ Loading: true })
+        switch (values.mode) {
             case "Add":
                 url = "api/stylist/stylist_details/"
-                Axios.post(url,data)
-                .then(res=>{
-                    console.log(res.data)
-                    this.props.reload()
-                    this.setState({Loading: false})
-                })     
-                .catch(e=>{
-                    console.log(e.response)
-                    this.setState({Loading: false})
-                })  
+                Axios.post(url, data)
+                    .then(res => {
+                        console.log(res.data)
+                        this.props.reload()
+                        this.setState({ Loading: false })
+                    })
+                    .catch(e => {
+                        console.log(e.response)
+                        this.setState({ Loading: false })
+                    })
                 break;
             case "Edit":
-                url = "api/stylist/stylist_details/"+ values.id + '/'
-                Axios.patch(url,data)
-                .then(res=>{
-                    console.log(res.data)
-                    this.props.reload()
-                    this.setState({Loading: false})
-                })     
-                .catch(e=>{
-                    console.log(e.response)
-                    this.setState({Loading: false})
-                })
+                url = "api/stylist/stylist_details/" + values.id + '/'
+                Axios.patch(url, data)
+                    .then(res => {
+                        console.log(res.data)
+                        this.props.reload()
+                        this.setState({ Loading: false })
+                    })
+                    .catch(e => {
+                        console.log(e.response)
+                        this.setState({ Loading: false })
+                    })
                 break;
         }
     }
@@ -204,14 +204,14 @@ export class Stylists extends Component {
         for (var key = 0; key < this.state.stylists.length; key++) {
             // console.log(names[key])
             const id = names[key].id
-            nameList.push(
-                <tr>
+            nameList[key] = {
+                element: <tr key={key}>
                     <th scope="row">{key + 1}</th>
                     <td>{names[key].name}</td>
-                    <td><button type="button" id={key+':'+id} class="btn btn-primary btn-sm" onClick={(e)=>this.toggleModal(e,"Edit")} >Edit</button> </td>
+                    <td><button type="button" id={key + ':' + id} class="btn btn-primary btn-sm" onClick={(e) => this.toggleModal(e, "Edit")} >Edit</button> </td>
                     <td ><button id={id + ':' + key} onClick={this.deleteHandler} type="button" class="btn btn-danger btn-sm">Delete</button> </td>
                 </tr>
-            )
+            }
         }
         this.setState({ nameList: nameList, Loading: false })
     }
@@ -248,7 +248,9 @@ export class Stylists extends Component {
                             </tr>
                         </thead>
                         <tbody>
-                            {this.state.nameList}
+                            {this.state.nameList.map((stylist => {
+                                return stylist.element
+                            }))}
                         </tbody>
                     </table>
                 }

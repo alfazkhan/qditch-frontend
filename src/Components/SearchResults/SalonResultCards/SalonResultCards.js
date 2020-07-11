@@ -21,7 +21,7 @@ const SalonResults = (props) => {
 
   const setSalonData=()=>{
     const ids = props.business_ids
-    console.log(ids)
+    // console.log(ids)
     const salonsList = []
     const promise = []
     for (var key in ids) {

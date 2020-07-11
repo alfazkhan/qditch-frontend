@@ -95,12 +95,12 @@ export class ServiceBook extends Component {
                 list.push(
                     <tr style={{ color: '#fff' }}>
                         {this.props.user_id
-                            ? <th scope="row">
+                            ? <th scope="row" className="p-0">
                                 <FormControlLabel
                                     value={["services", services[key].id, services[key].business_service_price, services[key].business_service_duration]}
                                     control={<Checkbox style={{ color: '#fff' }} />}
                                     onChange={this.serviceSelectHandler}
-                                    className="w-25"
+                                    
                                 />
                             </th>
                             : null}
@@ -117,7 +117,7 @@ export class ServiceBook extends Component {
                 list.push(
                     <tr style={{ color: '#fff' }}>
                         {this.props.user_id
-                            ? <th scope="row">
+                            ? <th scope="row" className="p-0">
                                 <FormControlLabel
                                     value={["custom-services", custom_services[key].id, custom_services[key].business_service_price, custom_services[key].business_service_duration]}
                                     control={<Checkbox style={{ color: '#fff' }} />}

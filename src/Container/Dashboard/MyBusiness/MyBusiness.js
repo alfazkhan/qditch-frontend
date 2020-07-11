@@ -24,7 +24,7 @@ class MyBusiness extends Component {
             saloonType: this.state.data['business_type'].toUpperCase()
         })
 
-        console.log(this.state.data.feedbacks)
+        // console.log(this.state.data.feedbacks)
         const feedbacks = []
 
         for (var key in this.state.data.feedbacks) {

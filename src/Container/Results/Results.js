@@ -62,7 +62,7 @@ class Results extends Component {
 
         Axios.post('api/service/get_busienss_service_filter/', data)
             .then(res => {
-                console.log(res.data.business)
+                // console.log(res.data.business)
                 this.setState({ Loading: false, serviceArray: res.data.business }, () => {
                     this.resultsRender()
                 })
@@ -133,6 +133,15 @@ class Results extends Component {
         }
         if (this.state.cityArray.length > 0) {
             finalArray = this.getArraysIntersection(finalArray, this.state.cityArray)
+        }
+        if (this.state.genderArray.length = 0) {
+            finalArray = []
+        }
+        if (this.state.serviceArray.length = 0) {
+            finalArray = []
+        }
+        if (this.state.cityArray.length = 0) {
+            finalArray = []
         }
 
 

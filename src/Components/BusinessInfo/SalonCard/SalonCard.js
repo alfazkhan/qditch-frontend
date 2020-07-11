@@ -142,6 +142,9 @@ class SalonCard extends Component {
                       <Typography variant="body2" color="textPrimary" component="p">
                         {salon.pincode}
                       </Typography>
+                      <Typography variant="body2" color="textPrimary" component="h1">
+                        {index}
+                      </Typography>
 
                       <table className="table mt-5">
                         {this.state.salonServices[salon.id].slice(0, 4)}
