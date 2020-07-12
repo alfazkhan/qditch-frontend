@@ -207,7 +207,7 @@ class EditProfile extends Component {
                                             <Select
                                                 name="city"
                                                 onChange={this.valuesChangeHandler}
-                                                label="City"
+                                                label={"Current City: " + this.state.currentCity}
                                             >
                                                 <MenuItem value="" disabled>
                                                     <em>None</em>

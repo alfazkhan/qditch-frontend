@@ -625,7 +625,7 @@ export class Services extends Component {
                 {this.state.Modal ? this.state.modalContent : null}
                 {this.state.Loading ? <CircularProgress /> :
                     <div>
-                        <Heading text="Saloon Services" />
+                        <Heading text="Salon Services" />
                         <div style={{ overflowX: "scroll" }}>
                             <table class="table table-striped" style={{ overflowX: "scroll" }}>
                                 <thead>
@@ -648,7 +648,7 @@ export class Services extends Component {
                             &#x2b; Add New Service
                         </Button>
 
-                        <Heading text="Saloon Custom Services" />
+                        <Heading text="Salon Custom Services" />
                         <div style={{ overflowX: "scroll" }}>
                             <table class="table table-striped" style={{ overflowX: "scroll" }}>
                                 <thead>
