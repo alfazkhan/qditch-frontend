@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Pagination from '../Pagination/Pagination'
 import Axios from '../../../Axios';
 import SalonCard from '../../BusinessInfo/SalonCard/SalonCard';
+import { CircularProgress } from '@material-ui/core';
 
 const SalonResults = (props) => {
   const [salons, setSalons] = useState([]);
@@ -11,15 +12,15 @@ const SalonResults = (props) => {
 
   useEffect(() => {
     setLoading(true);
-    
-    
+
+
 
     setSalonData()
 
 
   }, [props.business_ids]);
 
-  const setSalonData=()=>{
+  const setSalonData = () => {
     const ids = props.business_ids
     // console.log(ids)
     const salonsList = []
@@ -35,28 +36,43 @@ const SalonResults = (props) => {
 
     }
 
-  
+
     Promise.all(promise)
       .then(res => {
-        setSalons(salonsList)
-        // console.log(salonsList)
+        setSalons(bubbleSort(salonsList))
+        console.log(salonsList)
+        console.log(bubbleSort(salonsList))
         setLoading(false);
       })
   }
 
-  // Get current posts
-  const indexOfLastSalon = currentPage * salonsPerPage;
-  const indexOfFirstSalon = indexOfLastSalon - salonsPerPage;
-  const currentSalons = salons.slice(indexOfFirstSalon, indexOfLastSalon);
+  const bubbleSort = (Array) => {
+    let len = Array.length;
+    for (let i = 0; i < len; i++) { //you can also use "for in", so you don't need the variable "len"
+      for (let j = 0; j < len; j++) {
+        if (typeof Array[j + 1] !== "undefined") {
+          if (Array[j].id > Array[j + 1].id) {
+            let tmp = Array[j];
+            Array[j] = Array[j + 1];
+            Array[j + 1] = tmp;
+          }
+        }
+      }
+    }
+    return Array;
+  };
 
-  // Change page
-  const paginate = pageNumber => setCurrentPage(pageNumber);
+
 
   return (
-    <div className='mt-3'>
+    <div>
       {!loading
         ? <SalonCard salon={salons.sort()} />
-        : null}
+        :
+          <div className="col-12 mx-auto mt-5">
+            <CircularProgress className="text-center" />
+          </div>
+      }
 
       {/* {salons.length > salonsPerPage
         ? <Pagination

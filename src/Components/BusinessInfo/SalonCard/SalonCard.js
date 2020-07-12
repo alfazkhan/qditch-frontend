@@ -104,7 +104,7 @@ class SalonCard extends Component {
       <div className="container" >
         {this.state.Loading
           ?
-          <CircularProgress className="mt-5" style={styles.Loader} />
+          <CircularProgress className="mt-5" />
 
           :
           <ul className='list-group mb-4'>
@@ -124,9 +124,10 @@ class SalonCard extends Component {
                 <Card className={window.innerWidth > 768 ? "my-4 col-8" : "col-12 mb-3"}>
                   <CardActionArea>
                     <CardContent>
-                      <Typography gutterBottom variant="h4" component="h2">
-                        <strong> {salon.business_name} </strong>
-                      </Typography>
+                    
+                        <Typography gutterBottom variant="h4" component="h2">
+                          <strong> {salon.business_name} </strong>
+                        </Typography>
                       <Typography variant="body2" color="textPrimary" component="p">
                         {salon.line1}
                       </Typography>
@@ -142,9 +143,7 @@ class SalonCard extends Component {
                       <Typography variant="body2" color="textPrimary" component="p">
                         {salon.pincode}
                       </Typography>
-                      <Typography variant="body2" color="textPrimary" component="h1">
-                        {index}
-                      </Typography>
+
 
                       <table className="table mt-5">
                         {this.state.salonServices[salon.id].slice(0, 4)}

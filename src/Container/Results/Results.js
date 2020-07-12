@@ -16,9 +16,15 @@ class Results extends Component {
         categoryName: '',
         results: null,
         Loading: true,
+
         genderArray: [],
+        genderFilter: false,
+
         serviceArray: [],
-        cityArray: []
+        serviceFilter: false,
+        
+        cityArray: [],
+        cityFilter: false
     }
 
     componentDidMount() {
@@ -50,7 +56,7 @@ class Results extends Component {
         console.log(e.target.value)
         this.setState({ Loading: true })
         if (e.target.value === "All") {
-            this.setState({ serviceArray: [] }, () => {
+            this.setState({ serviceArray: [], serviceFilter: false }, () => {
                 this.resultsRender()
             })
             return 1
@@ -63,7 +69,7 @@ class Results extends Component {
         Axios.post('api/service/get_busienss_service_filter/', data)
             .then(res => {
                 // console.log(res.data.business)
-                this.setState({ Loading: false, serviceArray: res.data.business }, () => {
+                this.setState({ Loading: false, serviceArray: res.data.business, serviceFilter: true }, () => {
                     this.resultsRender()
                 })
             })
@@ -71,10 +77,10 @@ class Results extends Component {
     }
 
     cityFilterHandler = (e) => {
-        console.log(e.target.value)
+        // console.log(e.target.value)
         this.setState({ Loading: true })
         if (e.target.value === "All") {
-            this.setState({ cityArray: [] }, () => {
+            this.setState({ cityArray: [], cityFilter: false }, () => {
                 this.resultsRender()
             })
             return 1
@@ -86,8 +92,8 @@ class Results extends Component {
 
         Axios.post('api/users/city_filter/', data)
             .then(res => {
-                console.log(res.data.business)
-                this.setState({ Loading: false, cityArray: res.data.business }, () => {
+                // console.log(res.data.business)
+                this.setState({ Loading: false, cityArray: res.data.business, cityFilter: true }, () => {
                     this.resultsRender()
                 })
             })
@@ -99,7 +105,7 @@ class Results extends Component {
         this.setState({ Loading: true })
 
         if (e.target.value === "All") {
-            this.setState({ genderArray: [] }, () => {
+            this.setState({ genderArray: [], genderFilter: false }, () => {
                 this.resultsRender()
             })
             return 1
@@ -112,7 +118,7 @@ class Results extends Component {
         Axios.post('api/users/business_type_filter/', data)
             .then(res => {
                 console.log(res.data.business)
-                this.setState({ genderArray: res.data.business, Loading: false }, () => {
+                this.setState({ genderArray: res.data.business, Loading: false, genderFilter: true }, () => {
                     this.resultsRender()
                 })
 
@@ -134,20 +140,23 @@ class Results extends Component {
         if (this.state.cityArray.length > 0) {
             finalArray = this.getArraysIntersection(finalArray, this.state.cityArray)
         }
-        if (this.state.genderArray.length = 0) {
+        if (this.state.genderArray.length === 0 && this.state.genderFilter ) {
             finalArray = []
+            console.log("gender")
         }
-        if (this.state.serviceArray.length = 0) {
+        if (this.state.serviceArray.length === 0 && this.state.serviceFilter) {
             finalArray = []
+            console.log("service")
         }
-        if (this.state.cityArray.length = 0) {
+        if (this.state.cityArray.length === 0 && this.state.cityFilter) {
             finalArray = []
+            console.log("city")
         }
 
 
         let results
 
-        console.log(finalArray.sort())
+        // console.log(finalArray.sort())
 
         if (finalArray.length > 0) {
             results = <SalonResultCards business_ids={finalArray} />
@@ -247,10 +256,10 @@ class Results extends Component {
                         </FormControl>
 
                     </div>
-                    <div className="row">
+                    
 
                         {this.state.results}
-                    </div>
+                    
                 </div>
                 {/* } */}
 
