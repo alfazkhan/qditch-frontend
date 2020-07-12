@@ -32,11 +32,13 @@ class Results extends Component {
         const categoryName = this.props.match.params.categoryName
         this.setState({ categoryName: categoryName })
         const data = {
-            "id": category
+            "id": category,
+            "latitude": null,
+            "longitude": null
         }
         Axios.post('api/category/super_category/', data)
             .then(res => {
-                // console.log(res.data)
+                console.log(res.data)
                 this.setState({ businessIDs: res.data.business }, () => {
                     this.resultsRender()
                 })
