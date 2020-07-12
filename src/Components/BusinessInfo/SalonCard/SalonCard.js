@@ -101,7 +101,7 @@ class SalonCard extends Component {
 
   render() {
     return (
-      <div className="container" >
+      <div className={window.innerWidth > 768 ?"container-fluid":"container-fluid mt-4"} >
         {this.state.Loading
           ?
           <CircularProgress className="mt-5" />
@@ -109,7 +109,7 @@ class SalonCard extends Component {
           :
           <ul className='list-group mb-4'>
             {this.props.salon.sort().map((salon, index) => (
-              <div key={index} className="row" onClick={() => this.props.history.push('/saloninfo/' + salon.id)} style={{ width: window.innerWidth / 1.12 }}>
+              <div key={index} className="row" onClick={() => this.props.history.push('/saloninfo/' + salon.id)}>
                 <Card className={window.innerWidth > 768 ? "my-4 col-4" : "col-12"}>
                   <CardActionArea>
                     <CardMedia
