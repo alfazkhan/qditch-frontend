@@ -13,34 +13,44 @@ export class FeatureCard extends Component {
     render() {
         return (
             <div className="container my-3">
+                {window.innerWidth < 768
+                    ?
+                    <Card style={styles.root}>
+                        <CardMedia
+                            style={styles.cover}
+                            image={this.props.image}
+                            title="Live from space album cover"
+                        />
+                    </Card>
+                    : null
+                }
 
                 <Card style={styles.root}>
-                    {this.props.left
+                    {this.props.left && window.innerWidth >= 768
                         ? <CardMedia
                             style={styles.cover}
                             image={this.props.image}
                             title="Live from space album cover"
                         />
                         : null}
-                    <div style={styles.details}>
-                        <CardContent style={styles.content}>
-                            <Typography component="h5" variant="h5">
-                               <strong> {this.props.heading}</strong>
-                            </Typography>
-                            <Typography variant="subtitle1" color="textSecondary" className="mt-4">
-                                {this.props.text}
-                            </Typography>
-                        </CardContent>
-                    </div>
-                    {this.props.right
+                    <CardContent style={styles.content}>
+                        <Typography component="h5" variant="h5">
+                            <strong> {this.props.heading}</strong>
+                        </Typography>
+                        <Typography variant="subtitle1" color="textSecondary" className="mt-4">
+                            {this.props.text}
+                        </Typography>
+                    </CardContent>
+                    {this.props.right && window.innerWidth >= 768
                         ? <CardMedia
                             style={styles.cover}
                             image={this.props.image}
                             title="Live from space album cover"
                         />
                         : null}
-
                 </Card>
+
+
             </div>
         )
     }
@@ -50,21 +60,18 @@ export class FeatureCard extends Component {
 const styles = {
     root: {
         display: 'flex',
-        height: window.innerWidth < 768 ? 300 : 200
+        height: 200
     },
     details: {
-        display: 'flex',
         flexDirection: 'column',
     },
     content: {
-        flex: '1 0 auto',
-        width: window.innerWidth / 2
+        width: '100%'
     },
     cover: {
-        width: window.innerWidth / 3
+        width: '100%'
     },
     controls: {
-        display: 'flex',
         alignItems: 'center',
     },
     playIcon: {

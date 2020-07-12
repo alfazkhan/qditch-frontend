@@ -104,9 +104,9 @@ export class ServiceBook extends Component {
                                 />
                             </th>
                             : null}
-                        <td>{services[key].service_name}</td>
-                        <td>{services[key].business_service_price} &#8377;</td>
-                        <td>{this.timeConvert(services[key].business_service_duration)}</td>
+                        <td  className="mx-0 px-2">{services[key].service_name}</td>
+                        <td  className="mx-0 px-2">{services[key].business_service_price} &#8377;</td>
+                        <td  className="mx-0 px-2">{this.timeConvert(services[key].business_service_duration)}</td>
                     </tr>
 
                 )
@@ -125,9 +125,9 @@ export class ServiceBook extends Component {
                                 />
                             </th>
                             : null}
-                        <td>{custom_services[key].service_name}</td>
-                        <td>{custom_services[key].business_service_price} &#8377;</td>
-                        <td>{this.timeConvert(custom_services[key].business_service_duration)}</td>
+                        <td className="mx-0 px-2">{custom_services[key].service_name}</td>
+                        <td className="mx-0 px-2">{custom_services[key].business_service_price} &#8377;</td>
+                        <td className="mx-0 px-2">{this.timeConvert(custom_services[key].business_service_duration)}</td>
                     </tr>
                 )
             }
@@ -328,7 +328,7 @@ export class ServiceBook extends Component {
 
                     <Paper className="col" elevation={3} style={{ backgroundColor: '#333' }}>
                         <div style={{ overflowX: "scroll" }}>
-                            <table class="table table-striped">
+                            <table class="table">
                                 <thead>
                                     <tr style={{ color: '#fff' }}>
                                         {this.props.user_id
