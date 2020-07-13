@@ -219,7 +219,7 @@ class SaloonInfoForm extends Component {
 
                 <div className="row">
                     <TextField
-                        label="Line 1"
+                        label="Address (Line 1)"
                         multiline
                         id="line1"
                         onChange={this.valueChangeHandler}
@@ -232,7 +232,7 @@ class SaloonInfoForm extends Component {
 
                 <div className="row">
                     <TextField
-                        label="Line 2"
+                        label="Address (Line 2)"
                         multiline
                         id="line2"
                         onChange={this.valueChangeHandler}

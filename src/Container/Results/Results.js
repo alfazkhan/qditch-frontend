@@ -34,21 +34,36 @@ class Results extends Component {
         const category = this.props.match.params.category
         const categoryName = this.props.match.params.categoryName
         this.setState({ categoryName: categoryName })
+        let lat,long
+        console.log(this.props.user_coordinates)
+        if(typeof this.props.user_coordinates === "undefined"){
+            lat = null
+            long = null
+        }else{
+            lat = this.props.user_coordinates.latitude
+            long = this.props.user_coordinates.longitude
+
+        }
         const data = {
             "id": category,
-            "latitude": this.props.user_coordinates.latitude,
-            "longitude": this.props.user_coordinates.longitude
+            "latitude": lat,
+            "longitude": long
         }
         console.log(data)
         Axios.post('api/category/super_category/', data)
             .then(res => {
-                // console.log(res.data)
-                this.setState({ businessIDs: Object.keys(res.data), coordinatedData: res.data }, () => {
+                let data
+                if(lat === null){
+                    data = res.data.business
+                }else{
+                    data = Object.keys(res.data)
+                }
+                this.setState({ businessIDs: data, coordinatedData: res.data }, () => {
                     this.resultsRender()
                 })
             })
             .catch(e => {
-                console.log(e.response)
+                console.log(e.response.data)
             })
 
 

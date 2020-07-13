@@ -55,7 +55,7 @@ const SalonResults = (props) => {
     for (let i = 0; i < len; i++) { //you can also use "for in", so you don't need the variable "len"
       for (let j = 0; j < len; j++) {
         if (typeof Array[j + 1] !== "undefined") {
-          if (Array[j].id > Array[j + 1].id) {
+          if (Array[j].distance > Array[j + 1].distance) {
             let tmp = Array[j];
             Array[j] = Array[j + 1];
             Array[j + 1] = tmp;
