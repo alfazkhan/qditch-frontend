@@ -13,6 +13,7 @@ import './Signup.css';
 import StylistSelect from './StylistSelect/StylistSelect';
 import UploadImages from './UploadImages/UploadImages';
 import Fade from '@material-ui/core/Fade';
+import { connect } from 'react-redux'
 
 
 class Signup extends Component {
@@ -26,6 +27,12 @@ class Signup extends Component {
     }
 
     componentDidMount() {
+
+        if(this.props.userLoggedIn){
+            this.props.history.push('/profile')
+        }
+        console.log(this.props)
+
 
         const Mode = this.props.match.params.mode
         this.setState({ Mode: Mode })
@@ -108,5 +115,18 @@ const styles = {
     }
 }
 
-export default withRouter(Signup)
 
+
+
+
+const mapStateToProps = (state) => ({
+
+    userLoggedIn : state.userLoggedIn
+    
+})
+
+const mapDispatchToProps = {
+    
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Signup))
