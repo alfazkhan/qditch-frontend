@@ -153,7 +153,7 @@ class BasicDetails extends Component {
             return 1
         }
 
-        if(!Validator.isNumber(e.target.value) || true ){
+        if(!Validator.isNumber(e.target.value)){
             e.target.value = ""
             return 1
         }
@@ -177,7 +177,7 @@ class BasicDetails extends Component {
         Axios.post(url,data)
         .then(res=>{
             console.log(res.data)
-            if(res.data.exist){
+            if(res.data.exist || true){
                 this.submitHandler()
             }
         })
