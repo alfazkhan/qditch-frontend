@@ -42,7 +42,7 @@ class Results extends Component {
         console.log(data)
         Axios.post('api/category/super_category/', data)
             .then(res => {
-                console.log(res.data)
+                // console.log(res.data)
                 this.setState({ businessIDs: Object.keys(res.data), coordinatedData: res.data }, () => {
                     this.resultsRender()
                 })

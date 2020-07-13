@@ -292,10 +292,11 @@ class SaloonInfoForm extends Component {
                         required
                         id="mapURL"
                         onChange={this.mapValueHandler}
-                        label="Map URL"
+                        label="Map URL (optional)"
                         name="sal-name"
                         autoComplete=""
                         className="col-md"
+                        helperText="Copy URL from the Address Bar when you search for your Salon in the Google Maps"
                     />
                 </div>
 

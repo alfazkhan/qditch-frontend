@@ -101,7 +101,7 @@ class SalonCard extends Component {
 
   render() {
     return (
-      <div className={window.innerWidth > 768 ?"container-fluid":"container-fluid mt-4"} >
+      <div className={window.innerWidth > 768 ? "container-fluid" : "container-fluid mt-4"} >
         {this.state.Loading
           ?
           <CircularProgress className="mt-5" />
@@ -124,10 +124,16 @@ class SalonCard extends Component {
                 <Card className={window.innerWidth > 768 ? "my-4 col-8" : "col-12 mb-3"}>
                   <CardActionArea>
                     <CardContent>
-                    
-                        <Typography gutterBottom variant="h4" component="h2">
+                      <div className="row">
+                        <Typography gutterBottom variant="h6" className="col text-right my-auto">
+                          <strong className="text-right text-primary"> {salon.distance} KM </strong>
+                        </Typography>
+                      </div>
+                      <div className="row">
+                        <Typography gutterBottom variant="h4" component="h2" className="col-8 mx-auto">
                           <strong> {salon.business_name} </strong>
                         </Typography>
+                      </div>
                       <Typography variant="body2" color="textPrimary" component="p">
                         {salon.line1}
                       </Typography>

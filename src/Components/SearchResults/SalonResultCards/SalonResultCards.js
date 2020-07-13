@@ -22,13 +22,17 @@ const SalonResults = (props) => {
 
   const setSalonData = () => {
     const ids = props.business_ids
+    const distances = props.coordinatedData
     // console.log(ids)
     const salonsList = []
     const promise = []
     for (var key in ids) {
       promise[key] = Axios.get('api/users/business/' + ids[key] + '/')
         .then(res => {
-          salonsList.push(res.data)
+          let data = res.data
+          data = {...data, "distance":distances[data.id]}
+          // console.log(data)
+          salonsList.push(data)
         })
         .catch(e => {
           console.log(e.response)
@@ -40,8 +44,8 @@ const SalonResults = (props) => {
     Promise.all(promise)
       .then(res => {
         setSalons(bubbleSort(salonsList))
-        console.log(salonsList)
-        console.log(bubbleSort(salonsList))
+        // console.log(salonsList)
+        // console.log(bubbleSort(salonsList))
         setLoading(false);
       })
   }
