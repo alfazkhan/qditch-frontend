@@ -134,7 +134,7 @@ class SaloonInfoForm extends Component {
                 "pincode": this.state.values.pincode,
                 "latitude": this.state.values.latitude,
                 "longitude": this.state.values.longitude,
-                "map_url": this.state.value.mapURL
+                "map_url": this.state.values.mapURL
             });
 
             this.props.toggleLoading(true)
