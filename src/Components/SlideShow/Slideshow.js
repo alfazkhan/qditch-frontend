@@ -156,7 +156,6 @@ const styles = {
     },
     chip: {
         backgroundColor: '#3142a0',
-        border: '1px solid black',
         color: 'white',
         borderRadius: '5px',
         height: 30
