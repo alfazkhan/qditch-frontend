@@ -25,7 +25,7 @@ class Results extends Component {
 
         serviceArray: [],
         serviceFilter: false,
-        
+
         cityArray: [],
         cityFilter: false
     }
@@ -34,12 +34,12 @@ class Results extends Component {
         const category = this.props.match.params.category
         const categoryName = this.props.match.params.categoryName
         this.setState({ categoryName: categoryName })
-        let lat,long
+        let lat, long
         console.log(this.props.user_coordinates)
-        if(typeof this.props.user_coordinates === "undefined"){
+        if (typeof this.props.user_coordinates === "undefined") {
             lat = null
             long = null
-        }else{
+        } else {
             lat = this.props.user_coordinates.latitude
             long = this.props.user_coordinates.longitude
 
@@ -53,9 +53,9 @@ class Results extends Component {
         Axios.post('api/category/super_category/', data)
             .then(res => {
                 let data
-                if(lat === null){
+                if (lat === null) {
                     data = res.data.business
-                }else{
+                } else {
                     data = Object.keys(res.data)
                 }
                 this.setState({ businessIDs: data, coordinatedData: res.data }, () => {
@@ -90,6 +90,9 @@ class Results extends Component {
         Axios.post('api/service/get_busienss_service_filter/', data)
             .then(res => {
                 // console.log(res.data.business)
+                for (var key in res.data.business) {
+                    res.data.business[key] = res.data.business[key].toString()
+                }
                 this.setState({ Loading: false, serviceArray: res.data.business, serviceFilter: true }, () => {
                     this.resultsRender()
                 })
@@ -98,7 +101,7 @@ class Results extends Component {
     }
 
     cityFilterHandler = (e) => {
-        // console.log(e.target.value)
+        console.log(e.target.value)
         this.setState({ Loading: true })
         if (e.target.value === "All") {
             this.setState({ cityArray: [], cityFilter: false }, () => {
@@ -113,6 +116,9 @@ class Results extends Component {
 
         Axios.post('api/users/city_filter/', data)
             .then(res => {
+                for (var key in res.data.business) {
+                    res.data.business[key] = res.data.business[key].toString()
+                }
                 // console.log(res.data.business)
                 this.setState({ Loading: false, cityArray: res.data.business, cityFilter: true }, () => {
                     this.resultsRender()
@@ -138,7 +144,10 @@ class Results extends Component {
         }
         Axios.post('api/users/business_type_filter/', data)
             .then(res => {
-                console.log(res.data.business)
+                // console.log(res.data.business)
+                for (var key in res.data.business) {
+                    res.data.business[key] = res.data.business[key].toString()
+                }
                 this.setState({ genderArray: res.data.business, Loading: false, genderFilter: true }, () => {
                     this.resultsRender()
                 })
@@ -151,33 +160,27 @@ class Results extends Component {
 
     resultsRender = () => {
         let finalArray = this.state.businessIDs
+        // console.log(finalArray)
 
         if (this.state.genderArray.length > 0) {
             finalArray = this.getArraysIntersection(finalArray, this.state.genderArray)
+        } else if (this.state.genderArray.length === 0 && this.state.genderFilter) {
+            finalArray = []
         }
+
         if (this.state.serviceArray.length > 0) {
             finalArray = this.getArraysIntersection(finalArray, this.state.serviceArray)
+        } else if (this.state.serviceArray.length === 0 && this.state.serviceFilter) {
+            finalArray = []
         }
+
         if (this.state.cityArray.length > 0) {
             finalArray = this.getArraysIntersection(finalArray, this.state.cityArray)
-        }
-        if (this.state.genderArray.length === 0 && this.state.genderFilter ) {
+        } else if (this.state.cityArray.length === 0 && this.state.cityFilter) {
             finalArray = []
-            console.log("gender")
         }
-        if (this.state.serviceArray.length === 0 && this.state.serviceFilter) {
-            finalArray = []
-            console.log("service")
-        }
-        if (this.state.cityArray.length === 0 && this.state.cityFilter) {
-            finalArray = []
-            console.log("city")
-        }
-
 
         let results
-
-        // console.log(finalArray.sort())
 
         if (finalArray.length > 0) {
             results = <SalonResultCards business_ids={finalArray} coordinatedData={this.state.coordinatedData} />
@@ -277,10 +280,10 @@ class Results extends Component {
                         </FormControl>
 
                     </div>
-                    
 
-                        {this.state.results}
-                    
+
+                    {this.state.results}
+
                 </div>
                 {/* } */}
 
@@ -295,12 +298,12 @@ class Results extends Component {
 
 const mapStateToProps = (state) => ({
 
-    user_coordinates : state.user_coordinates
-    
+    user_coordinates: state.user_coordinates
+
 })
 
 const mapDispatchToProps = {
-    
+
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Results))

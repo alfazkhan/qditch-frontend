@@ -126,7 +126,10 @@ class SalonCard extends Component {
                     <CardContent>
                       <div className="row">
                         <Typography gutterBottom variant="h6" className="col text-right my-auto">
-                          <strong className="text-right text-primary"> {salon.distance} KM </strong>
+                          {salon.distance !== "" && salon.distance !== null 
+                          ?
+                          <strong className="text-right text-primary"> {salon.distance + "KM"}</strong>
+                        :null}
                         </Typography>
                       </div>
                       <div className="row">
@@ -135,19 +138,10 @@ class SalonCard extends Component {
                         </Typography>
                       </div>
                       <Typography variant="body2" color="textPrimary" component="p">
-                        {salon.line1}
+                        {salon.line1 +", "+ salon.line2}
                       </Typography>
                       <Typography variant="body2" color="textPrimary" component="p">
-                        {salon.line2}
-                      </Typography>
-                      <Typography variant="body2" color="textPrimary" component="p">
-                        {salon.area}
-                      </Typography>
-                      <Typography variant="body2" color="textPrimary" component="p">
-                        {salon.city_name}
-                      </Typography>
-                      <Typography variant="body2" color="textPrimary" component="p">
-                        {salon.pincode}
+                        {salon.area + ", " + salon.city_name + ", " + salon.pincode}
                       </Typography>
 
 

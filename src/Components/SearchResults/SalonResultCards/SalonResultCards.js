@@ -31,7 +31,7 @@ const SalonResults = (props) => {
         .then(res => {
           let data = res.data
           data = {...data, "distance":distances[data.id]}
-          // console.log(data)
+          // console.log(data)    
           salonsList.push(data)
         })
         .catch(e => {

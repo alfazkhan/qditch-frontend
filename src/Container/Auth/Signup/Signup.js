@@ -110,15 +110,3 @@ const styles = {
 
 export default withRouter(Signup)
 
-// basic detail
-// business detail
-// timing
-// category
-// services
-// stylist
-// safety features
-// images
-
-
-
-// http://13.233.161.148:8000/
