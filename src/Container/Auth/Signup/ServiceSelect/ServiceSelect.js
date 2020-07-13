@@ -203,7 +203,7 @@ class ServiceSelect extends Component {
             return false
         }
         this.setState({ errors: false })
-        return false
+        return true
 
     }
 

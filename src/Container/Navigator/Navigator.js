@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react'
+// import React, { useState, useEffect } from 'react'
+import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import {
     Link, Route, Switch,
     withRouter
@@ -28,56 +30,60 @@ const styles = {
 }
 
 
-const Navigator = (props) => {
+export class Navigator extends Component {
 
-    const [userLoggedIn, setuserLoggedIn] = useState(useSelector(state=>state.userLoggedIn))
-    // const [businessUser, setBusinessUser] = useState(true)
+    state = {
+        userLoggedIn: this.props.userLoggedIn,
+        user_id: this.props.user_id
+    }
 
-    const [userID, setuserID] = useState(useSelector(state => state.user_id))
-
-
-
-    // const dispatch = useDispatch()
-    // const logout = async () => {
-    //     this.props.history.push('/logout')
-    //   };
-    
-
-    useEffect(() => {
-        const data = JSON.parse(localStorage.getItem('state'))
-        if(data){
-            console.log(data)
-            setuserLoggedIn(data.userLoggedIn)
-            setuserID(data.user_id)
-        }
-        window.scrollTo(0,0)
+    componentDidMount() {
         
-        console.log("updated")
-    }, [useSelector(state => state.userLoggedIn)])
+        navigator.geolocation.getCurrentPosition(this.updateCoordinates)
+        const data = JSON.parse(localStorage.getItem('state'))
+        if (data) {
+            console.log(data)
+            this.setState({
+                userLoggedIn: data.userLoggedIn,
+                user_id: data.user_id
+            })
+        }
+        window.scrollTo(0, 0)
+    }
+
+    updateCoordinates = (data) => {
+        const lat = data.coords.latitude
+        const long = data.coords.longitude
+
+        const coordinates = {
+            latitude: lat,
+            longitude: long
+        }
+
+        this.props.onCoordinates(coordinates)
+    }
 
 
 
+    render() {
+        return (
+            <div>
+                <div className={"navigation-bar pb-3"}>
+                    <div>
+                        <nav className="navbar navbar-expand-lg" style={{ backgroundColor: Colors.primary }}>
+                            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                                {/* <span className="navbar-toggler-icon" style={{color:'white'}}></span>*/}
+                                <MenuRoundedIcon style={styles.navlink} />
+                            </button>
+                            <Link to='/' className={"navbar-brand "} >
+                                <img src={Logo} width="auto" height="40" alt="Qditch" />
+                            </Link>
+                            <div className="collapse navbar-collapse" id="navbarTogglerDemo03">
 
-
-
-    return (
-        <div>
-            <div className={"navigation-bar pb-3"}>
-                <div>
-                    <nav className="navbar navbar-expand-lg" style={{ backgroundColor: Colors.primary }}>
-                        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-                            {/* <span className="navbar-toggler-icon" style={{color:'white'}}></span>*/}
-                            <MenuRoundedIcon style={styles.navlink} />
-                        </button>
-                        <Link to='/' className={"navbar-brand "} >
-                            <img src={Logo} width="auto" height="40" alt="Qditch" />
-                        </Link>
-                        <div className="collapse navbar-collapse" id="navbarTogglerDemo03">
-
-                            {userLoggedIn
-                                ?
-                                <ul className="navbar-nav ml-auto mt-lg-0">
-                                    {/* {useSelector(state => state.businessUser)
+                                {this.props.userLoggedIn
+                                    ?
+                                    <ul className="navbar-nav ml-auto mt-lg-0">
+                                        {/* {useSelector(state => state.businessUser)
                                         ?
                                         <li className="nav-item">
                                             <Button variant="contained" size="small" color="primary">
@@ -86,49 +92,76 @@ const Navigator = (props) => {
                                         </li>
                                         : null
                                     } */}
-                                    <li className="nav-item">
-                                        <Link to={'/profile'} className={"navbar-link text-bold"} style={styles.navlink}>My Profile </Link>
-                                    </li>
-                                </ul>
-                                :
-                                <ul className="navbar-nav ml-auto mt-lg-0">
-                                    <li className="nav-item">
-                                        <Link to='/Login' className={"navbar-link "} style={styles.navlink} >Login</Link>
-                                    </li>
-                                    <li className="nav-item">
-                                        {/* <Button variant="contained" size="small" color="primary"> */}
-                                        <Link to='/Register/Business' className={" "} style={styles.navlink} >Business Signup</Link>
-                                        {/* </Button> */}
-                                    </li>
-                                    {/* {window.innerWidth <= 1000
+                                        <li className="nav-item">
+                                            <Link to={'/profile'} className={"navbar-link text-bold"} style={styles.navlink}>My Profile </Link>
+                                        </li>
+                                    </ul>
+                                    :
+                                    <ul className="navbar-nav ml-auto mt-lg-0">
+                                        <li className="nav-item">
+                                            <Link to='/Login' className={"navbar-link "} style={styles.navlink} >Login</Link>
+                                        </li>
+                                        <li className="nav-item">
+                                            {/* <Button variant="contained" size="small" color="primary"> */}
+                                            <Link to='/Register/Business' className={" "} style={styles.navlink} >Business Signup</Link>
+                                            {/* </Button> */}
+                                        </li>
+                                        {/* {window.innerWidth <= 1000
                                         ? <div>
                                             <div class="dropdown-divider"></div>
                                             <Link to='/Register/Business' className={" "} style={styles.navlink} >Business Signup</Link>
                                         </div>
                                         : null
                                     } */}
-                                </ul>
-                            }
+                                    </ul>
+                                }
 
 
-                        </div>
-                    </nav>
-                    <Switch>
-                        <Route path="/" exact children={<Landing />} />
-                        <Route path="/results/:category/:categoryName" children={<Results />} />
-                        <Route path="/saloninfo/:id" exact children={<BusinessInfo />} />
-                        <Route path="/Login" exact children={<Login />} />
-                        <Route path="/Register/:mode" exact children={<Signup />} />
-                        <Route path="/admin/dashboard/" exact children={<Dashboard />} />
-                        <Route path='/logout' exact children={<Logout />} />
-                        <Route path='/profile' exact children={<Profile logout={props.logout} />} />
-                        <Route path='/download-booking-data/' exact children={<DownloadBooking />} />
+                            </div>
+                        </nav>
+                        <Switch>
+                            <Route path="/" exact children={<Landing />} />
+                            <Route path="/results/:category/:categoryName" children={<Results />} />
+                            <Route path="/saloninfo/:id" exact children={<BusinessInfo />} />
+                            <Route path="/Login" exact children={<Login />} />
+                            <Route path="/Register/:mode" exact children={<Signup />} />
+                            <Route path="/admin/dashboard/" exact children={<Dashboard />} />
+                            <Route path='/logout' exact children={<Logout />} />
+                            <Route path='/profile' exact children={<Profile logout={this.props.logout} />} />
+                            <Route path='/download-booking-data/' exact children={<DownloadBooking />} />
 
-                    </Switch>
+                        </Switch>
+                    </div>
                 </div>
             </div>
-        </div>
-    )
-
+        )
+    }
 }
-export default withRouter(Navigator)
+
+
+
+
+
+const mapStateToProps = (state) => ({
+
+    userLoggedIn : state.userLoggedIn,
+    user_id: state.user_id
+
+
+
+})
+
+const mapDispatchToProps = dispatch => {
+
+    return {
+      onCoordinates: (data) => dispatch({
+        type: actionTypes.UPDATE_USER_COORDINATES,
+        user_coordinates: data
+      })
+    }
+  
+  }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navigator)
+
+

@@ -19,6 +19,9 @@ class EditProfile extends Component {
             city: this.props.data['city'],
             area: this.props.data['area'],
             pincode: this.props.data['pincode'],
+            latitude: this.props.data['latitude'],
+            longitude: this.props.data['longitude'],
+            map_url: this.props.data['map_url']
 
         },
         menuItems: null,
@@ -36,7 +39,7 @@ class EditProfile extends Component {
     valuesChangeHandler = (e) => {
         const values = this.state.values
         if (e.target.name === "type") {
-            
+
             values['type'] = e.target.value
             this.setState({ values: values })
             return true
@@ -63,12 +66,12 @@ class EditProfile extends Component {
         if (e.target.name === "city") {
             // console.log(e.target.value)
             values['city'] = e.target.value
-            this.setState({ values: values },()=>console.table(this.state.values))
+            this.setState({ values: values }, () => console.table(this.state.values))
             return true
         }
 
         if (e.target.id === "area") {
-            
+
             values['area'] = e.target.value
             this.setState({ values: values })
             return true
@@ -80,6 +83,21 @@ class EditProfile extends Component {
             return true
         }
 
+    }
+
+    mapValueHandler = (e) => {
+        let mapurl = e.target.value
+        const splitmapurl = mapurl.split('/')[6].split(',')
+        const lat = splitmapurl[0].substring(1)
+        const long = splitmapurl[1]
+        const values = this.state.values
+        values.mapURL = mapurl
+        values.latitude = lat
+        values.longitude = long
+        console.log(lat,long)
+        this.setState({
+            values: values
+        })
     }
 
 
@@ -94,6 +112,9 @@ class EditProfile extends Component {
             "area": this.state.values.area,
             "city": this.state.values.city,
             "pincode": this.state.values.pincode,
+            "latitude": this.state.values.latitude,
+            "longitude": this.state.values.longitude,
+            "map_url": this.state.values.mapURL
         }
         this.setState({ Loading: true })
         Axios.patch(url, data)
@@ -232,6 +253,24 @@ class EditProfile extends Component {
                                             variant="outlined"
                                             className="col-md"
                                         // margin="normal"
+                                        />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row"></th>
+                                    <td>
+
+                                        <TextField
+                                            variant="outlined"
+                                            margin="normal"
+                                            required
+                                            id="mapURL"
+                                            defaultValue={this.state.values.map_url}
+                                            onChange={this.mapValueHandler}
+                                            label="Map URL"
+                                            name="sal-name"
+                                            autoComplete=""
+                                            className="col-md"
                                         />
                                     </td>
                                 </tr>

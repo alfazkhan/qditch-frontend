@@ -7,6 +7,10 @@ const initialState = {
     userLoggedIn: false,
     businessUser: false,
     user_details_id : null,
+    user_coordinates: {
+        latitude: null,
+        longitude: null
+    }
 }
 
 let updatedState
@@ -63,10 +67,18 @@ const reducer = (state = initialState, action) => {
             return updatedState
 
         case actionTypes.LOCAL_STORAGE_FETCH:
-            console.log(action.fetchedState)
             updatedState = {
                 ...action.fetchedState
             }
+            return updatedState
+            
+
+        case actionTypes.UPDATE_USER_COORDINATES:
+            updatedState = {
+                ...state,
+                user_coordinates : action.user_coordinates
+            }
+            localStorage.setItem('state',JSON.stringify(updatedState))
             return updatedState
             
         }

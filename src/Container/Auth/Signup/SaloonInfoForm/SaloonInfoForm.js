@@ -20,7 +20,10 @@ class SaloonInfoForm extends Component {
             line2: '',
             area: '',
             city: '',
-            pincode: ''
+            pincode: '',
+            latitude: '',
+            longitude: '',
+            mapURL: ''
         },
         user_id: null,
         errors: false,
@@ -66,7 +69,7 @@ class SaloonInfoForm extends Component {
                 newValues = { ...newValues, area: event.target.value }
                 break
             case "pincode":
-                if(!Validator.isNumber(event.target.value)){
+                if (!Validator.isNumber(event.target.value)) {
                     event.target.value = ""
                     return 1
                 }
@@ -74,7 +77,7 @@ class SaloonInfoForm extends Component {
                 break
         }
 
-        this.setState({values: newValues})
+        this.setState({ values: newValues })
 
     }
 
@@ -88,6 +91,7 @@ class SaloonInfoForm extends Component {
 
     validateData = () => {
         const values = this.state.values
+        console.log(values)
         const messages = []
 
 
@@ -127,7 +131,10 @@ class SaloonInfoForm extends Component {
                 "line2": this.state.values.line2,
                 "area": this.state.values.area,
                 "city": this.state.values.city,
-                "pincode": this.state.values.pincode
+                "pincode": this.state.values.pincode,
+                "latitude": this.state.values.latitude,
+                "longitude": this.state.values.longitude,
+                "map_url": this.state.value.mapURL
             });
 
             this.props.toggleLoading(true)
@@ -144,6 +151,20 @@ class SaloonInfoForm extends Component {
                 });
         }
 
+    }
+
+    mapValueHandler = (e) => {
+        let mapurl = e.target.value
+        const splitmapurl = mapurl.split('/')[6].split(',')
+        const lat = splitmapurl[0].substring(1)
+        const long = splitmapurl[1]
+        const values = this.state.values
+        values.mapURL = mapurl
+        values.latitude = lat
+        values.longitude = long
+        this.setState({
+            values: values
+        })
     }
 
 
@@ -262,6 +283,19 @@ class SaloonInfoForm extends Component {
                         variant="outlined"
                         className="col-md"
                     // margin="normal"
+                    />
+                </div>
+                <div className="row">
+                    <TextField
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        id="mapURL"
+                        onChange={this.mapValueHandler}
+                        label="Map URL"
+                        name="sal-name"
+                        autoComplete=""
+                        className="col-md"
                     />
                 </div>
 

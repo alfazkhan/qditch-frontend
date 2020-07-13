@@ -7,6 +7,8 @@ import Heading from '../../Components/Heading/Heading';
 import SalonResultCards from '../../Components/SearchResults/SalonResultCards/SalonResultCards';
 import { FormControl, InputLabel, Select, MenuItem, CircularProgress, Card } from '@material-ui/core';
 import Colors from '../../Constants/Colors';
+import { connect } from 'react-redux'
+
 
 
 class Results extends Component {
@@ -16,6 +18,7 @@ class Results extends Component {
         categoryName: '',
         results: null,
         Loading: true,
+        coordinatedData: null,
 
         genderArray: [],
         genderFilter: false,
@@ -33,13 +36,14 @@ class Results extends Component {
         this.setState({ categoryName: categoryName })
         const data = {
             "id": category,
-            "latitude": null,
-            "longitude": null
+            "latitude": this.props.user_coordinates.latitude,
+            "longitude": this.props.user_coordinates.longitude
         }
+        console.log(data)
         Axios.post('api/category/super_category/', data)
             .then(res => {
-                // console.log(res.data)
-                this.setState({ businessIDs: res.data.business }, () => {
+                console.log(res.data)
+                this.setState({ businessIDs: Object.keys(res.data), coordinatedData: res.data }, () => {
                     this.resultsRender()
                 })
             })
@@ -161,7 +165,7 @@ class Results extends Component {
         // console.log(finalArray.sort())
 
         if (finalArray.length > 0) {
-            results = <SalonResultCards business_ids={finalArray} />
+            results = <SalonResultCards business_ids={finalArray} coordinatedData={this.state.coordinatedData} />
         } else {
             results = (
                 <div className="mx-auto mt-5">
@@ -270,4 +274,19 @@ class Results extends Component {
     }
 }
 
-export default withRouter(Results)
+
+
+
+
+const mapStateToProps = (state) => ({
+
+    user_coordinates : state.user_coordinates
+    
+})
+
+const mapDispatchToProps = {
+    
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Results))
+

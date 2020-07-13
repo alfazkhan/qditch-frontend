@@ -153,7 +153,7 @@ class BasicDetails extends Component {
             return 1
         }
 
-        if(!Validator.isNumber(e.target.value)){
+        if(!Validator.isNumber(e.target.value) || true ){
             e.target.value = ""
             return 1
         }
