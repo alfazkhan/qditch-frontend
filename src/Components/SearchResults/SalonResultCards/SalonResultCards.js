@@ -30,7 +30,7 @@ const SalonResults = (props) => {
       promise[key] = Axios.get('api/users/business/' + ids[key] + '/')
         .then(res => {
           let data = res.data
-          data = {...data, "distance":distances[data.id]}
+          data = { ...data, "distance": distances[data.id] }
           // console.log(data)    
           salonsList.push(data)
         })
@@ -50,6 +50,17 @@ const SalonResults = (props) => {
       })
   }
 
+  const array_move = (arr, old_index, new_index) => {
+    if (new_index >= arr.length) {
+      var k = new_index - arr.length + 1;
+      while (k--) {
+        arr.push(undefined);
+      }
+    }
+    arr.splice(new_index, 0, arr.splice(old_index, 1)[0]);
+    return arr; // for testing
+  }
+
   const bubbleSort = (Array) => {
     let len = Array.length;
     for (let i = 0; i < len; i++) { //you can also use "for in", so you don't need the variable "len"
@@ -63,6 +74,13 @@ const SalonResults = (props) => {
         }
       }
     }
+
+    for (var i = 0; i < len; i++) {
+      if(Array[i].distance === null){
+        array_move(Array,i,len-1)
+      }
+    }
+    console.log(Array)
     return Array;
   };
 
@@ -73,9 +91,9 @@ const SalonResults = (props) => {
       {!loading
         ? <SalonCard salon={salons.sort()} />
         :
-          <div className="col-12 mx-auto mt-5">
-            <CircularProgress className="text-center" />
-          </div>
+        <div className="col-12 mx-auto mt-5">
+          <CircularProgress className="text-center" />
+        </div>
       }
 
       {/* {salons.length > salonsPerPage

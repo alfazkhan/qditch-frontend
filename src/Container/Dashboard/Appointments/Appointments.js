@@ -32,6 +32,19 @@ export class Appointments extends Component {
 
 
     componentDidMount() {
+        let date = this.state.tempBlockDate.toString().split(' ')
+        date = date[2] + '/' + this.getMonthFromString(date[1]) + '/' + date[3]
+
+        let startTime = this.state.tempBlockStartTime.toString().split(' ')
+        let endTime = this.state.tempBlockEndTime.toString().split(' ')
+
+        this.setState({
+            blockDate: date,
+            blockStartTime: startTime[4],
+            blockEndTime: endTime[4]
+        })
+
+
         this.setAppointment()
     }
 
@@ -250,6 +263,7 @@ export class Appointments extends Component {
 
     }
 
+
     blockvaluesHandler = (e, type) => {
         switch (type) {
             case "blockDate":
@@ -263,6 +277,7 @@ export class Appointments extends Component {
                 break;
             case "blockEndTime":
                 let endTime = e.toString().split(' ')
+                console.log(this.pythonToJsTime(endTime[4]))
                 this.setState({ blockEndTime: endTime[4], tempBlockEndTime: e })
                 break;
 
@@ -271,22 +286,23 @@ export class Appointments extends Component {
 
     submitTimeBlock = () => {
         const data = {
-            business : this.props.data['id'],
+            business: this.props.data['id'],
             start_time: this.state.blockDate + " " + this.state.blockStartTime,
             end_time: this.state.blockDate + " " + this.state.blockEndTime
         }
+        console.log(data)
         const url = 'api/availability/block_booking/'
-        this.setState({Loading: true})
-        Axios.post(url,data)
-        .then(res=>{
-            console.log(res.data)
-            this.setState({Loading: false})
-            this.props.reload()
-        })
-        .catch(e=>{
-            console.log(e.response)
-            this.setState({Loading: false})
-        })
+        this.setState({ Loading: true })
+        Axios.post(url, data)
+            .then(res => {
+                console.log(res.data)
+                this.setState({ Loading: false })
+                this.props.reload()
+            })
+            .catch(e => {
+                console.log(e.response)
+                this.setState({ Loading: false })
+            })
     }
 
 
@@ -411,15 +427,15 @@ export class Appointments extends Component {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {this.props.data['block_bookings'].map(block=>{
-                                        let startTime = block.start_time.split(' ')[1].split(':') 
-                                        let endTime = block.end_time.split(' ')[1].split(':') 
+                                    {this.props.data['block_bookings'].map(block => {
+                                        let startTime = block.start_time.split(' ')[1].split(':')
+                                        let endTime = block.end_time.split(' ')[1].split(':')
                                         // console.log(this.formatAMPM( new Date(2020,3,10,endTime[0],endTime[1])))
-                                        return(
+                                        return (
                                             <tr>
                                                 <td><strong> {block.start_time.split(' ')[0]}</strong></td>
-                                                <td>{this.formatAMPM( new Date(2020,3,10,startTime[0],startTime[1]))}</td>
-                                                <td>{this.formatAMPM( new Date(2020,3,10,endTime[0],endTime[1]))}</td>
+                                                <td>{this.formatAMPM(new Date(2020, 3, 10, startTime[0], startTime[1]))}</td>
+                                                <td>{this.formatAMPM(new Date(2020, 3, 10, endTime[0], endTime[1]))}</td>
                                             </tr>
                                         )
                                     })}

@@ -22,7 +22,7 @@ class ResponseModal extends Component {
     }
 
     componentDidMount() {
-    
+
 
         if (this.props.status) {
 
@@ -143,9 +143,13 @@ class ResponseModal extends Component {
                             <Button onClick={this.props.close} color="primary" autoFocus>
                                 Close
                             </Button>
-                            <Button onClick={this.downloadBookingHandler} color="primary" autoFocus>
-                                Download
+                            {this.props.status
+                                ?
+                                <Button onClick={this.downloadBookingHandler} color="primary" autoFocus>
+                                    Download
                             </Button>
+                                : null
+                            }
                         </DialogActions>
                     </Dialog>
                 }
@@ -169,4 +173,4 @@ const styles = {
     }
 }
 
-export default withRouter( ResponseModal)
+export default withRouter(ResponseModal)
