@@ -227,8 +227,12 @@ export class Appointments extends Component {
 
         }
 
-        if(appointmentList.length === 0){
-            appointmentList.push(<h1>No Appointments Today!!!</h1>)
+        if (appointmentList.length === 0) {
+            appointmentList.push(
+                <div className="mx-auto">
+                    <h3 className="text-center mt-3 text-grey" style={{ color: 'grey' }}>No Appointments Today!!!</h3>
+                </div>
+            )
         }
 
         this.setState({

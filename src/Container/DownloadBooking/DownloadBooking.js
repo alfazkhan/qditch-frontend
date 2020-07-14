@@ -50,6 +50,7 @@ export class DownloadBooking extends Component {
                 }, () => {
                     // window.close()
                     window.print()
+                    this.props.history.goBack()
                 })
             })
 

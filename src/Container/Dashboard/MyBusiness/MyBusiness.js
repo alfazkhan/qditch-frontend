@@ -31,15 +31,24 @@ class MyBusiness extends Component {
             // console.log(this.state.data.feedbacks[key])
             feedbacks.push(
                 <tr>
-                    <td>{key}</td>
+                    <td>{parseInt(key)+1}</td>
                     <td> {this.state.data.feedbacks[key].user_name}</td>
                     <td> {this.state.data.feedbacks[key].rating}  <i class="fa fa-star" aria-hidden="true" ></i></td>
-                    <td> {this.state.data.feedbacks[key].review}</td>
+                    <td className="text-left"> {this.state.data.feedbacks[key].review}</td>
                     <td> <button id={this.state.data.feedbacks[key].id} className="btn btn-sm btn-danger" onClick={this.deleteReviewHandler} >Delete</button> </td>
                     
                 </tr>
             )
         }
+
+        if (feedbacks.length === 0) {
+            feedbacks.push(
+                <div className="mx-auto">
+                    <h3 className="text-center mt-3 text-grey" style={{ color: 'grey' }}>No Reviews Given!!!</h3>
+                </div>
+            )
+        }
+
 
         this.setState({
             feedbacks: feedbacks

@@ -65,7 +65,7 @@ export class Images extends Component {
 
 
         // eslint-disable-next-line no-restricted-globals
-        let allow = confirm("Are you Sure you Want to Delete this Image?")
+        let allow = confirm("Are you sure, you want to Delete this Image?")
 
         if (allow) {
             this.setState({
@@ -100,7 +100,7 @@ export class Images extends Component {
 console.log(data)
 
         // eslint-disable-next-line no-restricted-globals
-        let allow = confirm("Are you Sure you Want to Set this Image as Cover Image?")
+        let allow = confirm("Are you sure, you want to set this Image as Cover Image?")
 
         if (allow) {
             this.setState({

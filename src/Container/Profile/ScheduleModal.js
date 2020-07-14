@@ -162,6 +162,15 @@ export class ScheduleModal extends Component {
             )
         }
 
+        if (appointmentList.length === 0) {
+            appointmentList.push(
+                <div className="mx-auto">
+                    <h3 className="text-center mt-3 text-grey" style={{ color: 'grey' }}>No Upcoming Appointments...</h3>
+                </div>
+            )
+        }
+
+
         this.setState({
             appointmentList: appointmentList,
             Loading: false

@@ -28,6 +28,15 @@ export class FeedbackList extends Component {
                 />
             )
         }
+
+        if (List.length === 0) {
+            List.push(
+                <div className="mx-auto">
+                    <h3 className="text-center mt-3 text-grey" style={{ color: 'grey' }}>No Reviews Yet!!!</h3>
+                </div>
+            )
+        }
+
         this.setState({
             List: List
         })

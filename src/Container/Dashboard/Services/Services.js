@@ -284,6 +284,15 @@ export class Services extends Component {
 
         }
 
+        if (List.length === 0) {
+            List.push(
+                <div className="mx-auto">
+                    <h3 className="text-center mt-3 text-grey" style={{ color: 'grey' }}>No Services Added</h3>
+                </div>
+            )
+        }
+
+
         this.setState({ lists: List, services: services }, () => {
 
         })
@@ -320,6 +329,15 @@ export class Services extends Component {
             )
 
         }
+
+        if (List.length === 0) {
+            List.push(
+                <div className="mx-auto">
+                    <h3 className="text-center mt-3 text-grey" style={{ color: 'grey' }}>No Custom Services Added</h3>
+                </div>
+            )
+        }
+
 
         this.setState({ customList: List }, () => {
             this.setState({

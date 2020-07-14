@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Paper, Checkbox, FormControlLabel, TextField, Chip, Button, Snackbar } from '@material-ui/core'
+import { Paper, Checkbox, FormControlLabel, TextField, Chip, Button, Snackbar, List } from '@material-ui/core'
 import { MuiPickersUtilsProvider, KeyboardTimePicker, KeyboardDatePicker } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import Colors from '../../../Constants/Colors'
@@ -100,13 +100,13 @@ export class ServiceBook extends Component {
                                     value={["services", services[key].id, services[key].business_service_price, services[key].business_service_duration]}
                                     control={<Checkbox style={{ color: '#fff' }} />}
                                     onChange={this.serviceSelectHandler}
-                                    
+
                                 />
                             </th>
                             : null}
-                        <td  className="mx-0 px-2">{services[key].service_name}</td>
-                        <td  className="mx-0 px-2">{services[key].business_service_price} &#8377;</td>
-                        <td  className="mx-0 px-2">{this.timeConvert(services[key].business_service_duration)}</td>
+                        <td className="mx-0 px-2">{services[key].service_name}</td>
+                        <td className="mx-0 px-2">{services[key].business_service_price} &#8377;</td>
+                        <td className="mx-0 px-2">{this.timeConvert(services[key].business_service_duration)}</td>
                     </tr>
 
                 )
@@ -132,6 +132,15 @@ export class ServiceBook extends Component {
                 )
             }
         }
+
+        if (list.length === 0) {
+            list.push(
+                <div className="mx-auto">
+                    <h3 className="text-center mt-3 text-grey" style={{ color: 'grey' }}>No Services to Select!!!</h3>
+                </div>
+            )
+        }
+
 
         this.setState({
             serviceTableList: list
@@ -393,13 +402,23 @@ export class ServiceBook extends Component {
                 </div>
 
                 {this.state.serviceSelected.length > 0 || this.state.customServiceSelected.length > 0
-                    ? <div className="row">
-                        <th scope="col">
-                            <Chip color="primary" className="col ml-5 mr-5" label={this.state.totalPrice + " ₹"} />
-                        </th>
-                        <th scope="col">
-                            <Chip color="secondary" className="col ml-5 mr-5" label={this.timeConvert(this.state.totalDuration)} />
-                        </th>
+                    ?
+                    <div>
+                        <div className="row">
+                            <tr>
+                                <th scope="col">
+                                    <Chip color="primary" className="col ml-5 mr-5" label={this.state.totalPrice + " ₹"} />
+                                </th>
+                                <th scope="col">
+                                    <Chip color="secondary" className="col ml-5 mr-5" label={this.timeConvert(this.state.totalDuration)} />
+                                </th>
+                            </tr>
+                        </div>
+                        <div className="row mx-auto mt-3">
+                            <tr>
+                                <th className="text-center mx-auto" style={{color: 'grey'}}> *There might be a COVID-19 additional price related to this salon </th>
+                            </tr>
+                        </div>
                     </div>
                     : null}
 

@@ -66,6 +66,8 @@ export class FeedbackCreate extends Component {
         .then(res=>{
             console.log(res.data)
             this.props.onClose()
+
+            window.location.reload()
         })
         .catch(e=>{
             console.log(e.response)

@@ -160,7 +160,7 @@ class EditProfile extends Component {
                     <div>
                         <table class="table table-borderless">
                             <tbody>
-                                <tr className="my-5">
+                                <tr className=""> 
                                     <th scope="row">Business Name</th>
                                     <td>
                                         <TextField
@@ -226,7 +226,7 @@ class EditProfile extends Component {
                                         <TextField
                                             label="Line 1"
                                             id="line1"
-                                            fullWidth
+                                            
                                             defaultValue={this.state.values.line1}
                                             onChange={this.valuesChangeHandler}
                                             variant="outlined"
@@ -272,7 +272,7 @@ class EditProfile extends Component {
                                     <th scope="row"></th>
                                     <td>
 
-                                        <FormControl variant="outlined" className="col-md mb-3">
+                                        <FormControl variant="outlined" className="col-md">
                                             <InputLabel>Current City: {this.state.currentCity}</InputLabel>
                                             <Select
                                                 name="city"
@@ -331,7 +331,7 @@ class EditProfile extends Component {
 
                 <div>
 
-                    <Button variant="contained" size="large" style={{ backgroundColor: Colors.success, color: 'white' }} className="mt-2" onClick={this.submitDataHandler}>
+                    <Button variant="contained" size="large" style={{ backgroundColor: Colors.success, color: 'white' }} className="" onClick={this.submitDataHandler}>
                         Save
                     </Button>
                 </div>
