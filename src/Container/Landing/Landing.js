@@ -50,7 +50,7 @@ export class Landing extends Component {
                     : null}
                 <Slideshow />
 
-                
+                <Heading text="Things to keep in mind while choosing a salon" />
                 <FeatureCard image={BodyTemp} 
                 text={"Temperature of all the customers and salon staff should be monitored regularly"}
                 heading={"Body Temperature"}

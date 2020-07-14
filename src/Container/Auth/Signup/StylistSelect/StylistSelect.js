@@ -230,6 +230,7 @@ class StylistSelect extends Component {
                         </tbody>
                     </table>
                 </div>
+                <strong className="text-center" style={{color: 'grey'}}>*Please note : Number of Stylist denotes number of chairs</strong>
                 <div>
                     <Button variant="contained" size="small" color="primary" className="mt-4" onClick={this.addNewStylistField}>
                         &#x2b; Add Another Stylist
