@@ -136,8 +136,8 @@ class EditProfile extends Component {
                 Axios.post('api/category/change_super_category/',catData)
                 .then(res=>{
                     console.log(res.data)
-                    this.setState({ Loading: false })
                     this.props.reload()
+                    this.setState({ Loading: false })
                     console.log(res.data)
                 })
                 .catch(e => {

@@ -227,6 +227,10 @@ export class Appointments extends Component {
 
         }
 
+        if(appointmentList.length === 0){
+            appointmentList.push(<h1>No Appointments Today!!!</h1>)
+        }
+
         this.setState({
             appointmentList: appointmentList,
             Loading: false
@@ -357,7 +361,7 @@ export class Appointments extends Component {
                                 </tbody>
                             </table>
                         </div>
-                        <Heading text="Slot Blocking" />
+                        {/* <Heading text="Slot Blocking" />
                         <div className="row">
                             <MuiPickersUtilsProvider utils={DateFnsUtils} className="mt-3">
                                 <KeyboardDatePicker
@@ -441,7 +445,7 @@ export class Appointments extends Component {
                                     })}
                                 </tbody>
                             </table>
-                        </div>
+                        </div> */}
                     </div>
                 }
 
