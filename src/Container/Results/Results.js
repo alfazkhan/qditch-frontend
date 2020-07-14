@@ -36,7 +36,7 @@ class Results extends Component {
         this.setState({ categoryName: categoryName })
         let lat, long
         console.log(this.props.user_coordinates)
-        if (typeof this.props.user_coordinates === "undefined") {
+        if (typeof this.props.user_coordinates === "undefined" || typeof this.props.user_coordinates === null ) {
             lat = null
             long = null
         } else {
@@ -160,27 +160,32 @@ class Results extends Component {
 
     resultsRender = () => {
         let finalArray = this.state.businessIDs
-        // console.log(finalArray)
-
+        for (var key in finalArray) {
+            finalArray[key] = finalArray[key].toString()
+        }
+        
+        
         if (this.state.genderArray.length > 0) {
             finalArray = this.getArraysIntersection(finalArray, this.state.genderArray)
         } else if (this.state.genderArray.length === 0 && this.state.genderFilter) {
             finalArray = []
         }
-
+        
         if (this.state.serviceArray.length > 0) {
             finalArray = this.getArraysIntersection(finalArray, this.state.serviceArray)
         } else if (this.state.serviceArray.length === 0 && this.state.serviceFilter) {
             finalArray = []
         }
-
+        
         if (this.state.cityArray.length > 0) {
             finalArray = this.getArraysIntersection(finalArray, this.state.cityArray)
+            console.log(finalArray,this.state.cityArray)
         } else if (this.state.cityArray.length === 0 && this.state.cityFilter) {
             finalArray = []
         }
 
         let results
+        // console.log(finalArray)
 
         if (finalArray.length > 0) {
             results = <SalonResultCards business_ids={finalArray} coordinatedData={this.state.coordinatedData} />

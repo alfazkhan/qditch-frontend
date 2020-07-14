@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import Axios from '../../../Axios'
 import Heading from '../../../Components/Heading/Heading'
 import { CircularProgress, Button, ButtonGroup } from '@material-ui/core'
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers'
+import { MuiPickersUtilsProvider, KeyboardDatePicker, KeyboardTimePicker } from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns';
-
+import Colors from '../../../Constants/Colors'
 
 export class Appointments extends Component {
 
@@ -15,11 +15,19 @@ export class Appointments extends Component {
         business_services: {},
         custom_business_services: {},
         date: new Date(),
+        startDate: new Date(),
 
 
         appointmentList: [],
 
-        Loading: true
+        Loading: true,
+
+        blockDate: new Date(),
+        blockStartTime: new Date(),
+        blockEndTime: new Date(),
+        tempBlockDate: new Date(),
+        tempBlockStartTime: new Date(),
+        tempBlockEndTime: new Date(),
     }
 
 
@@ -221,25 +229,64 @@ export class Appointments extends Component {
 
         if (allow) {
 
-        this.setState({Loading: true})
-        const url = 'api/booking/booking_cancelled_by_business/'
+            this.setState({ Loading: true })
+            const url = 'api/booking/booking_cancelled_by_business/'
+            const data = {
+                "booking_id": e.target.id
+            }
+
+            Axios.post(url, data)
+                .then(res => {
+                    console.log(res.data)
+                    this.setState({ Loading: false })
+                    this.props.reload()
+                })
+                .catch(e => {
+                    console.log(e.response)
+                    this.setState({ Loading: false })
+                })
+        }
+
+
+    }
+
+    blockvaluesHandler = (e, type) => {
+        switch (type) {
+            case "blockDate":
+                let date = e.toString().split(' ')
+                date = date[2] + '/' + this.getMonthFromString(date[1]) + '/' + date[3]
+                this.setState({ blockDate: date, tempBlockDate: e })
+                break;
+            case "blockStartTime":
+                let startTime = e.toString().split(' ')
+                this.setState({ blockStartTime: startTime[4], tempBlockStartTime: e })
+                break;
+            case "blockEndTime":
+                let endTime = e.toString().split(' ')
+                this.setState({ blockEndTime: endTime[4], tempBlockEndTime: e })
+                break;
+
+        }
+    }
+
+    submitTimeBlock = () => {
         const data = {
-            "booking_id": e.target.id
+            business : this.props.data['id'],
+            start_time: this.state.blockDate + " " + this.state.blockStartTime,
+            end_time: this.state.blockDate + " " + this.state.blockEndTime
         }
-
-        Axios.post(url, data)
-            .then(res => {
-                console.log(res.data)
-                this.setState({Loading: false})
-                this.props.reload()
-            })
-            .catch(e => {
-                console.log(e.response)
-                this.setState({Loading: false})
-            })
-        }
-
-
+        const url = 'api/availability/block_booking/'
+        this.setState({Loading: true})
+        Axios.post(url,data)
+        .then(res=>{
+            console.log(res.data)
+            this.setState({Loading: false})
+            this.props.reload()
+        })
+        .catch(e=>{
+            console.log(e.response)
+            this.setState({Loading: false})
+        })
     }
 
 
@@ -275,25 +322,114 @@ export class Appointments extends Component {
 
                 {this.state.Loading ? <CircularProgress />
                     :
-                    <div style={{ height: window.innerHeight, overflow: "scroll" }}>
-                        <table class="table mt-4" >
-                            <thead>
-                                <tr>
-                                    <th scope="col">Service</th>
-                                    <th scope="col">User</th>
-                                    <th scope="col">Stylist</th>
-                                    <th scope="col">Start</th>
-                                    <th scope="col">End</th>
-                                    <th scope="col">Cost</th>
-                                    <th scope="col">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {this.state.appointmentList}
-                            </tbody>
-                        </table>
+                    <div>
+                        <div style={{ height: window.innerHeight / 2.5, overflow: "scroll" }}>
+                            <table class="table mt-4" >
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Service</th>
+                                        <th scope="col">User</th>
+                                        <th scope="col">Stylist</th>
+                                        <th scope="col">Start</th>
+                                        <th scope="col">End</th>
+                                        <th scope="col">Cost</th>
+                                        <th scope="col">Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {this.state.appointmentList}
+                                </tbody>
+                            </table>
+                        </div>
+                        <Heading text="Slot Blocking" />
+                        <div className="row">
+                            <MuiPickersUtilsProvider utils={DateFnsUtils} className="mt-3">
+                                <KeyboardDatePicker
+                                    disableToolbar
+                                    // className={window.innerWidth > 768 ? "col-6 mx-auto" : "col mr-2 ml-2"}
+                                    variant="inline"
+                                    format="dd/MM/yyyy"
+                                    id="date-picker-inline"
+                                    label="Select Start Date"
+                                    value={this.state.tempBlockDate}
+                                    fullWidth
+                                    disablePast
+                                    // invalidDateMessage=""
+                                    format="dd/MM/yyyy"
+                                    maxDateMessage=""
+                                    minDateMessage=""
+                                    onChange={(e) => this.blockvaluesHandler(e, "blockDate")}
+                                    KeyboardButtonProps={{
+                                        'aria-label': 'change date',
+                                    }}
+                                />
+                            </MuiPickersUtilsProvider>
+
+                            <MuiPickersUtilsProvider utils={DateFnsUtils} className="mt-3">
+                                <KeyboardTimePicker
+                                    id="time-picker"
+                                    label="Select Start Time"
+                                    value={this.state.tempBlockStartTime}
+                                    fullWidth
+                                    onChange={(e) => this.blockvaluesHandler(e, "blockStartTime")}
+                                    minutesStep={5}
+                                    // invalidDateMessage=""
+                                    KeyboardButtonProps={{
+                                        'aria-label': 'change time',
+                                    }}
+                                />
+                            </MuiPickersUtilsProvider>
+
+                            <MuiPickersUtilsProvider utils={DateFnsUtils} className="mt-3">
+                                <KeyboardTimePicker
+                                    id="time-picker"
+                                    label="Select End Time"
+                                    value={this.state.tempBlockEndTime}
+                                    fullWidth
+                                    onChange={(e) => this.blockvaluesHandler(e, "blockEndTime")}
+                                    minutesStep={5}
+                                    // invalidDateMessage=""
+                                    KeyboardButtonProps={{
+                                        'aria-label': 'change time',
+                                    }}
+                                />
+                            </MuiPickersUtilsProvider>
+
+
+                        </div>
+                        <div className="row mt-3">
+                            <button className="mx-auto btn btn-success btn-sm" onClick={this.submitTimeBlock} >Add Blocking</button>
+
+                        </div>
+                        <div style={{ height: window.innerHeight / 2.5, overflow: "scroll" }}>
+                            <table class="table mt-4" >
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">Start Time</th>
+                                        <th scope="col">End Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {this.props.data['block_bookings'].map(block=>{
+                                        let startTime = block.start_time.split(' ')[1].split(':') 
+                                        let endTime = block.end_time.split(' ')[1].split(':') 
+                                        // console.log(this.formatAMPM( new Date(2020,3,10,endTime[0],endTime[1])))
+                                        return(
+                                            <tr>
+                                                <td><strong> {block.start_time.split(' ')[0]}</strong></td>
+                                                <td>{this.formatAMPM( new Date(2020,3,10,startTime[0],startTime[1]))}</td>
+                                                <td>{this.formatAMPM( new Date(2020,3,10,endTime[0],endTime[1]))}</td>
+                                            </tr>
+                                        )
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 }
+
+
             </div>
         )
     }

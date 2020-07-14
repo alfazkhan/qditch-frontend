@@ -15,34 +15,58 @@ class SafetyFeatures extends Component {
         SafetyFeatures: {},
         List: [],
         SelectedFeatures: [],
-        business_id:1
+        business_id: this.props.business_id,
+
+        defaultSelected: []
     }
 
     componentDidMount() {
+        let promise = []
+        promise[0] = Axios.get('api/users/business/' + this.state.business_id + '/')
+            .then(res => {
+                // console.log(res.data.business_safety_features)
+                const selected = this.makeValuesInt(res.data.business_safety_features)
+                this.setState({
+                    defaultSelected: selected,
+                    SelectedFeatures: selected
+                })
+            })
+
         //getCategories from server
-        this.setState({business_id:this.props.business_id})
+        this.setState({ business_id: this.props.business_id })
         Axios.get('api/safety_feature/safety_features/')
             .then(res => {
                 let saf_fec = this.setState.SafetyFeatures
                 saf_fec = { ...res.data }
                 // console.table(saf_fec)
                 this.setState({ SafetyFeatures: saf_fec }, () => {
-                    this.initialValuesHandler()
+                    Promise.all(promise)
+                        .then(res => {
+                            this.initialValuesHandler()
+                        })
                 })
             })
+    }
+
+    makeValuesInt = (array) => {
+        for (var key in array) {
+            array[key] = parseInt(array[key])
+        }
+        return array
     }
 
     initialValuesHandler = () => {
         const safetyFeatures = this.state.SafetyFeatures
         const List = []
         for (var key in safetyFeatures) {
-            // console.log(safetyFeatures[key].safety_feature)
             List.push(<div className="row ml-5">
 
                 <FormControlLabel
                     key={key}
                     value={key}
-                    control={<Checkbox color="primary" />}
+                    control={<Checkbox
+                        defaultChecked={this.state.defaultSelected.indexOf(safetyFeatures[key].id) !== -1}
+                        color="primary" />}
                     label={safetyFeatures[key].safety_feature}
                     labelPlacement="end"
                     onChange={this.valueChangeHandler}
@@ -64,7 +88,7 @@ class SafetyFeatures extends Component {
     }
 
     valueChangeHandler = (e) => {
-        // console.log(e.target.value)
+        console.log(e.target.value)
         const id = e.target.value
         var selectedFeatures = this.state.SelectedFeatures
         const features_list = this.state.SafetyFeatures
@@ -80,9 +104,9 @@ class SafetyFeatures extends Component {
         this.setState({ SelectedFeatures: selectedFeatures })
     }
 
-    pageChangeHandler = () =>{
+    pageChangeHandler = () => {
         const mode = this.props.mode
-        const progress = 100*7/8
+        const progress = 100 * 7 / 8
         this.props.changeProgress(progress)
         this.props.toggleLoading(false)
         this.props.nextScreen('UploadImages')
@@ -90,44 +114,64 @@ class SafetyFeatures extends Component {
 
     submitHandler = () => {
         const selected = this.state.SelectedFeatures
-        const url = 'api/safety_feature/business_safety_features/'
-        this.props.toggleLoading(true)
         console.log(selected)
-        for (var i = 0; i < selected.length; i++) {
+        const url = 'api/safety_feature/business_safety_features/'
+
+        console.log(selected)
+        if (this.props.action === "Edit") {
             const data = {
-                "business" : this.state.business_id,
-                safety_features: selected[i]
+                "business": this.state.business_id,
+                safety_features: selected
             }
-            Axios.post(url, data)
+            Axios.post('api/safety_feature/change_safety_features/', data)
                 .then((res) => {
-                    console.log(res)
-                    this.props.toggleLoading(false)
-                    if(i === selected.length){
-                        this.pageChangeHandler()
-                    }
+                    // console.log(res)
+                    this.props.reload()
 
                 })
                 .catch((e) => {
-                    console.log(e.response)
-                    this.props.toggleLoading(false)
+                    console.log(e.response.data)
                 })
+        } else {
+            this.props.toggleLoading(true)
+            for (var i = 0; i < selected.length; i++) {
+                const data = {
+                    "business": this.state.business_id,
+                    safety_features: selected[i]
+                }
+
+                Axios.post(url, data)
+                    .then((res) => {
+                        console.log(res)
+                        this.props.toggleLoading(false)
+                        if (i === selected.length) {
+                            this.pageChangeHandler()
+                        }
+
+                    })
+                    .catch((e) => {
+                        console.log(e.response)
+                        this.props.toggleLoading(false)
+                    })
+
+            }
         }
 
-            
+
     }
 
 
     render() {
         return (
             <div className="container" style={styles.screen}>
-                <Heading text="Safety Features" />
-                
+                <Heading text={this.props.action === "Edit" ? "Edit Safety Features" : "Safety Features"} />
+
                 <div class="text-left" style={{ width: '100%', height: window.innerHeight / 2, overflowX: 'hidden' }}>
                     {this.state.List}
                 </div>
-                <div className="submitButton text-right">
+                <div className="submitButton text-center">
                     <Button variant="contained" size="large" style={{ backgroundColor: Colors.success, color: 'white' }} onClick={this.submitHandler}>
-                        Next
+                        {this.props.action === "Edit" ? "Save" : "Next"}
                     </Button>
                 </div>
             </div >
@@ -145,7 +189,7 @@ const styles = {
 
 const mapStateToProps = (state) => ({
     // user_id : state.user_id,
-    business_id : state.business_id
+    business_id: state.business_id
 })
 
 

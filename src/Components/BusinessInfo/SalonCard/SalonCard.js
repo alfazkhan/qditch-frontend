@@ -126,7 +126,7 @@ class SalonCard extends Component {
                     <CardContent>
                       <div className="row">
                         <Typography gutterBottom variant="h6" className="col text-right my-auto">
-                          {salon.distance !== "" && salon.distance !== null 
+                          {salon.distance !== "" && salon.distance !== null && typeof salon.distance !== "undefined"
                           ?
                           <strong className="text-right text-primary"> {salon.distance + "KM"}</strong>
                         :null}

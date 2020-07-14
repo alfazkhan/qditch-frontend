@@ -20,16 +20,32 @@ class CategorySelect extends Component {
         mainCategory: false,
         business_id: null,
         messages: [],
-        errors: false
+        errors: false,
+
+        defaultSelectedCategories: []
     }
 
     componentDidMount() {
         //getCategories from server
         this.setState({ business_id: this.props.business_id })
+
+        Axios.get('api/users/business/'+this.props.business_id+'/')
+        .then(res=>{
+            const defaultSelectedCategories = []
+            const data = res.data.business_categories
+            for(var key in data){
+                // console.log(data[key].category)
+                defaultSelectedCategories.push(data[key].category)
+                this.setState({
+                    defaultSelectedCategories : defaultSelectedCategories
+                })
+            }
+        })
+
         Axios.get('api/category/categories/')
             .then(res => {
                 const data = res.data
-                console.log(data)
+                // console.log(data)
                 const CatList = this.state.CategoryList
                 const checkValues = this.state.values
                 const ids = this.state.categoryIDs
@@ -51,6 +67,7 @@ class CategorySelect extends Component {
 
     initialValuesHandler = () => {
         const Categories = this.state.CategoryList
+        const categoryIDs = this.state.categoryIDs
         const selectedCategoryList = this.state.selectedCategoryList
         const values = this.state.values
         const List = []
@@ -60,6 +77,7 @@ class CategorySelect extends Component {
 
                 <FormControlLabel
                     value={i}
+                    
                     control={<Checkbox color="primary" checked={this.state.values[i]} />}
                     label={Categories[i]}
                     labelPlacement="end"
@@ -169,7 +187,7 @@ class CategorySelect extends Component {
     render() {
         return (
             <div className="container" style={styles.screen}>
-                <Heading text="Select Categories" />
+                <Heading text={this.props.action === "Edit" ? "Edit Categories" : "Select Categories"} />
 
                 {this.state.errors
                     ? <div class="alert alert-danger alert-dismissible fade show text-left" role="alert">

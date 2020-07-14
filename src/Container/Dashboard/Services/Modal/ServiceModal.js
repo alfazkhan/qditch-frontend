@@ -42,7 +42,7 @@ const ServiceModal = (props) => {
 
         <DialogContent>
             <DialogContentText id="alert-dialog-description">
-                <Box>
+                <div>
                     <div className="row mt-3" key={new Date()}>
                         {props.action === "CustomEdit" || props.action === "CustomAdd"
                             ? <TextField
@@ -54,16 +54,16 @@ const ServiceModal = (props) => {
                                 label="Service Name"
                                 // value={props.values.name}
                                 autoComplete=""
-                                className="col-md"
+                                className={window.innerWidth < 768 ? "col-12": "col"}
                             />
-                            : <FormControl variant="outlined" className="col-sm">
+                            : <FormControl variant="outlined" className={window.innerWidth < 768 ? "col-12": "col"}>
                                 <InputLabel>Select Service</InputLabel>
                                 <Select
                                     name='selectedServices'
                                     onChange={props.change}
                                     label="Select Service"
                                     // value={props.values.name}
-                                    className="col-md"
+                                    className={window.innerWidth < 768 ? "col-12": "col"}
                                 >
 
                                     {props.services.map((value, index) => {
@@ -81,7 +81,7 @@ const ServiceModal = (props) => {
                                     onChange={props.change}
                                     // value={props.values.category}
                                     label="Select Category"
-                                    className="col-md"
+                                    className={window.innerWidth < 768 ? "col-12": "col"}
                                 >
                                     {props.categories}
 
@@ -99,7 +99,7 @@ const ServiceModal = (props) => {
                             // value={props.values.price}
                             onKeyPress={validate}
                             autoComplete=""
-                            className="col-md"
+                            className={window.innerWidth < 768 ? "col-12": "col"}
                         />
                         <TextField
                             variant="outlined"
@@ -111,10 +111,10 @@ const ServiceModal = (props) => {
                             onKeyPress={validate}
                             // value={props.values.duration}
                             autoComplete=""
-                            className="col-md"
+                            className={window.innerWidth < 768 ? "col-12": "col"}
                         />
                     </div>
-                </Box>
+                </div>
             </DialogContentText>
         </DialogContent>
     )

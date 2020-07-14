@@ -4,6 +4,8 @@ import Heading from '../../../Components/Heading/Heading';
 import { TextField, FormControl, InputLabel, Select, Button, MenuItem } from '@material-ui/core';
 import Colors from '../../../Constants/Colors';
 import Axios from '../../../Axios';
+import CategorySelect from '../../Auth/Signup/CategorySelect/CategorySelect'
+import SafetyFeatures from '../../Auth/Signup/SafetyFeatures/SafetyFeatures'
 
 
 class EditProfile extends Component {
@@ -26,7 +28,9 @@ class EditProfile extends Component {
         },
         menuItems: null,
         currentType: this.props.data['business_type'],
-        currentCity: this.props.data['city_name']
+        currentCity: this.props.data['city_name'],
+        currentSuperCat: this.props.data['super_category'],
+        superCategory: null
     }
 
     componentDidMount() {
@@ -42,6 +46,11 @@ class EditProfile extends Component {
 
             values['type'] = e.target.value
             this.setState({ values: values })
+            return true
+        }
+
+        if (e.target.name === "superCat") {
+            this.setState({ superCategory: e.target.value })
             return true
         }
 
@@ -94,7 +103,7 @@ class EditProfile extends Component {
         values.mapURL = mapurl
         values.latitude = lat
         values.longitude = long
-        console.log(lat,long)
+        console.log(lat, long)
         this.setState({
             values: values
         })
@@ -119,9 +128,22 @@ class EditProfile extends Component {
         this.setState({ Loading: true })
         Axios.patch(url, data)
             .then(res => {
-                this.setState({ Loading: false })
-                this.props.reload()
-                console.log(res.data)
+                const catData={
+                    "business": this.props.data['id'],
+                    "category": this.state.superCategory
+                }
+                console.log(catData)
+                Axios.post('api/category/change_super_category/',catData)
+                .then(res=>{
+                    console.log(res.data)
+                    this.setState({ Loading: false })
+                    this.props.reload()
+                    console.log(res.data)
+                })
+                .catch(e => {
+                    this.setState({ Loading: false })
+                    console.log(e.response)
+                })
             })
             .catch(e => {
                 this.setState({ Loading: false })
@@ -167,6 +189,33 @@ class EditProfile extends Component {
                                             <MenuItem value={'male'}>Male</MenuItem>
                                             <MenuItem value={'female'}>Female</MenuItem>
                                             <MenuItem value={'unisex'}>Unisex</MenuItem>
+
+                                        </Select>
+                                    </FormControl>
+                                </tr>
+                                <tr>
+                                    <th scope="row">Main Category</th>
+                                    <FormControl variant="" className="col-sm">
+                                        <InputLabel className="text-uppercase" >Current Main Category: {this.state.currentSuperCat} </InputLabel>
+                                        <Select
+                                            name='superCat'
+                                            onChange={this.valuesChangeHandler}
+                                            // value={"10"}
+                                            id="superCat"
+                                            label={this.state.values.type}
+                                            inputProps={{ 'aria-label': 'Without label' }}
+                                        >
+                                            <MenuItem disabled value="">
+                                                <em> {this.state.values.type} </em>
+                                            </MenuItem>
+                                            <MenuItem value={'1'}>Hair</MenuItem>
+                                            <MenuItem value={'2'}>Skin</MenuItem>
+                                            <MenuItem value={'3'}>Spa</MenuItem>
+                                            <MenuItem value={'4'}>Makeup</MenuItem>
+                                            <MenuItem value={'5'}>Eyebrows</MenuItem>
+                                            <MenuItem value={'6'}>Hair Removal</MenuItem>
+                                            <MenuItem value={'7'}>Nails</MenuItem>
+                                            <MenuItem value={'8'}>Massage</MenuItem>
 
                                         </Select>
                                     </FormControl>
@@ -276,6 +325,7 @@ class EditProfile extends Component {
                                 </tr>
                             </tbody>
                         </table>
+
                     </div>
                 }
 
@@ -284,6 +334,10 @@ class EditProfile extends Component {
                     <Button variant="contained" size="large" style={{ backgroundColor: Colors.success, color: 'white' }} className="mt-2" onClick={this.submitDataHandler}>
                         Save
                     </Button>
+                </div>
+
+                <div className='container'>
+                    <SafetyFeatures action="Edit" reload={this.props.reload} />
                 </div>
             </div>
         )
