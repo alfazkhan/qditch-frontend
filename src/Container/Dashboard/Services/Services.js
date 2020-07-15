@@ -225,14 +225,14 @@ export class Services extends Component {
         console.log(e.target.id)
         //eslint-disable-next-line no-restricted-globals
         let allow = confirm("Are you Sure you Want to Disable this Service?")
-        const url = action === "disable-service" ? 'api/service/business_services/' + id +'/' : 'api/service/custom_business_services/' + id+'/'
+        const url = action === "disable-service" ? 'api/service/business_services/' + id + '/' : 'api/service/custom_business_services/' + id + '/'
         if (allow) {
             const data = {
-                disable : e.target.id.split(':')[3] === "true" ? false : true   
+                disable: e.target.id.split(':')[3] === "true" ? false : true
             }
             console.log(data)
             this.setState({ Loading: true })
-            Axios.patch(url,data)
+            Axios.patch(url, data)
                 .then(res => {
 
                     this.props.reload()
@@ -269,7 +269,7 @@ export class Services extends Component {
                     <td>{allCat[allServices[services[key].service].category].name}</td>
                     <td> {services[key].business_service_duration} </td>
                     <td>{services[key].business_service_price} </td>
-                    <td><button id={"edit-custom-service:" + key + ':' + id }
+                    <td><button id={"edit-custom-service:" + key + ':' + id}
                         type="button" class="btn btn-primary btn-sm" onClick={(e) => this.toggleModal(e, "ServiceEdit")}>Edit</button></td>
                     <td ><button id={"disable-service:" + id + ':' + key + ':' + services[key].disable}
                         onClick={this.disableServiceHandler}
@@ -641,54 +641,60 @@ export class Services extends Component {
                     : null
                 }
                 {this.state.Modal ? this.state.modalContent : null}
-                {this.state.Loading ? <CircularProgress /> :
-                    <div>
-                        <Heading text="Salon Services" />
-                        <div style={{ overflowX: "scroll" }}>
-                            <table class="table table-striped" style={{ overflowX: "scroll" }}>
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Service</th>
-                                        <th scope="col">Category</th>
-                                        <th scope="col">Duration</th>
-                                        <th scope="col">Price</th>
-                                        <th scope="col"></th>
-                                        <th scope="col"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {this.state.lists}
-                                </tbody>
-                            </table>
+                {this.state.Loading ? <CircularProgress />
+                    : this.state.lists.length == 0
+                        ?
+                        <div className="mx-auto">
+                            <h3 className="text-center mt-3 text-grey" style={{ color: 'grey' }}>No Services Added</h3>
                         </div>
-                        <Button variant="contained" size="small" color="primary" className="mt-4 mb-3" onClick={(e) => this.toggleModal(e, "Add")}>
-                            &#x2b; Add New Service
+                        :
+                        <div>
+                            <Heading text="Salon Services" />
+                            <div style={{ overflowX: "scroll" }}>
+                                <table class="table table-striped" style={{ overflowX: "scroll" }}>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Service</th>
+                                            <th scope="col">Category</th>
+                                            <th scope="col">Duration</th>
+                                            <th scope="col">Price</th>
+                                            <th scope="col"></th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {this.state.lists}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <Button variant="contained" size="small" color="primary" className="mt-4 mb-3" onClick={(e) => this.toggleModal(e, "Add")}>
+                                &#x2b; Add New Service
                         </Button>
 
-                        <Heading text="Salon Custom Services" />
-                        <div style={{ overflowX: "scroll" }}>
-                            <table class="table table-striped" style={{ overflowX: "scroll" }}>
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Service</th>
-                                        <th scope="col">Category</th>
-                                        <th scope="col">Duration</th>
-                                        <th scope="col">Price</th>
-                                        <th scope="col"></th>
-                                        <th scope="col"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {this.state.customList}
-                                </tbody>
-                            </table>
-                        </div>
-                        <Button variant="contained" size="small" color="secondary" className="mt-4 mb-3" onClick={(e) => this.toggleModal(e, "CustomAdd")}>
-                            &#x2b; Add New Custom Service
+                            <Heading text="Salon Custom Services" />
+                            <div style={{ overflowX: "scroll" }}>
+                                <table class="table table-striped" style={{ overflowX: "scroll" }}>
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Service</th>
+                                            <th scope="col">Category</th>
+                                            <th scope="col">Duration</th>
+                                            <th scope="col">Price</th>
+                                            <th scope="col"></th>
+                                            <th scope="col"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {this.state.customList}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <Button variant="contained" size="small" color="secondary" className="mt-4 mb-3" onClick={(e) => this.toggleModal(e, "CustomAdd")}>
+                                &#x2b; Add New Custom Service
                         </Button>
-                    </div>
+                        </div>
                 }
             </div>
         )

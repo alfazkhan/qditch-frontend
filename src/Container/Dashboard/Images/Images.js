@@ -95,9 +95,9 @@ export class Images extends Component {
         let url = 'api/images/change_cover_image/'
 
         const data = {
-            "business_image_id" : id
+            "business_image_id": id
         }
-console.log(data)
+        console.log(data)
 
         // eslint-disable-next-line no-restricted-globals
         let allow = confirm("Are you sure, you want to set this Image as Cover Image?")
@@ -106,7 +106,7 @@ console.log(data)
             this.setState({
                 Loading: true
             })
-            Axios.post(url,data)
+            Axios.post(url, data)
                 .then(res => {
                     console.log(res.data)
                     this.props.reload()
@@ -122,7 +122,7 @@ console.log(data)
 
     }
 
-    imageAddHandler=(e)=>{
+    imageAddHandler = (e) => {
         this.setState({
             Loading: true
         })
@@ -131,17 +131,17 @@ console.log(data)
         var data = new FormData();
         data.append('blob_data', e.target.files[0]);
         data.append('business', this.props.data['id']);
-        data.append('cover','false');
+        data.append('cover', 'false');
 
-        Axios.post(url,data)
-        .then(res=>{
-            console.log(res.data)
-            this.props.reload()
-        })
-        .catch(e=>{
-            console.log(e.response)
-            this.props.reload()
-        })
+        Axios.post(url, data)
+            .then(res => {
+                console.log(res.data)
+                this.props.reload()
+            })
+            .catch(e => {
+                console.log(e.response)
+                this.props.reload()
+            })
 
     }
 
@@ -250,15 +250,18 @@ console.log(data)
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td><img src={this.state.coverImage} style={styles.coverImage} width="auto" height={window.innerHeight / 6} /></td>
-                                    <td>
-                                        <label for={"cover-image-edit:" + this.state.coverImageID}>
-                                            <div type="button" class="btn btn-primary btn-sm mt-5">Edit Cover Image</div>
-                                        </label>
-                                        <input id={"cover-image-edit:" + this.state.coverImageID} type="file" style={{ display: "none" }} onChange={this.imageEditHandler} />
-                                    </td>
-                                </tr>
+                                {this.state.coverImage !== null
+                                    ?
+                                    <tr>
+                                        <td><img src={this.state.coverImage} style={styles.coverImage} width="auto" height={window.innerHeight / 6} /></td>
+                                        <td>
+                                            <label for={"cover-image-edit:" + this.state.coverImageID}>
+                                                <div type="button" class="btn btn-primary btn-sm mt-5">Edit Cover Image</div>
+                                            </label>
+                                            <input id={"cover-image-edit:" + this.state.coverImageID} type="file" style={{ display: "none" }} onChange={this.imageEditHandler} />
+                                        </td>
+                                    </tr>
+                                    : null}
                                 <tr><div className="my-5"></div></tr>
                                 {this.state.imageList}
                             </tbody>
