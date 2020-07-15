@@ -137,7 +137,6 @@ class EditProfile extends Component {
                 .then(res=>{
                     console.log(res.data)
                     this.props.reload()
-                    this.setState({ Loading: false })
                     console.log(res.data)
                 })
                 .catch(e => {

@@ -14,12 +14,19 @@ class Timings extends Component {
         initialDataLoaded : false,
         editedTimeValues:{
             
-        }
+        },
+        showDefaultButton: false
     }
 
     componentDidMount() {
         console.log(this.props.data['business_timings'])
         const id = this.props.data['business_timings'][0]
+        if(this.props.data['business_timings'].length === 0){
+            this.setState({
+                Loading : false,
+                showDefaultButton: true
+            })
+        }
         Axios.get('api/availability/timing/' + id + '/')
             .then(res => {
 
@@ -164,11 +171,36 @@ class Timings extends Component {
         })
     }
 
+    generateDefaultData = () =>{
+
+        this.setState({
+            Loading: true
+        })
+        const url = 'api/availability/timing/'
+        const data = {
+            "business": this.props.data['id']
+        }
+
+        Axios.post(url,data)
+        .then(res=>{
+            console.log(res.data)
+            this.props.reload()
+        })
+        .catch(e=>{
+            console.log(e.response)
+            this.setState({Loading: false})
+        })
+        
+
+    }
+
     render() {
         return (
             <div className="container">
                 <Heading text="Salon Timings" />
-                {this.state.Loading ? <CircularProgress /> :
+                {this.state.Loading ? <CircularProgress /> : this.state.showDefaultButton
+                ? <button className="btn btn-primary btn-sm" onClick={this.generateDefaultData}>Generate Default Data</button>
+                :
                 <div>
                     {this.state.Modal? this.state.modalContent:null}
                     <table class="table table-striped">
