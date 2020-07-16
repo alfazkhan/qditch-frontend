@@ -291,7 +291,7 @@ class ServiceSelect extends Component {
                     "business": this.state.business_id,
                     "service": this.findIndex(selectedService[key].service, ServiceList) + 1,
                     "business_service_price": selectedService[key].price,
-                    "business_service_duration": selectedService[key].price,
+                    "business_service_duration": selectedService[key].duration,
                     "disable": "False",
                     "buffer_time": "null"
 
