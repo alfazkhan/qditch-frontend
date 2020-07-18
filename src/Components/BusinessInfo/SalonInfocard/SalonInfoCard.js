@@ -39,7 +39,7 @@ export class SalonInfoCard extends Component {
         return (
             <div>
                 {!this.state.Loading
-                    ? <Paper elevation={3} className="my-auto">
+                    ? <Paper elevation={3} className="p-0">
                         <Heading text={this.props.data['business_name']} />
                         <strong className="ml-3 mr-3 mb-1 text-break">{this.props.data['address']}</strong>
                         <div className='mt-1 mb-3' style={{maxHeight: 400,overflow: 'scroll',overflowX: 'hidden'}}>

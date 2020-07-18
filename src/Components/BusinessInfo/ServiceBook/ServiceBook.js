@@ -104,7 +104,7 @@ export class ServiceBook extends Component {
                                 />
                             </th>
                             : null}
-                        <td className="mx-0 px-2">{services[key].service_name}</td>
+                        <td className="mx-0 px-2 text-wrap">{services[key].service_name}</td>
                         <td className="mx-0 px-2">{services[key].business_service_price} &#8377;</td>
                         <td className="mx-0 px-2">{this.timeConvert(services[key].business_service_duration)}</td>
                     </tr>
@@ -125,7 +125,7 @@ export class ServiceBook extends Component {
                                 />
                             </th>
                             : null}
-                        <td className="mx-0 px-2">{custom_services[key].service_name}</td>
+                        <td className="mx-0 px-2 text-wrap">{custom_services[key].service_name}</td>
                         <td className="mx-0 px-2">{custom_services[key].business_service_price} &#8377;</td>
                         <td className="mx-0 px-2">{this.timeConvert(custom_services[key].business_service_duration)}</td>
                     </tr>
@@ -336,7 +336,7 @@ export class ServiceBook extends Component {
                 <div className="row">
 
                     <Paper className="col" elevation={3} style={{ backgroundColor: '#333' }}>
-                        <div style={{ overflowX: "scroll" }}>
+                        <div style={{ overflowX: window.innerWidth < 768 ? "scroll" : "hidden" }}>
                             <table class="table">
                                 <thead>
                                     <tr style={{ color: '#fff' }}>

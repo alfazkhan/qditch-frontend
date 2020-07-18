@@ -87,6 +87,7 @@ class SalonTimingsCard extends Component {
             <div>
                 {this.state.Loading ? <CircularProgress /> :
                     <Paper elevation={3} style={{backgroundColor:''}}>
+                        <h4 className="mb-2">Opening Hours</h4>
                         <table class="table table-borderless">
                         {this.state.timingsList}
                         </table>

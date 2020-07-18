@@ -285,6 +285,7 @@ class EditProfile extends Component {
                                                 <MenuItem value={'2'}>Indore</MenuItem>
                                                 <MenuItem value={'3'}>Mumbai</MenuItem>
                                                 <MenuItem value={'4'}>Chennai</MenuItem>
+                                                <MenuItem value={'5'}>Gurgaon</MenuItem>
                                             </Select>
                                         </FormControl>
                                     </td>
