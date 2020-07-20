@@ -145,14 +145,14 @@ class SalonCard extends Component {
                       </Typography>
 
 
-                      <table className="table mt-5">
+                      <table className="table mt-3">
                         {this.state.salonServices[salon.id].slice(0, 4)}
                       </table>
 
                     </CardContent>
                   </CardActionArea>
                   <CardActions className="mt-auto">
-                    <Button className="ml-auto mt-5" size="small" color="primary">
+                    <Button className="ml-auto mt-2" size="small" color="primary">
                       Book Appointment Now
                     </Button>
                   </CardActions>

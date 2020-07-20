@@ -338,8 +338,8 @@ export class ServiceBook extends Component {
                     <Paper className="col" elevation={3} style={{ backgroundColor: '#333' }}>
                         <div style={{ overflowX: window.innerWidth < 768 ? "scroll" : "hidden" }}>
                             <table class="table">
-                                <thead>
-                                    <tr style={{ color: '#fff' }}>
+                                <thead className="table-dark">
+                                    <tr>
                                         {this.props.user_id
                                             ? <th scope="col">#</th>
                                             : null}

@@ -128,21 +128,26 @@ class EditProfile extends Component {
         this.setState({ Loading: true })
         Axios.patch(url, data)
             .then(res => {
-                const catData={
+                const catData = {
                     "business": this.props.data['id'],
                     "category": this.state.superCategory
                 }
                 console.log(catData)
-                Axios.post('api/category/change_super_category/',catData)
-                .then(res=>{
-                    console.log(res.data)
-                    this.props.reload()
-                    console.log(res.data)
-                })
-                .catch(e => {
+                if (catData.category !== null) {
+                    Axios.post('api/category/change_super_category/', catData)
+                        .then(res => {
+                            console.log(res.data)
+                            this.props.reload()
+                            console.log(res.data)
+                        })
+                        .catch(e => {
+                            this.setState({ Loading: false })
+                            console.log(e.response)
+                        })
+                }
+                else {
                     this.setState({ Loading: false })
-                    console.log(e.response)
-                })
+                }
             })
             .catch(e => {
                 this.setState({ Loading: false })
@@ -159,7 +164,7 @@ class EditProfile extends Component {
                     <div>
                         <table class="table table-borderless">
                             <tbody>
-                                <tr className=""> 
+                                <tr className="">
                                     <th scope="row">Business Name</th>
                                     <td>
                                         <TextField
@@ -225,7 +230,7 @@ class EditProfile extends Component {
                                         <TextField
                                             label="Line 1"
                                             id="line1"
-                                            
+
                                             defaultValue={this.state.values.line1}
                                             onChange={this.valuesChangeHandler}
                                             variant="outlined"

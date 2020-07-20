@@ -82,7 +82,7 @@ class BusinessInfo extends Component {
                             <div className={window.innerWidth > 768 ? "col-8" : "col-12"}>
                                 <BusinessSlideshow images={this.state.business_data['business_images']} />
                             </div>
-                            <div className={window.innerWidth > 768 ? "col-4" : "col-12"}>
+                            <div className={window.innerWidth > 768 ? "col-4 p-0" : "col-12"}>
                                 <SalonInfoCard data={this.state.business_data} />
                             </div>
                         </div>

@@ -38,6 +38,9 @@ export class Navigator extends Component {
     }
 
     componentDidMount() {
+
+        console.log(window.innerWidth)
+
         
         navigator.geolocation.getCurrentPosition(this.updateCoordinates)
         const data = JSON.parse(localStorage.getItem('state'))

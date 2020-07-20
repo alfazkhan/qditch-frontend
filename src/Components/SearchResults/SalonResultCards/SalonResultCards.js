@@ -61,6 +61,10 @@ const SalonResults = (props) => {
     return arr; // for testing
   }
 
+  const getArraysExclusion = (a1, a2) => {
+    return a1.filter(function (n) { return a2.indexOf(n) === -1; });
+  }
+
   const bubbleSort = (Array) => {
     let len = Array.length;
     for (let i = 0; i < len; i++) { //you can also use "for in", so you don't need the variable "len"
@@ -75,13 +79,13 @@ const SalonResults = (props) => {
       }
     }
 
-    for (var i = 0; i < len; i++) {
-      if(Array[i].distance === null){
-        array_move(Array,i,len-1)
+    const temparray = []
+    for (var i = 0; i < Array.length; i++) {
+      if (Array[i].distance === null) {
+        temparray.push(Array[i])
       }
     }
-    console.log(Array)
-    return Array;
+    return getArraysExclusion(Array, temparray).concat(temparray);
   };
 
 

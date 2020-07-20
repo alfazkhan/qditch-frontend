@@ -13,7 +13,7 @@ export class SalonInfoCard extends Component {
     componentDidMount() {
 
         const safetyFeatures = this.state.safetyFeatures
-        // console.log(this.props.data)
+        console.log(this.props.data)
         const promise = [Axios.get('api/safety_feature/safety_features/')
             .then(res => {
                 // console.log(res.data)
@@ -41,7 +41,8 @@ export class SalonInfoCard extends Component {
                 {!this.state.Loading
                     ? <Paper elevation={3} className="p-0">
                         <Heading text={this.props.data['business_name']} />
-                        <strong className="ml-3 mr-3 mb-1 text-break">{this.props.data['address']}</strong>
+                        <strong className="ml-3 mr-3 mb-1 text-break">{this.props.data['line1'] +", "+ this.props.data['line2']}</strong><br/>
+                        <strong className="ml-3 mr-3 mb-1 text-break">{this.props.data['area'] + ", " + this.props.data['city_name'] + ", " + this.props.data['pincode']}</strong>
                         <div className='mt-1 mb-3' style={{maxHeight: 400,overflow: 'scroll',overflowX: 'hidden'}}>
                         {this.state.safetyFeatures}
                         </div>
