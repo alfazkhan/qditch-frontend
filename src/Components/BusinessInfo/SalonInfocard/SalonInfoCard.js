@@ -39,7 +39,7 @@ export class SalonInfoCard extends Component {
         return (
             <div>
                 {!this.state.Loading
-                    ? <Paper elevation={3} className="p-0">
+                    ? <div>
                         <Heading text={this.props.data['business_name']} />
                         <strong className="ml-3 mr-3 mb-1 text-break">{this.props.data['line1'] +", "+ this.props.data['line2']}</strong><br/>
                         <strong className="ml-3 mr-3 mb-1 text-break">{this.props.data['area'] + ", " + this.props.data['city_name'] + ", " + this.props.data['pincode']}</strong>
@@ -47,7 +47,7 @@ export class SalonInfoCard extends Component {
                         {this.state.safetyFeatures}
                         </div>
 
-                    </Paper>
+                    </div>
                     : null}
 
 

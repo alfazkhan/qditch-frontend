@@ -1,6 +1,7 @@
 import React, { useEffect, useState, Component } from 'react'
 import Axios from '../../../Axios'
 import Colors from '../../../Constants/Colors'
+import { Paper } from '@material-ui/core'
 
 
 class BusinessSlideshow extends Component {
@@ -68,7 +69,7 @@ const styles = {
         objectFit: 'cover',
         objectPosition: 'center',
         width: window.innerWidth,
-        height: window.innerWidth < 768 ? 200 :400,
+        height: window.innerWidth < 768 ? 200 : 400,
         position: 'sticky',
         overFlow: 'hidden',
         top: 1000

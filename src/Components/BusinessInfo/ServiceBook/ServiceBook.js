@@ -335,7 +335,7 @@ export class ServiceBook extends Component {
             <div className="container">
                 <div className="row">
 
-                    <Paper className="col" elevation={3} style={{ backgroundColor: '#333' }}>
+                    <Paper className="col" elevation={3} style={{ backgroundColor: '#343A40' }}>
                         <div style={{ overflowX: window.innerWidth < 768 ? "scroll" : "hidden" }}>
                             <table class="table">
                                 <thead className="table-dark">
@@ -405,18 +405,14 @@ export class ServiceBook extends Component {
                     ?
                     <div>
                         <div className="row">
-                            <tr>
-                                <th scope="col">
-                                    <Chip color="primary" className="col ml-5 mr-5" label={this.state.totalPrice + " ₹"} />
-                                </th>
-                                <th scope="col">
-                                    <Chip color="secondary" className="col ml-5 mr-5" label={this.timeConvert(this.state.totalDuration)} />
-                                </th>
-                            </tr>
+
+                            <Chip color="primary" className="col" label={this.state.totalPrice + " ₹"} />
+                            <Chip color="secondary" className="col" label={this.timeConvert(this.state.totalDuration)} />
+
                         </div>
                         <div className="row mx-auto mt-3">
                             <tr>
-                                <th className="text-center mx-auto" style={{color: 'grey'}}> *There might be a COVID-19 additional price related to this salon </th>
+                                <th className="text-center mx-auto" style={{ color: 'grey' }}> *There might be a COVID-19 additional price related to this salon </th>
                             </tr>
                         </div>
                     </div>
