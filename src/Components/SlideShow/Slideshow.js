@@ -106,8 +106,8 @@ const Slideshow = (props) => {
                     </div>
                     < div className="row mx-auto my-3">
                         <div className="col-1" />
-                        <button onClick={clickHandler} className="col-4 btn btn-primary" style={styles.chip} id="Nails">Nails</button>
-                        <div className="col-2" />
+                        {/* <button onClick={clickHandler} className="col-4 btn btn-primary" style={styles.chip} id="Nails">Nails</button> */}
+                        {/* <div className="col-2" /> */}
                         <button onClick={clickHandler} className="col-4 btn btn-primary" style={styles.chip} id="Massage" >Massage</button>
                         <div className="col-1" />
                     </div>

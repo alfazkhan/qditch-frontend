@@ -218,7 +218,7 @@ class EditProfile extends Component {
                                             <MenuItem value={'4'}>Makeup</MenuItem>
                                             <MenuItem value={'5'}>Eyebrows</MenuItem>
                                             <MenuItem value={'6'}>Hair Removal</MenuItem>
-                                            <MenuItem value={'7'}>Nails</MenuItem>
+                                            {/* <MenuItem value={'7'}>Nails</MenuItem> */}
                                             <MenuItem value={'8'}>Massage</MenuItem>
 
                                         </Select>

@@ -54,9 +54,9 @@ const Categories = (props) => {
                 <div className="col mb-1" onClick={clickHandler} >
                     <Link  className="navbar-link text-bold" id="Hair Removal" style={styles.Avatar}>Hair Removal</Link>
                 </div>
-                <div className="col mb-1" onClick={clickHandler} >
+                {/* <div className="col mb-1" onClick={clickHandler} >
                     <Link  className="navbar-link text-bold" id="Nails" style={styles.Avatar}>Nails</Link>
-                </div>
+                </div> */}
                 <div className="col mb-1" onClick={clickHandler} >
                     <Link  className="navbar-link text-bold" id="Massage" style={styles.Avatar}>Massage</Link>
                 </div>
