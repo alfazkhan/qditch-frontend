@@ -48,9 +48,11 @@ export class SalonInfoCard extends Component {
                         </div>
                         {
                             this.props.data['map_url'] === ""
-                            ?null
+                            ? this.props.data['latitude'] 
+                            ? <a href={"http://maps.google.com/maps?q="+this.props.data['latitude']+","+this.props.data['longitude']} target="blank"><button className="btn btn-primary btn-sm btn-block">Open in Maps</button></a> 
+                            :null
                             :
-                        <a href={this.props.data['map_url']} target="blank"><button className="btn btn-primary">Open in Maps</button></a>
+                        <a href={this.props.data['map_url']} target="blank"><button className="btn btn-primary btn-sm btn-block">Open in Maps</button></a>
                         }
                     </div>
                     : null}
