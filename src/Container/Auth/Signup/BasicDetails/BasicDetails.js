@@ -190,7 +190,8 @@ class BasicDetails extends Component {
     otpHandler = () => {
         if (this.validateData()) {
             const data = {
-                "user": this.state.values.email
+                "user": this.state.values.email,
+                "name": this.state.values.first_name
             }
             Axios.post('api/users/otp/',data)
             .catch(e=>{

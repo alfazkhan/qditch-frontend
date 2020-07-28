@@ -42,11 +42,16 @@ export class SalonInfoCard extends Component {
                     ? <div>
                         <Heading text={this.props.data['business_name']} />
                         <strong className="ml-3 mr-3 mb-1 text-break">{this.props.data['line1'] +", "+ this.props.data['line2']}</strong><br/>
-                        <strong className="ml-3 mr-3 mb-1 text-break">{this.props.data['area'] + ", " + this.props.data['city_name'] + ", " + this.props.data['pincode']}</strong>
-                        <div className='mt-1 mb-3' style={{maxHeight: 400,overflow: 'scroll',overflowX: 'hidden'}}>
+                        <strong className="ml-3 mr-3 mb-1 text-break">{this.props.data['area'] + ", " + this.props.data['city_name'] + ", " + this.props.data['pincode']}</strong><br/>
+                        <div className='mt-1 mb-1' style={{maxHeight: 400,overflow: 'scroll',overflowX: 'hidden'}}>
                         {this.state.safetyFeatures}
                         </div>
-
+                        {
+                            this.props.data['map_url'] === ""
+                            ?null
+                            :
+                        <a href={this.props.data['map_url']} target="blank"><button className="btn btn-primary">Open in Maps</button></a>
+                        }
                     </div>
                     : null}
 
