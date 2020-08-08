@@ -3,6 +3,7 @@ import Slide1 from '../../Assets/Slide-1.png'
 import Slide2 from '../../Assets/Slide-2.png'
 import Slide3 from '../../Assets/Slide-3.png'
 import Slide4 from '../../Assets/Slide-4.png'
+import Slide5 from '../../Assets/Slide-5.png'
 import Categories from '../Categories/Categories'
 import { Avatar, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
 import Axios from '../../Axios'
@@ -50,6 +51,7 @@ const Slideshow = (props) => {
                     <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
                     <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
                     <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+                    {/* <li data-target="#carouselExampleIndicators" data-slide-to="4"></li> */}
                 </ol>
                 <div className="carousel-inner">
                     <div className="carousel-item active">
@@ -64,6 +66,9 @@ const Slideshow = (props) => {
                     <div className="carousel-item">
                         <img className="d-block w-100" src={Slide4} style={styles.thumbpost_center} alt="First slide" />
                     </div>
+                    {/* <div className="carousel-item">
+                        <img className="d-block w-100" src={Slide5} style={styles.thumbpost_center} alt="First slide" />
+                    </div> */}
 
 
                 </div>
@@ -128,7 +133,7 @@ const styles = {
         objectFit: 'cover',
         objectPosition: 'top',
         width: window.innerWidth,
-        maxHeight: 550,
+        maxHeight: 450,
         position: 'sticky',
         overFlow: 'hidden',
         top: 1000
@@ -138,7 +143,7 @@ const styles = {
         objectFit: 'cover',
         objectPosition: 'bottom',
         width: window.innerWidth,
-        maxHeight: 550,
+        maxHeight: 450,
         position: 'sticky',
         overFlow: 'hidden',
         top: 1000
@@ -148,7 +153,7 @@ const styles = {
         objectFit: 'cover',
         objectPosition: 'center',
         width: window.innerWidth,
-        maxHeight: 550,
+        maxHeight: 450,
         position: 'sticky',
         overFlow: 'hidden',
         top: 1000

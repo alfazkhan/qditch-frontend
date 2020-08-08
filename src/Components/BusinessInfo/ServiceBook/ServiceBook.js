@@ -8,6 +8,7 @@ import Axios from '../../../Axios'
 import MuiAlert from '@material-ui/lab/Alert';
 import ResponseModal from './ResponseModal';
 import ScheduleModal from '../ScheduleModal/ScheduleModal';
+import { withRouter } from 'react-router-dom';
 
 
 export class ServiceBook extends Component {
@@ -438,8 +439,9 @@ export class ServiceBook extends Component {
                         Book Now
                 </Button>
                     :
-                    <div className="mt-4">
-                        <strong className="text-danger">*Please Sign in/Sign up to book an Appointment</strong>
+                    <div className="mt-4 btn-block">
+                        <div className="btn btn-sm w-50 btn-primary" onClick={()=>this.props.history.push('/Login')}>Login</div>
+                        <div className="btn btn-sm w-50 btn-success" onClick={()=>this.props.history.push('/Register/User')}>Sign Up</div>
                     </div>
                 }
 
@@ -484,4 +486,4 @@ const mapDispatchToProps = {
 
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ServiceBook)
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(ServiceBook))

@@ -21,7 +21,6 @@ export class App extends Component {
 
   componentWillMount() {
     const data = JSON.parse(localStorage.getItem('state'))
-    console.log("Scroll Fix")
     this.props.onstart(data)
     this.setState({Loading:false})
   }

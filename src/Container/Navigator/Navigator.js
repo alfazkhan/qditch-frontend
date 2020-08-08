@@ -45,7 +45,7 @@ export class Navigator extends Component {
         navigator.geolocation.getCurrentPosition(this.updateCoordinates)
         const data = JSON.parse(localStorage.getItem('state'))
         if (data) {
-            console.log(data)
+            // console.log(data)
             this.setState({
                 userLoggedIn: data.userLoggedIn,
                 user_id: data.user_id
