@@ -42,6 +42,8 @@ const Slideshow = (props) => {
 
     }
 
+
+
     return (
         <div>
             
@@ -90,30 +92,30 @@ const Slideshow = (props) => {
                     <Heading text="We Provide" />
                     < div className="row mx-auto my-3">
                         <div className="col-1" />
-                        <button onClick={clickHandler} className="col-4 btn btn-primary" style={styles.chip} id="Hair">Hair</button>
+                        <button onClick={clickHandler} className="col-4 btn chip" style={styles.chip} id="Hair">Hair</button>
                         <div className="col-2" />
-                        <button onClick={clickHandler} className="col-4 btn btn-primary" style={styles.chip} id="Skin">Skin</button>
+                        <button onClick={clickHandler} className="col-4 btn chip" style={styles.chip} id="Skin">Skin</button>
                         <div className="col-1" />
                     </div>
                     < div className="row mx-auto my-3">
                         <div className="col-1" />
-                        <button onClick={clickHandler} className="col-4 btn btn-primary" style={styles.chip} id="Spa">Spa</button>
+                        <button onClick={clickHandler} className="col-4 btn chip" style={styles.chip} id="Spa">Spa</button>
                         <div className="col-2" />
-                        <button onClick={clickHandler} className="col-4 btn btn-primary" style={styles.chip} id="Makeup">Makeup</button>
+                        <button onClick={clickHandler} className="col-4 btn chip" style={styles.chip} id="Makeup">Makeup</button>
                         <div className="col-1" />
                     </div>
                     < div className="row mx-auto my-3">
                         <div className="col-1" />
-                        <button onClick={clickHandler} className="col-4 btn btn-primary" style={styles.chip} id="Eyebrows">Eyebrows</button>
+                        <button onClick={clickHandler} className="col-4 btn chip" style={styles.chip} id="Eyebrows">Eyebrows</button>
                         <div className="col-2" />
-                        <button onClick={clickHandler} className="col-4 btn btn-primary" style={styles.chip} id="Hair Removal">Hair Removal</button>
+                        <button onClick={clickHandler} className="col-4 btn chip" style={styles.chip} id="Hair Removal">Hair Removal</button>
                         <div className="col-1" />
                     </div>
                     < div className="row mx-auto my-3">
                         <div className="col-1" />
-                        {/* <button onClick={clickHandler} className="col-4 btn btn-primary" style={styles.chip} id="Nails">Nails</button> */}
+                        {/* <button onClick={clickHandler} className="col-4 btn chip" style={styles.chip} id="Nails">Nails</button> */}
                         {/* <div className="col-2" /> */}
-                        <button onClick={clickHandler} className="col-4 btn btn-primary" style={styles.chip} id="Massage" >Massage</button>
+                        <button onClick={clickHandler} className="col-4 btn chip" style={styles.chip} id="Massage" >Massage</button>
                         <div className="col-1" />
                     </div>
 
@@ -163,6 +165,7 @@ const styles = {
         color: 'white',
         borderRadius: '5px',
         height: 40,
+        backgroundColor: Colors.buttonColor
     }
 
 }

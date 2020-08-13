@@ -35,9 +35,9 @@ export class FeatureCard extends Component {
                         : null}
                     <CardContent style={styles.content}>
                         <Typography component="h5" variant="h5">
-                            <strong> {this.props.heading}</strong>
+                            <strong style={{fontFamily:'Montserrat'}}> {this.props.heading}</strong>
                         </Typography>
-                        <Typography variant="subtitle1" color="textSecondary" className="mt-4">
+                        <Typography variant="subtitle1" color="textSecondary" className="mt-4" style={{fontFamily:'Montserrat'}}>
                             {this.props.text}
                         </Typography>
                     </CardContent>
@@ -60,7 +60,8 @@ export class FeatureCard extends Component {
 const styles = {
     root: {
         display: 'flex',
-        height: 200
+        height: 200,
+        fontFamily: 'Montserrat'
     },
     details: {
         flexDirection: 'column',

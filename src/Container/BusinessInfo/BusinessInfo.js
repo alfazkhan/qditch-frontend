@@ -11,6 +11,7 @@ import ServiceBook from '../../Components/BusinessInfo/ServiceBook/ServiceBook'
 import SalonInfoCard from '../../Components/BusinessInfo/SalonInfocard/SalonInfoCard'
 import FeedbackList from '../../Components/Feedback/FeedbackList/FeedbackList'
 import FeedbackCreate from '../../Components/Feedback/FeedbackCreate/FeedbackCreate'
+import Colors from '../../Constants/Colors'
 
 
 class BusinessInfo extends Component {
@@ -47,7 +48,6 @@ class BusinessInfo extends Component {
     timeModalhandler = () => {
         const modalContent = (
             <Dialog onClose={() => this.setState({ timeModal: false })} aria-labelledby="simple-dialog-title" open={true}>
-                <DialogTitle id="simple-dialog-title">Timings</DialogTitle>
                 <DialogContent>
                     <SalonTimingsCard timings={this.state.business_data['business_timings'][0]} />
                 </DialogContent>
@@ -76,7 +76,7 @@ class BusinessInfo extends Component {
                     :
                     <div className="container-fluid my-5" style={{ width: '90%' }}>
                         <div className="row mx-auto">
-                            <Button onClick={() => this.props.history.goBack()} color="default" variant="contained" className="mr-auto" >{"<< Back"}</Button>
+                            <Button onClick={() => this.props.history.goBack()} style={{backgroundColor: Colors.danger,color: '#fff'}} variant="contained" className="mr-auto" >{"<< Back"}</Button>
                         </div>
                         <div className="row my-3">
                             <div className={window.innerWidth > 768 ? "col-8" : "col-12"}>
@@ -89,7 +89,7 @@ class BusinessInfo extends Component {
 
                         <div className="row mb-3">
                             <div className={window.innerWidth > 768 ? "col-4" : "col-12"}>
-                                <Button variant='contained' fullWidth className="bg-warning" style={{ color: 'white' }} onClick={() => this.setState({ reviewsListModel: true })}>
+                                <Button variant='contained' fullWidth style={{ color: 'black', backgroundColor: Colors.warning }} onClick={() => this.setState({ reviewsListModel: true })}>
                                     <i class="fa fa-star mr-3" aria-hidden="true"></i>
                                         All Reviews
                                 </Button>
@@ -119,7 +119,7 @@ class BusinessInfo extends Component {
 
                         {window.innerWidth < 768
                             ? <div className="row mx-auto my-4">
-                                <Button onClick={this.timeModalhandler} color="primary" variant="contained" fullWidth >View Salon Timings</Button>
+                                <Button onClick={this.timeModalhandler} style={{backgroundColor: Colors.buttonColor, color: '#fff'}} variant="contained" fullWidth >View Salon Timings</Button>
                                 {this.state.timeModal
                                     ? this.state.modalContent
                                     : null

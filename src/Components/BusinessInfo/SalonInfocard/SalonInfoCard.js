@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Paper, Fade } from '@material-ui/core'
 import Heading from '../../Heading/Heading'
 import Axios from '../../../Axios'
+import Color from '../../../Constants/Colors'
 
 export class SalonInfoCard extends Component {
 
@@ -43,17 +44,17 @@ export class SalonInfoCard extends Component {
                         <Heading text={this.props.data['business_name']} />
                         <strong className="ml-3 mr-3 mb-1 text-break">{this.props.data['line1'] +", "+ this.props.data['line2']}</strong><br/>
                         <strong className="ml-3 mr-3 mb-1 text-break">{this.props.data['area'] + ", " + this.props.data['city_name'] + ", " + this.props.data['pincode']}</strong><br/>
-                        <div className='mt-1 mb-1' style={{maxHeight: 400,overflow: 'scroll',overflowX: 'hidden'}}>
-                        {this.state.safetyFeatures}
-                        </div>
                         {
                             this.props.data['map_url'] === ""
                             ? this.props.data['latitude'] 
-                            ? <a href={"http://maps.google.com/maps?q="+this.props.data['latitude']+","+this.props.data['longitude']} target="blank"><button className="btn btn-primary btn-sm btn-block">Open in Maps</button></a> 
+                            ? <a href={"http://maps.google.com/maps?q="+this.props.data['latitude']+","+this.props.data['longitude']} target="blank"><button className="btn btn-sm btn-block my-2" style={{backgroundColor: Color.buttonColor,color:'#fff'}}>Get Directions</button></a> 
                             :null
                             :
-                        <a href={this.props.data['map_url']} target="blank"><button className="btn btn-primary btn-sm btn-block">Open in Maps</button></a>
+                        <a href={this.props.data['map_url']} target="blank"><button className="btn btn-sm btn-block my-2" style={{backgroundColor: Color.buttonColor,color:'#fff'}}>Get Directions</button></a>
                         }
+                        <div className='mt-1 mb-1' style={{maxHeight: 400,overflow: 'scroll',overflowX: 'hidden', color: '#fff'}}>
+                        {this.state.safetyFeatures}
+                        </div>
                     </div>
                     : null}
 

@@ -188,7 +188,7 @@ class Results extends Component {
         // console.log(finalArray)
 
         if (finalArray.length > 0) {
-            results = <SalonResultCards business_ids={finalArray} coordinatedData={this.state.coordinatedData} />
+            results = <SalonResultCards  business_ids={finalArray} coordinatedData={this.state.coordinatedData} />
         } else {
             results = (
                 <div className="mx-auto mt-5">
@@ -209,15 +209,15 @@ class Results extends Component {
     render() {
         return (
             <div className="container-fluid" style={{ width: '90%' }}>
-                <Card className="my-4 w-75 mx-auto" elevation={5}>
-                    <h1>{this.state.categoryName}</h1>
-                </Card>
+                {/* <Card className="my-4 w-75 mx-auto" elevation={5} style={{color: '#EF5528'}}> */}
+                    <h1 className="my-4" style={{color: '#1B1D21',fontFamily: 'Montserrat',fontWeight: 'bold'}} >{this.state.categoryName}</h1>
+                {/* </Card> */}
                 {/* {this.state.Loading
                     ? <CircularProgress /> */}
                 <div>
                     <div className="row">
                         <FormControl variant="outlined" className="col-md">
-                            <InputLabel>Salon Type Filter</InputLabel>
+                            <InputLabel style={{color: '#000',fontFamily: 'Montserrat'}}>Salon Type Filter</InputLabel>
                             <Select
                                 // value={age}
                                 onChange={(e) => this.salonTypeFilterHandler(e)}
@@ -231,7 +231,7 @@ class Results extends Component {
                         </FormControl>
 
                         <FormControl variant="outlined" className="col-md">
-                            <InputLabel>City</InputLabel>
+                            <InputLabel style={{color: '#000',fontFamily: 'Montserrat'}}>City</InputLabel>
                             <Select
                                 // value={age}
                                 onChange={(e) => this.cityFilterHandler(e)}
@@ -246,18 +246,19 @@ class Results extends Component {
                             </Select>
                         </FormControl>
 
-                        <FormControl variant="outlined" className="col-md">
-                            <InputLabel>Salon Service Filter</InputLabel>
+                        <FormControl variant="outlined" className="col-md" >
+                            <InputLabel style={{color: '#000',fontFamily: 'Montserrat'}}>Salon Service Filter</InputLabel>
                             <Select
                                 // value={age}
                                 onChange={(e) => this.salonServiceFilterHandler(e)}
                                 label="Saloon Service Filter"
+                                
                             >
                                 <MenuItem value="All">
                                     All
                                 </MenuItem>
 
-                                <MenuItem value={'1'}>Haircut</MenuItem>
+                                <MenuItem value={'1'} >Haircut</MenuItem>
                                 <MenuItem value={'2'}>Hair wash</MenuItem>
                                 <MenuItem value={'3'}>Hair colour</MenuItem>
                                 <MenuItem value={'4'}>Highlights</MenuItem>

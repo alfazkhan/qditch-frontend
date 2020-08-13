@@ -336,10 +336,10 @@ export class ServiceBook extends Component {
             <div className="container">
                 <div className="row">
 
-                    <Paper className="col" elevation={3} style={{ backgroundColor: '#343A40' }}>
+                    <Paper className="col" elevation={3} style={{ backgroundColor: Colors.primary }}>
                         <div style={{ overflowX: window.innerWidth < 768 ? "scroll" : "hidden" }}>
-                            <table class="table">
-                                <thead className="table-dark">
+                            <table class="table" >
+                                <thead className="table-dark" style={{backgroundColor: Colors.primary}} >
                                     <tr>
                                         {this.props.user_id
                                             ? <th scope="col">#</th>
@@ -418,15 +418,18 @@ export class ServiceBook extends Component {
                         </div>
                     </div>
                     : null}
-
+                {this.props.user_id
+                ?
                 <Button variant="contained"
                     className="mt-4"
                     fullWidth
                     color="secondary"
                     onClick={this.scheduleModalHandler}
+                    style={{backgroundColor: Colors.danger}}
                 >
                     View This Date Schedule
                 </Button>
+            :null}
 
                 {this.state.scheduleModal ? this.state.scheduleModalContent : null}
                 {this.props.user_id
@@ -440,8 +443,8 @@ export class ServiceBook extends Component {
                 </Button>
                     :
                     <div className="mt-4 btn-block">
-                        <div className="btn btn-sm w-50 btn-primary" onClick={()=>this.props.history.push('/Login')}>Login</div>
-                        <div className="btn btn-sm w-50 btn-success" onClick={()=>this.props.history.push('/Register/User')}>Sign Up</div>
+                        <div className="btn btn-sm w-50" style={{backgroundColor:Colors.buttonColor,color:'#fff'}} onClick={()=>this.props.history.push('/Login')}>Login</div>
+                        <div className="btn btn-sm w-50" style={{backgroundColor:Colors.success,color:'#fff'}} onClick={()=>this.props.history.push('/Register/User')}>Sign Up</div>
                     </div>
                 }
 

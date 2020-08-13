@@ -73,7 +73,7 @@ export class Navigator extends Component {
             <div>
                 <div className={"navigation-bar pb-3"}>
                     <div>
-                        <nav className="navbar navbar-expand-lg" style={{ backgroundColor: Colors.primary }}>
+                        <nav className="navbar navbar-expand-lg" style={{ backgroundColor: Colors.primary, fontWeight: 'bold' }}>
                             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
                                 {/* <span className="navbar-toggler-icon" style={{color:'white'}}></span>*/}
                                 <MenuRoundedIcon style={styles.navlink} />
@@ -90,19 +90,19 @@ export class Navigator extends Component {
                                         ?
                                         <li className="nav-item">
                                             <Button variant="contained" size="small" color="primary">
-                                                <Link to='/admin/dashboard' className={"navbar-link "} style={styles.navlink}>Admin Dashboard</Link>
+                                                <Link to='/admin/dashboard' className={" "} style={styles.navlink}>Admin Dashboard</Link>
                                             </Button>
                                         </li>
                                         : null
                                     } */}
                                         <li className="nav-item">
-                                            <Link to={'/profile'} className={"navbar-link text-bold"} style={styles.navlink}>My Profile </Link>
+                                            <Link to={'/profile'} className={" text-bold"} style={styles.navlink}>My Profile </Link>
                                         </li>
                                     </ul>
                                     :
                                     <ul className="navbar-nav ml-auto mt-lg-0">
                                         <li className="nav-item">
-                                            <Link to='/Login' className={"navbar-link "} style={styles.navlink} >Login</Link>
+                                            <Link to='/Login' className={" "} style={styles.navlink} >Login</Link>
                                         </li>
                                         <li className="nav-item">
                                             {/* <Button variant="contained" size="small" color="primary"> */}

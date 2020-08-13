@@ -109,8 +109,8 @@ class SalonCard extends Component {
           :
           <ul className='list-group mb-4'>
             {this.props.salon.sort().map((salon, index) => (
-              <div key={index} className="row" onClick={() => this.props.history.push('/saloninfo/' + salon.id)}>
-                <Card className={window.innerWidth > 768 ? "my-4 col-4" : "col-12"}>
+              <div key={index} className="row" onClick={() => this.props.history.push('/saloninfo/' + salon.id)} >
+                <Card className={window.innerWidth > 768 ? "my-4 col-4" : "col-12"} >
                   <CardActionArea>
                     <CardMedia
                       component="img"
@@ -118,9 +118,10 @@ class SalonCard extends Component {
                       height="200"
                       image={this.state.coverImages[salon.id] ? "https://master.qditch.com" + this.state.coverImages[salon.id] : "https://images.pexels.com/photos/705255/pexels-photo-705255.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"}
                       title={salon.business_name}
+                      className="mt-3"
                     />
                   </CardActionArea>
-                </Card>
+                </Card >
                 <Card className={window.innerWidth > 768 ? "my-4 col-8" : "col-12 mb-3"}>
                   <CardActionArea>
                     <CardContent>
@@ -128,19 +129,19 @@ class SalonCard extends Component {
                         <Typography gutterBottom variant="h6" className="col text-right my-auto">
                           {salon.distance !== "" && salon.distance !== null && typeof salon.distance !== "undefined"
                           ?
-                          <strong className="text-right text-primary"> {salon.distance + "KM"}</strong>
+                          <strong className="text-right" style={{color: '#00B0B9',fontFamily: 'Montserrat'}}> {salon.distance + "KM"}</strong>
                         :null}
                         </Typography>
                       </div>
                       <div className="row">
                         <Typography gutterBottom variant="h4" component="h2" className="col-8 mx-auto">
-                          <strong> {salon.business_name} </strong>
+                          <strong style={{fontFamily:'Montserrat',color:'#1B1D21'}}> {salon.business_name} </strong>
                         </Typography>
                       </div>
-                      <Typography variant="body2" color="textPrimary" component="p">
+                      <Typography variant="body2" color="textPrimary" component="p" style={{fontFamily: 'Montserrat'}}>
                         {salon.line1 +", "+ salon.line2}
                       </Typography>
-                      <Typography variant="body2" color="textPrimary" component="p">
+                      <Typography variant="body2" color="textPrimary" component="p" style={{fontFamily: 'Montserrat'}}>
                         {salon.area + ", " + salon.city_name + ", " + salon.pincode}
                       </Typography>
 
@@ -152,7 +153,7 @@ class SalonCard extends Component {
                     </CardContent>
                   </CardActionArea>
                   <CardActions className="mt-auto">
-                    <Button className="ml-auto mt-2" size="small" color="primary">
+                    <Button className="ml-auto mt-2" size="small" style={{color: '#00B0B9',fontFamily: 'Montserrat'}}>
                       Book Appointment Now
                     </Button>
                   </CardActions>
