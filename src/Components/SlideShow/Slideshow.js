@@ -3,7 +3,7 @@ import Slide1 from '../../Assets/Slide-1.png'
 import Slide2 from '../../Assets/Slide-2.png'
 import Slide3 from '../../Assets/Slide-3.png'
 import Slide4 from '../../Assets/Slide-4.png'
-import Slide5 from '../../Assets/Slide-5.png'
+import Slide5 from '../../Assets/Slide-5.jpg'
 import Categories from '../Categories/Categories'
 import { Avatar, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
 import Axios from '../../Axios'
@@ -57,7 +57,7 @@ const Slideshow = (props) => {
                 </ol>
                 <div className="carousel-inner">
                     <div className="carousel-item">
-                        <img className="d-block w-100" src={Slide1} style={styles.thumbpost_center} alt="First slide" />
+                        <img className="d-block w-100" src={Slide1} style={styles.thumbpost_up} alt="First slide" />
                     </div>
                     <div className="carousel-item active">
                         <img className="d-block w-100" src={Slide5} style={styles.thumbpost_up} alt="First slide" />
