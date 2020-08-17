@@ -53,7 +53,7 @@ const Slideshow = (props) => {
                     <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
                     <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
                     <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
-                    {/* <li data-target="#carouselExampleIndicators" data-slide-to="4"></li> */}
+                    <li data-target="#carouselExampleIndicators" data-slide-to="4"></li>
                 </ol>
                 <div className="carousel-inner">
                     <div className="carousel-item active">
@@ -68,9 +68,9 @@ const Slideshow = (props) => {
                     <div className="carousel-item">
                         <img className="d-block w-100" src={Slide4} style={styles.thumbpost_center} alt="First slide" />
                     </div>
-                    {/* <div className="carousel-item">
+                    <div className="carousel-item">
                         <img className="d-block w-100" src={Slide5} style={styles.thumbpost_center} alt="First slide" />
-                    </div> */}
+                    </div>
 
 
                 </div>
