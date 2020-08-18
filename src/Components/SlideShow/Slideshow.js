@@ -56,10 +56,10 @@ const Slideshow = (props) => {
                     <li data-target="#carouselExampleIndicators" data-slide-to="4"></li>
                 </ol>
                 <div className="carousel-inner">
-                    <div className="carousel-item active">
+                    <div className="carousel-item">
                         <img className="d-block w-100" src={Slide1} style={styles.thumbpost_up} alt="First slide" />
                     </div>
-                    <div className="carousel-item">
+                    <div className="carousel-item active">
                         <img className="d-block w-100" src={Slide5} style={styles.thumbpost_up} alt="First slide" />
                     </div>
                     <div className="carousel-item">
