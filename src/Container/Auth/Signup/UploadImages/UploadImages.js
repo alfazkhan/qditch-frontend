@@ -312,6 +312,7 @@ class UploadImages extends Component {
                             </div>
                         </div>
                     </form>
+                    <strong className="text-danger">Images should be in lanscape mode for better orientation</strong>
                 </Box>
                 <div className="submitButton text-right">
                     <Button variant="contained" size="large" style={{ backgroundColor: Colors.success, color: 'white' }} onClick={this.submitHandler}>

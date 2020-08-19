@@ -30,7 +30,7 @@ class SalonCard extends Component {
 
 
     const salonData = this.props.salon
-    // console.log(salonData)
+    console.log(salonData)
     for (var key in salonData) {
       const serviceList = []
       for (var index in salonData[key].business_services) {
@@ -101,7 +101,7 @@ class SalonCard extends Component {
 
   render() {
     return (
-      <div className={window.innerWidth > 768 ? "container-fluid" : "container-fluid mt-4"} >
+      <div className={window.innerWidth > 768 ? "mx-auto" : "mx-auto mt-4"} >
         {this.state.Loading
           ?
           <CircularProgress className="mt-5" />
@@ -110,7 +110,7 @@ class SalonCard extends Component {
           <ul className='list-group mb-4'>
             {this.props.salon.sort().map((salon, index) => (
               <div key={index} className="row" onClick={() => this.props.history.push('/saloninfo/' + salon.id)} >
-                <Card className={window.innerWidth > 768 ? "my-4 col-4" : "col-12"} >
+                <div className={window.innerWidth > 768 ? "my-4 col-4" : "col-12"} >
                   <CardActionArea>
                     <CardMedia
                       component="img"
@@ -118,11 +118,11 @@ class SalonCard extends Component {
                       height="200"
                       image={this.state.coverImages[salon.id] ? "https://master.qditch.com" + this.state.coverImages[salon.id] : "https://images.pexels.com/photos/705255/pexels-photo-705255.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"}
                       title={salon.business_name}
-                      className="mt-3"
+                      className={window.innerWidth > 768 ? "my-5" : "my-auto"}
                     />
                   </CardActionArea>
-                </Card >
-                <Card className={window.innerWidth > 768 ? "my-4 col-8" : "col-12 mb-3"}>
+                </div >
+                <div className={window.innerWidth > 768 ? "my-4 col-8" : "col-12 mb-3"}>
                   <CardActionArea>
                     <CardContent>
                       <div className="row">
@@ -134,30 +134,33 @@ class SalonCard extends Component {
                         </Typography>
                       </div>
                       <div className="row">
-                        <Typography gutterBottom variant="h4" component="h2" className="col-8 mx-auto">
+                        <Typography gutterBottom variant="h6" className="col-8 text-left">
                           <strong style={{fontFamily:'Montserrat',color:'#1B1D21'}}> {salon.business_name} </strong>
                         </Typography>
                       </div>
-                      <Typography variant="body2" color="textPrimary" component="p" style={{fontFamily: 'Montserrat'}}>
+                      <Typography variant="body2" color="textPrimary" className="text-left" component="p" style={{fontFamily: 'Montserrat'}}>
                         {salon.line1 +", "+ salon.line2}
                       </Typography>
-                      <Typography variant="body2" color="textPrimary" component="p" style={{fontFamily: 'Montserrat'}}>
+                      <Typography variant="body2" color="textPrimary" className="text-left" component="p" style={{fontFamily: 'Montserrat'}}>
                         {salon.area + ", " + salon.city_name + ", " + salon.pincode}
+                      </Typography>
+                      <Typography variant="body2" color="textPrimary" className="text-left" component="p" style={{fontFamily: 'Montserrat'}}>
+                        {salon.about !== null ? salon.about: null}
                       </Typography>
 
 
-                      <table className="table mt-3">
+                      <table className="table mt-3" style={{fontSize:"14px"}}>
                         {this.state.salonServices[salon.id].slice(0, 4)}
                       </table>
 
                     </CardContent>
                   </CardActionArea>
-                  <CardActions className="mt-auto">
-                    <Button className="ml-auto mt-2" size="small" style={{color: '#00B0B9',fontFamily: 'Montserrat'}}>
+                  <CardActions>
+                    <Button className="ml-auto" size="small" style={{color: '#00B0B9',fontFamily: 'Montserrat'}}>
                       Book Appointment Now
                     </Button>
                   </CardActions>
-                </Card>
+                </div>
 
               </div>
 
