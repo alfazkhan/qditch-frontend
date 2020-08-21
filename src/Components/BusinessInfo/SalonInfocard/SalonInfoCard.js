@@ -38,12 +38,12 @@ export class SalonInfoCard extends Component {
 
     render() {
         return (
-            <div>
+            <div className="mx-3">
                 {!this.state.Loading
                     ? <div>
-                        <Heading text={this.props.data['business_name']} />
-                        <strong className="ml-3 mr-3 mb-1 text-break">{this.props.data['line1'] +", "+ this.props.data['line2']}</strong><br/>
-                        <strong className="ml-3 mr-3 mb-1 text-break">{this.props.data['area'] + ", " + this.props.data['city_name'] + ", " + this.props.data['pincode']}</strong><br/>
+                        <h4 className="text-left my-2" style={{fontWeight:"bolder",fontSize:"20px"}}>{this.props.data['business_name']}</h4>
+                        <p className="text-left text-muted" style={{fontSize:"12px"}}>{this.props.data['line1'] +", "+ this.props.data['line2']}</p>
+                        <p className="text-left text-muted" style={{fontSize:"12px"}}>{this.props.data['area'] + ", " + this.props.data['city_name'] + ", " + this.props.data['pincode']}</p>
                         {
                             this.props.data['map_url'] === ""
                             ? this.props.data['latitude'] 
@@ -52,9 +52,9 @@ export class SalonInfoCard extends Component {
                             :
                         <a href={this.props.data['map_url']} target="blank"><button className="btn btn-sm btn-block my-2" style={{backgroundColor: Color.buttonColor,color:'#fff'}}>Get Directions</button></a>
                         }
-                        <div className='mt-1 mb-1' style={{maxHeight: 400,overflow: 'scroll',overflowX: 'hidden', color: '#fff'}}>
+                        {/* <div className='mt-1 mb-1' style={{maxHeight: 400,overflow: 'scroll',overflowX: 'hidden', color: '#fff'}}>
                         {this.state.safetyFeatures}
-                        </div>
+                        </div> */}
                     </div>
                     : null}
 

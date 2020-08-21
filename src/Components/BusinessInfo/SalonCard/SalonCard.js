@@ -126,37 +126,35 @@ class SalonCard extends Component {
                   <CardActionArea>
                     <CardContent>
                       <div className="row">
+                        <Typography gutterBottom variant="h6" className="col-8 text-left">
+                          <strong style={{ fontFamily: 'Montserrat', color: '#1B1D21' }}> {salon.business_name} </strong>
+                        </Typography>
                         <Typography gutterBottom variant="h6" className="col text-right my-auto">
                           {salon.distance !== "" && salon.distance !== null && typeof salon.distance !== "undefined"
-                          ?
-                          <strong className="text-right" style={{color: '#00B0B9',fontFamily: 'Montserrat'}}> {salon.distance + "KM"}</strong>
-                        :null}
+                            ?
+                            <strong className="text-right" style={{ color: '#00B0B9', fontFamily: 'Montserrat' }}> {salon.distance + "KM"}</strong>
+                            : null}
                         </Typography>
                       </div>
-                      <div className="row">
-                        <Typography gutterBottom variant="h6" className="col-8 text-left">
-                          <strong style={{fontFamily:'Montserrat',color:'#1B1D21'}}> {salon.business_name} </strong>
-                        </Typography>
-                      </div>
-                      <Typography variant="body2" color="textPrimary" className="text-left" component="p" style={{fontFamily: 'Montserrat'}}>
-                        {salon.line1 +", "+ salon.line2}
+                      <Typography variant="body2" color="textPrimary" className="text-left" component="p" style={{ fontFamily: 'Montserrat' }}>
+                        {salon.line1 + ", " + salon.line2}
                       </Typography>
-                      <Typography variant="body2" color="textPrimary" className="text-left" component="p" style={{fontFamily: 'Montserrat'}}>
+                      <Typography variant="body2" color="textPrimary" className="text-left" component="p" style={{ fontFamily: 'Montserrat' }}>
                         {salon.area + ", " + salon.city_name + ", " + salon.pincode}
                       </Typography>
-                      <Typography variant="body2" color="textPrimary" className="text-left" component="p" style={{fontFamily: 'Montserrat'}}>
-                        {salon.about !== null ? salon.about: null}
+                      <Typography variant="body2" color="textPrimary" className="text-left" component="p" style={{ fontFamily: 'Montserrat' }}>
+                        {salon.about !== null ? salon.about : null}
                       </Typography>
 
 
-                      <table className="table mt-3" style={{fontSize:"14px"}}>
-                        {this.state.salonServices[salon.id].slice(0, 4)}
+                      <table className="table mt-3" style={{ fontSize: "14px" }}>
+                        {this.state.salonServices[salon.id].slice(0, 3)}
                       </table>
 
                     </CardContent>
                   </CardActionArea>
                   <CardActions>
-                    <Button className="ml-auto" size="small" style={{color: '#00B0B9',fontFamily: 'Montserrat'}}>
+                    <Button className="ml-auto" size="small" style={{ color: '#00B0B9', fontFamily: 'Montserrat' }}>
                       Book Appointment Now
                     </Button>
                   </CardActions>

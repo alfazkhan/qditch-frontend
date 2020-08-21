@@ -333,10 +333,10 @@ export class ServiceBook extends Component {
 
     render() {
         return (
-            <div className="container">
+            <div>
                 <div className="row">
 
-                    <Paper className="col" elevation={3} style={{ backgroundColor: Colors.primary }}>
+                    <Paper className="mx-auto" elevation={3} style={{ backgroundColor: Colors.primary, width:"95%" }}>
                         <div style={{ overflowX: window.innerWidth < 768 ? "scroll" : "hidden" }}>
                             <table class="table" >
                                 <thead className="table-dark" style={{backgroundColor: Colors.primary}} >
@@ -411,7 +411,7 @@ export class ServiceBook extends Component {
                             <Chip color="secondary" className="col" label={this.timeConvert(this.state.totalDuration)} />
 
                         </div>
-                        <div className="row mx-auto mt-3">
+                        <div className="row mt-3">
                             <tr>
                                 <th className="text-center mx-auto" style={{ color: 'grey' }}> *There might be a COVID-19 additional price related to this salon </th>
                             </tr>
@@ -420,27 +420,27 @@ export class ServiceBook extends Component {
                     : null}
                 {this.props.user_id
                 ?
-                <Button variant="contained"
-                    className="mt-4"
+                <button
+                    className="mt-4 btn btn-block btn-sm"
                     fullWidth
                     color="secondary"
                     onClick={this.scheduleModalHandler}
-                    style={{backgroundColor: Colors.danger}}
+                    style={{backgroundColor: Colors.danger,color:'#fff'}}
                 >
                     View This Date Schedule
-                </Button>
+                </button>
             :null}
 
                 {this.state.scheduleModal ? this.state.scheduleModalContent : null}
                 {this.props.user_id
-                    ? <Button variant="contained"
-                        className="mt-4"
+                    ? <button
+                        className="mt-4 btn btn-block btn-sm"
                         fullWidth
                         style={{ backgroundColor: this.state.serviceSelected.length > 0 || this.state.customServiceSelected.length > 0 ? Colors.success : 'grey', color: '#fff' }}
                         onClick={this.state.serviceSelected.length > 0 || this.state.customServiceSelected.length > 0 ? this.submitHandler : null}
                     >
                         Book Now
-                </Button>
+                </button>
                     :
                     <div className="mt-4 btn-block">
                         <div className="btn btn-sm w-50" style={{backgroundColor:Colors.buttonColor,color:'#fff'}} onClick={()=>this.props.history.push('/Login')}>Login</div>

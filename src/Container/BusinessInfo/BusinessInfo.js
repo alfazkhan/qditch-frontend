@@ -74,25 +74,24 @@ class BusinessInfo extends Component {
                         <CircularProgress className="mx-auto" style={styles.Loader} />
                     </div>
                     :
-                    <div className="container-fluid my-5" style={{ width: '90%' }}>
-                        <div className="row mx-auto">
-                            <Button onClick={() => this.props.history.goBack()} style={{backgroundColor: Colors.danger,color: '#fff'}} variant="contained" className="mr-auto" >{"<< Back"}</Button>
+                    <div className="mx-auto my-2">
+                        <div className="row">
+                            {/* <Button  style={{ backgroundColor: Colors.danger, color: '#fff' }} variant="contained" className="mr-auto" >{"<< Back"}</Button> */}
+                            <button onClick={() => this.props.history.goBack()} className="btn btn-danger btn-sm mx-auto">{"<< Back"}</button>
                         </div>
                         <div className="row my-3">
-                            <div className={window.innerWidth > 768 ? "col-8" : "col-12"}>
+                            <div className={window.innerWidth > 768 ? "col-6 ml-5" : "col-12"}>
                                 <BusinessSlideshow images={this.state.business_data['business_images']} />
                             </div>
-                            <div className={window.innerWidth > 768 ? "col-4 p-0" : "col-12"}>
+                            <div className={window.innerWidth > 768 ? "col-5 mx-auto" : "col-12"}>
                                 <SalonInfoCard data={this.state.business_data} />
                             </div>
                         </div>
 
                         <div className="row mb-3">
-                            <div className={window.innerWidth > 768 ? "col-4" : "col-12"}>
-                                <Button variant='contained' fullWidth style={{ color: 'black', backgroundColor: Colors.warning }} onClick={() => this.setState({ reviewsListModel: true })}>
-                                    <i class="fa fa-star mr-3" aria-hidden="true"></i>
-                                        All Reviews
-                                </Button>
+                            <div className="col-4">
+
+                                <strong onClick={() => this.setState({ reviewsListModel: true })}>All Reviews</strong>
                                 {this.state.reviewsListModel
                                     ? <FeedbackList onClose={() => this.setState({ reviewsListModel: false })}
                                         feedbacks={this.state.business_data['feedbacks']}
@@ -101,11 +100,8 @@ class BusinessInfo extends Component {
                             </div>
 
                             {this.props.userLoggedIn
-                                ? <div className={window.innerWidth > 768 ? "col-4" : "col-12"}>
-                                    <Button variant='contained' fullWidth className="bg-info" style={{ color: 'white' }} onClick={() => this.setState({ createReviewModal: true })}>
-                                        <i class="fa fa-plus mr-3" aria-hidden="true"></i>
-                                Write a Review
-                            </Button>
+                                ? <div className="col-4">
+                                    <strong onClick={() => this.setState({ createReviewModal: true })}>Write a Review</strong>
                                     {this.state.createReviewModal
                                         ?
                                         <FeedbackCreate onClose={() => this.setState({ createReviewModal: false })}
@@ -115,22 +111,24 @@ class BusinessInfo extends Component {
                                 </div>
                                 : null}
 
+                            {window.innerWidth < 768
+                                ? <div className="col-4">
+                                    <strong onClick={this.timeModalhandler}>
+                                        View Salon Timings
+                                    </strong>
+                                    {this.state.timeModal
+                                        ? this.state.modalContent
+                                        : null
+                                    }
+                                </div>
+                                : null}
                         </div>
 
-                        {window.innerWidth < 768
-                            ? <div className="row mx-auto my-4">
-                                <Button onClick={this.timeModalhandler} style={{backgroundColor: Colors.buttonColor, color: '#fff'}} variant="contained" fullWidth >View Salon Timings</Button>
-                                {this.state.timeModal
-                                    ? this.state.modalContent
-                                    : null
-                                }
-                            </div>
-                            : null}
 
 
 
 
-                        <div className="row">
+                        <div className="row mx-auto">
                             <div className={window.innerWidth > 768 ? "col-8" : "col-12"}>
                                 <ServiceBook data={this.state.business_data} />
                             </div>
@@ -163,11 +161,11 @@ const styles = {
 const mapStateToProps = (state) => ({
 
     userLoggedIn: state.userLoggedIn
-    
+
 })
 
 const mapDispatchToProps = {
-    
+
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(withRouter(BusinessInfo))

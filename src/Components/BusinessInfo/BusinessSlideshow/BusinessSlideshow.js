@@ -75,9 +75,7 @@ const styles = {
         top: 1000
         // marginBottom: '1rem',
     },
-    border: {
-        border: "4px solid " + Colors.primary
-    }
+    
 
 }
 
