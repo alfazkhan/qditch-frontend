@@ -94,12 +94,12 @@ export class ServiceBook extends Component {
         for (var key in services) {
             if (!services[key].disable) {
                 list.push(
-                    <tr style={{ color: '#fff' }}>
+                    <tr>
                         {this.props.user_id
                             ? <th scope="row" className="p-0">
                                 <FormControlLabel
                                     value={["services", services[key].id, services[key].business_service_price, services[key].business_service_duration]}
-                                    control={<Checkbox style={{ color: '#fff' }} />}
+                                    control={<Checkbox />}
                                     onChange={this.serviceSelectHandler}
 
                                 />
@@ -116,12 +116,12 @@ export class ServiceBook extends Component {
         for (var key in custom_services) {
             if (!custom_services[key].disable) {
                 list.push(
-                    <tr style={{ color: '#fff' }}>
+                    <tr>
                         {this.props.user_id
                             ? <th scope="row" className="p-0">
                                 <FormControlLabel
                                     value={["custom-services", custom_services[key].id, custom_services[key].business_service_price, custom_services[key].business_service_duration]}
-                                    control={<Checkbox style={{ color: '#fff' }} />}
+                                    control={<Checkbox />}
                                     onChange={this.serviceSelectHandler}
                                 />
                             </th>
@@ -336,10 +336,10 @@ export class ServiceBook extends Component {
             <div>
                 <div className="row">
 
-                    <Paper className="mx-auto" elevation={3} style={{ backgroundColor: Colors.primary, width:"95%" }}>
+                    <div className="mx-auto" elevation={3} style={{ width:"95%" }}>
                         <div style={{ overflowX: window.innerWidth < 768 ? "scroll" : "hidden" }}>
                             <table class="table" >
-                                <thead className="table-dark" style={{backgroundColor: Colors.primary}} >
+                                <thead >
                                     <tr>
                                         {this.props.user_id
                                             ? <th scope="col">#</th>
@@ -354,7 +354,7 @@ export class ServiceBook extends Component {
                                 </tbody>
                             </table>
                         </div>
-                    </Paper>
+                    </div>
                     {this.props.user_id
                         ? <table class="table table-striped">
                             <thead>

@@ -32,7 +32,9 @@ export class SalonInfoCard extends Component {
         Promise.all(promise)
             .then(res => {
                 // console.log(safetyFeatures)
+                this.props.safetyFeatures(safetyFeatures)
                 this.setState({ safetyFeatures: safetyFeatures, Loading: false })
+
             })
     }
 
@@ -41,16 +43,16 @@ export class SalonInfoCard extends Component {
             <div className="mx-3">
                 {!this.state.Loading
                     ? <div>
-                        <h4 className="text-left my-2" style={{fontWeight:"bolder",fontSize:"20px"}}>{this.props.data['business_name']}</h4>
-                        <p className="text-left text-muted" style={{fontSize:"12px"}}>{this.props.data['line1'] +", "+ this.props.data['line2']}</p>
-                        <p className="text-left text-muted" style={{fontSize:"12px"}}>{this.props.data['area'] + ", " + this.props.data['city_name'] + ", " + this.props.data['pincode']}</p>
+                        <h4 className="text-left mt-2" style={{fontWeight:"bolder",fontSize:"20px"}}>{this.props.data['business_name']}</h4>
+                        <p className="text-left text-muted" style={{fontSize:"12px"}}>{this.props.data['line1'] +", "+ this.props.data['line2']+' '+
+                        this.props.data['area'] + ", " + this.props.data['city_name'] + ", " + this.props.data['pincode']}</p>
                         {
                             this.props.data['map_url'] === ""
                             ? this.props.data['latitude'] 
-                            ? <a href={"http://maps.google.com/maps?q="+this.props.data['latitude']+","+this.props.data['longitude']} target="blank"><button className="btn btn-sm btn-block my-2" style={{backgroundColor: Color.buttonColor,color:'#fff'}}>Get Directions</button></a> 
+                            ? <a href={"http://maps.google.com/maps?q="+this.props.data['latitude']+","+this.props.data['longitude']} target="blank"><button className="btn btn-sm btn-block " style={{backgroundColor: Color.buttonColor,color:'#fff'}}>Get Directions</button></a> 
                             :null
                             :
-                        <a href={this.props.data['map_url']} target="blank"><button className="btn btn-sm btn-block my-2" style={{backgroundColor: Color.buttonColor,color:'#fff'}}>Get Directions</button></a>
+                        <a href={this.props.data['map_url']} target="blank"><button className="btn btn-sm btn-block" style={{backgroundColor: Color.buttonColor,color:'#fff'}}>Get Directions</button></a>
                         }
                         {/* <div className='mt-1 mb-1' style={{maxHeight: 400,overflow: 'scroll',overflowX: 'hidden', color: '#fff'}}>
                         {this.state.safetyFeatures}

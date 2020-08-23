@@ -3,7 +3,7 @@ import Slide1 from '../../Assets/Slide-1.png'
 import Slide2 from '../../Assets/Slide-2.png'
 import Slide3 from '../../Assets/Slide-3.png'
 import Slide4 from '../../Assets/Slide-4.png'
-import Slide5 from '../../Assets/Slide-5.jpg'
+import Slide5 from '../../Assets/Slide-5.png'
 import Categories from '../Categories/Categories'
 import { Avatar, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
 import Axios from '../../Axios'
@@ -47,7 +47,7 @@ const Slideshow = (props) => {
     return (
         <div>
             
-            <div id="carouselExampleIndicators" className="carousel slide carousel-fade" data-ride="carousel" data-interval="3000" pause="false" wrap="true">
+            <div id="carouselExampleIndicators" className="carousel slide carousel-fade" data-ride="carousel" data-interval="1500" pause="false" wrap="true">
                 <ol className="carousel-indicators">
                     <li data-target="#carouselExampleIndicators" data-slide-to="0" className="active"></li>
                     <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>

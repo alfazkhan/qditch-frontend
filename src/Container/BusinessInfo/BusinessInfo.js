@@ -20,6 +20,8 @@ class BusinessInfo extends Component {
         business_data: null,
         Loading: true,
         timeModal: false,
+        safetyfeaturemodal: false,
+        safetyFeaturesList: null,
         modalContent: null,
 
         createReviewModal: false,
@@ -47,12 +49,12 @@ class BusinessInfo extends Component {
 
     timeModalhandler = () => {
         const modalContent = (
-            <Dialog onClose={() => this.setState({ timeModal: false })} aria-labelledby="simple-dialog-title" open={true}>
+            <Dialog onClose={() => this.setState({ timeModal: false, modalContent: null })} aria-labelledby="simple-dialog-title" open={true}>
                 <DialogContent>
                     <SalonTimingsCard timings={this.state.business_data['business_timings'][0]} />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => this.setState({ timeModal: false })} color="secondary">
+                    <Button onClick={() => this.setState({ timeModal: false, modalContent: null })} color="secondary">
                         Cancel
               </Button>
                 </DialogActions>
@@ -66,6 +68,36 @@ class BusinessInfo extends Component {
         })
     }
 
+    safetyModalhandler = () => {
+        const modalContent = (
+            <Dialog onClose={() => this.setState({ safetyfeaturemodal: false, modalContent: null })} aria-labelledby="simple-dialog-title" open={true}>
+                <DialogContent>
+                    {this.state.safetyFeaturesList}
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => this.setState({ safetyfeaturemodal: false, modalContent: null })} color="secondary">
+                        Cancel
+              </Button>
+                </DialogActions>
+            </Dialog>
+
+        )
+
+        this.setState({
+            safetyfeaturemodal: true,
+            modalContent: modalContent
+        })
+    }
+
+    setSafetyFeatures=(data)=>{
+        const safety = data
+
+        this.setState({
+            safetyFeaturesList: safety
+        })
+
+    }
+
     render() {
         return (
             <div>
@@ -74,24 +106,26 @@ class BusinessInfo extends Component {
                         <CircularProgress className="mx-auto" style={styles.Loader} />
                     </div>
                     :
-                    <div className="mx-auto my-2">
-                        <div className="row">
+                    <div className="mx-auto">
+                        <div className="row mt-1">
                             {/* <Button  style={{ backgroundColor: Colors.danger, color: '#fff' }} variant="contained" className="mr-auto" >{"<< Back"}</Button> */}
-                            <button onClick={() => this.props.history.goBack()} className="btn btn-danger btn-sm mx-auto">{"<< Back"}</button>
+                            <strong onClick={() => this.props.history.goBack()} className="mx-auto text-danger">{"<< Back"}</strong>
                         </div>
-                        <div className="row my-3">
+                        <div className="row mb-2">
                             <div className={window.innerWidth > 768 ? "col-6 ml-5" : "col-12"}>
                                 <BusinessSlideshow images={this.state.business_data['business_images']} />
                             </div>
                             <div className={window.innerWidth > 768 ? "col-5 mx-auto" : "col-12"}>
-                                <SalonInfoCard data={this.state.business_data} />
+                                <SalonInfoCard safetyFeatures={this.setSafetyFeatures} data={this.state.business_data} />
                             </div>
                         </div>
 
-                        <div className="row mb-3">
-                            <div className="col-4">
+                        
 
-                                <strong onClick={() => this.setState({ reviewsListModel: true })}>All Reviews</strong>
+                        <div className="row mb-3 mx-auto">
+                            <div className="col-3">
+
+                                <strong style={styles.linktext} onClick={() => this.setState({ reviewsListModel: true })}>All Reviews</strong>
                                 {this.state.reviewsListModel
                                     ? <FeedbackList onClose={() => this.setState({ reviewsListModel: false })}
                                         feedbacks={this.state.business_data['feedbacks']}
@@ -100,8 +134,8 @@ class BusinessInfo extends Component {
                             </div>
 
                             {this.props.userLoggedIn
-                                ? <div className="col-4">
-                                    <strong onClick={() => this.setState({ createReviewModal: true })}>Write a Review</strong>
+                                ? <div className="col-3">
+                                    <strong style={styles.linktext} onClick={() => this.setState({ createReviewModal: true })}>Write a Review</strong>
                                     {this.state.createReviewModal
                                         ?
                                         <FeedbackCreate onClose={() => this.setState({ createReviewModal: false })}
@@ -112,11 +146,22 @@ class BusinessInfo extends Component {
                                 : null}
 
                             {window.innerWidth < 768
-                                ? <div className="col-4">
-                                    <strong onClick={this.timeModalhandler}>
+                                ? <div className="col-3">
+                                    <strong style={styles.linktext} onClick={this.timeModalhandler}>
                                         View Salon Timings
                                     </strong>
                                     {this.state.timeModal
+                                        ? this.state.modalContent
+                                        : null
+                                    }
+                                </div>
+                                : null}
+                                {window.innerWidth < 768
+                                ? <div className="col-3">
+                                    <strong className="text-success" style={styles.linktext} onClick={this.safetyModalhandler}>
+                                    &#10004; Safety Features
+                                    </strong>
+                                    {this.state.safetyfeaturemodal
                                         ? this.state.modalContent
                                         : null
                                     }
@@ -153,6 +198,10 @@ const styles = {
     },
     Loader: {
         marginTop: '40px'
+    },
+    linktext:{
+        fontSize:'14px',
+        color: '#00A3AD'
     }
 }
 

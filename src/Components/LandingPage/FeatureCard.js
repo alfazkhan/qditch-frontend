@@ -15,17 +15,17 @@ export class FeatureCard extends Component {
             <div className="container my-3">
                 {window.innerWidth < 768
                     ?
-                    <Card style={styles.root}>
+                    <div style={styles.root}>
                         <CardMedia
                             style={styles.cover}
                             image={this.props.image}
                             title="Live from space album cover"
                         />
-                    </Card>
+                    </div>
                     : null
                 }
 
-                <Card style={styles.root}>
+                <div style={styles.root}>
                     {this.props.left && window.innerWidth >= 768
                         ? <CardMedia
                             style={styles.cover}
@@ -48,7 +48,7 @@ export class FeatureCard extends Component {
                             title="Live from space album cover"
                         />
                         : null}
-                </Card>
+                </div>
 
 
             </div>

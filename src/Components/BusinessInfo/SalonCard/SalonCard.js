@@ -37,8 +37,8 @@ class SalonCard extends Component {
         if (!salonData[key].business_services[index].disable) {
           serviceList.push(
             <tr>
-              <td className="text-left">{salonData[key].business_services[index].service_name}</td>
-              <td className="text-right">{salonData[key].business_services[index].business_service_price} ₹</td>
+              <td style={{marginTop: "50px"}} className="text-left">{salonData[key].business_services[index].service_name}</td>
+              <td style={{marginTop: "50px"}} className="text-right">{salonData[key].business_services[index].business_service_price} ₹</td>
             </tr>
           )
         }
@@ -48,8 +48,8 @@ class SalonCard extends Component {
         if (!salonData[key].custom_business_services[index].disable) {
           serviceList.push(
             <tr>
-              <td className="text-left">{salonData[key].custom_business_services[index].service_name}</td>
-              <td className="text-right">{salonData[key].custom_business_services[index].business_service_price} ₹</td>
+              <td style={{marginTop: "50px"}} className="text-left">{salonData[key].custom_business_services[index].service_name}</td>
+              <td style={{marginTop: "50px"}} className="text-right">{salonData[key].custom_business_services[index].business_service_price} ₹</td>
             </tr>
           )
         }
@@ -126,13 +126,11 @@ class SalonCard extends Component {
                   <CardActionArea>
                     <CardContent>
                       <div className="row">
-                        <Typography gutterBottom variant="h6" className="col-8 text-left">
-                          <strong style={{ fontFamily: 'Montserrat', color: '#1B1D21' }}> {salon.business_name} </strong>
-                        </Typography>
+                          <strong className="col-8 text-left" style={{ fontFamily: 'Montserrat', color: '#1B1D21', fontSize: "17px" }}> {salon.business_name} </strong>
                         <Typography gutterBottom variant="h6" className="col text-right my-auto">
                           {salon.distance !== "" && salon.distance !== null && typeof salon.distance !== "undefined"
                             ?
-                            <strong className="text-right" style={{ color: '#00B0B9', fontFamily: 'Montserrat' }}> {salon.distance + "KM"}</strong>
+                            <strong className="text-right" style={{ color: '#00B0B9', fontFamily: 'Montserrat', fontSize: "17px" }}> {salon.distance + "KM"}</strong>
                             : null}
                         </Typography>
                       </div>
@@ -147,7 +145,7 @@ class SalonCard extends Component {
                       </Typography>
 
 
-                      <table className="table mt-3" style={{ fontSize: "14px" }}>
+                      <table className="table mt-4" style={{ fontSize: "14px" }}>
                         {this.state.salonServices[salon.id].slice(0, 3)}
                       </table>
 
