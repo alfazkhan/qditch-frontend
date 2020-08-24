@@ -45,9 +45,9 @@ const Slideshow = (props) => {
 
 
     return (
-        <div>
+        <div  className="mt-5">
             
-            <div id="carouselExampleIndicators" className="carousel slide carousel-fade" data-ride="carousel" data-interval="1500" pause="false" wrap="true">
+            <div id="carouselExampleIndicators" className="carousel slide carousel-fade" data-ride="carousel" data-interval="4000" pause="false" wrap="true">
                 <ol className="carousel-indicators">
                     <li data-target="#carouselExampleIndicators" data-slide-to="0" className="active"></li>
                     <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
@@ -57,7 +57,7 @@ const Slideshow = (props) => {
                 </ol>
                 <div className="carousel-inner">
                     <div className="carousel-item active">
-                        <img className="d-block w-100" src={Slide5} style={styles.thumbpost_up} alt="First slide" />
+                        <img className="d-block w-100" src={Slide5} style={styles.thumbpost_down} alt="First slide" />
                     </div>
                     <div className="carousel-item">
                         <img className="d-block w-100" src={Slide1} style={styles.thumbpost_up} alt="First slide" />
@@ -89,7 +89,7 @@ const Slideshow = (props) => {
             {window.innerWidth <= 1000
                 ?
                 <div className="mt-5">
-                    <Heading text="We Provide" />
+                    <Heading text="Services To Choose From" />
                     < div className="row mx-auto my-3">
                         <div className="col-1" />
                         <button onClick={clickHandler} className="col-4 btn chip" style={styles.chip} id="Hair">Hair</button>
@@ -132,7 +132,7 @@ const Slideshow = (props) => {
 
 const styles = {
     thumbpost_up: {
-        objectFit: 'cover',
+        objectFit: "cover",
         objectPosition: 'top',
         width: window.innerWidth,
         maxHeight: 450,
@@ -142,7 +142,7 @@ const styles = {
         // marginBottom: '1rem',
     },
     thumbpost_down: {
-        objectFit: 'cover',
+        objectFit: "cover",
         objectPosition: 'bottom',
         width: window.innerWidth,
         maxHeight: 450,
@@ -152,7 +152,7 @@ const styles = {
         // marginBottom: '1rem',
     },
     thumbpost_center: {
-        objectFit: 'cover',
+        objectFit: "cover",
         objectPosition: 'center',
         width: window.innerWidth,
         maxHeight: 450,
@@ -166,6 +166,9 @@ const styles = {
         borderRadius: '5px',
         height: 40,
         backgroundColor: Colors.buttonColor
+    },
+    slideshow:{
+        marginTop: '0.3%'
     }
 
 }

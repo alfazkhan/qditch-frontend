@@ -139,7 +139,7 @@ class Dashboard extends Component {
           <div>
             <div style={styles.root} className="text-center">
               {window.innerWidth > 768
-                ? <AppBar position="relative" color="default">
+                ? <AppBar position="relative" color="default" style={{marginTop:'4em'}}>
                   <Tabs
                     value={this.state.value}
                     onChange={this.handleChange}
@@ -149,6 +149,7 @@ class Dashboard extends Component {
                     textColor="primary"
                     aria-label="scrollable force tabs example"
                     className="text-center ml-auto mr-auto"
+                    
                   >
                     <Tab label="Services" icon={<AmpStoriesIcon />} {...a11yProps(0)} />
                     <Tab label="Appointments" icon={<ListAltIcon />} {...a11yProps(1)} />

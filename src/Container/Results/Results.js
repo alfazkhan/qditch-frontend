@@ -208,7 +208,7 @@ class Results extends Component {
 
     render() {
         return (
-            <div className="mx-auto" style={{ width: '90%' }}>
+            <div className="mx-auto" style={{ width: '90%',marginTop:'5em' }}>
                 {/* <Card className="my-4 w-75 mx-auto" elevation={5} style={{color: '#EF5528'}}> */}
                     <h4 className="my-4" style={{color: '#1B1D21',fontFamily: 'Montserrat',fontWeight: 'bold'}} >{this.state.categoryName}</h4>
                 {/* </Card> */}

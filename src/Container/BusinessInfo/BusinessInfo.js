@@ -100,7 +100,7 @@ class BusinessInfo extends Component {
 
     render() {
         return (
-            <div>
+            <div style={{marginTop:'4em'}}>
                 {this.state.Loading
                     ? <div className="row">
                         <CircularProgress className="mx-auto" style={styles.Loader} />

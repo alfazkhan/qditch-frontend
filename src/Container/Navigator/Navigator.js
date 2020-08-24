@@ -73,7 +73,7 @@ export class Navigator extends Component {
             <div>
                 <div className={"navigation-bar pb-3"}>
                     <div>
-                        <nav className="navbar navbar-expand-lg" style={{ backgroundColor: Colors.primary, fontWeight: 'bold' }}>
+                        <nav className="navbar navbar-expand-lg fixed-top" style={{ backgroundColor: Colors.primary, fontWeight: 'bold' }}>
                             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
                                 {/* <span className="navbar-toggler-icon" style={{color:'white'}}></span>*/}
                                 <MenuRoundedIcon style={styles.navlink} />

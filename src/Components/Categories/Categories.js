@@ -34,30 +34,30 @@ const Categories = (props) => {
     }
 
     return (
-        <div className="container-fluid mx-auto" style={{ backgroundColor: Colors.primary }}>
+        <div className="container-fluid mx-auto fixed-top" style={{ backgroundColor: Colors.primary,marginTop:'4em' }}>
             <div className="row">
-                <div className="col my-3" onClick={clickHandler} >
+                <div className="col mb-2" onClick={clickHandler} >
                     <Link  className="navbar-link text-bold" id="Hair">Hair</Link>
                 </div>
-                <div className="col my-3" onClick={clickHandler} >
+                <div className="col mb-2" onClick={clickHandler} >
                     <Link  className="navbar-link text-bold" id="Skin">Skin</Link>
                 </div>
-                <div className="col my-3" onClick={clickHandler} >
+                <div className="col mb-2" onClick={clickHandler} >
                     <Link  className="navbar-link text-bold" id="Spa">Spa</Link>
                 </div>
-                <div className="col my-3" onClick={clickHandler} >
+                <div className="col mb-2" onClick={clickHandler} >
                     <Link  className="navbar-link text-bold" id="Makeup">Makeup</Link>
                 </div>
-                <div className="col my-3" onClick={clickHandler} >
+                <div className="col mb-2" onClick={clickHandler} >
                     <Link  className="navbar-link text-bold" id="Eyebrows">Eyebrows</Link>
                 </div>
-                <div className="col my-3" onClick={clickHandler} >
+                <div className="col mb-2" onClick={clickHandler} >
                     <Link  className="navbar-link text-bold" id="Hair Removal">Hair Removal</Link>
                 </div>
-                {/* <div className="col my-3" onClick={clickHandler} >
+                {/* <div className="col mb-2" onClick={clickHandler} >
                     <Link  className="navbar-link text-bold" id="Nails">Nails</Link>
                 </div> */}
-                <div className="col my-3" onClick={clickHandler} >
+                <div className="col mb-2" onClick={clickHandler} >
                     <Link  className="navbar-link text-bold" id="Massage">Massage</Link>
                 </div>
             </div>

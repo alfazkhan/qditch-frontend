@@ -12,7 +12,7 @@ import SkipNextIcon from '@material-ui/icons/SkipNext';
 export class FeatureCard extends Component {
     render() {
         return (
-            <div className="container my-3">
+            <div className="mx-auto">
                 {window.innerWidth < 768
                     ?
                     <div style={styles.root}>

@@ -50,7 +50,9 @@ export class Landing extends Component {
                     : null}
                 <Slideshow />
 
+
                 <h3 className="my-5 text-center">Things to keep in mind while choosing a salon</h3>
+                <div className="row">
                 <FeatureCard image={BodyTemp} 
                 text={"Temperature of all the customers and salon staff should be monitored regularly"}
                 heading={"Body Temperature"}
@@ -62,6 +64,7 @@ export class Landing extends Component {
                 heading={"Digital Payments"}
                 left={true}
                 />
+                </div>
                 
                 <FeatureCard image={OnlineBooking} 
                 text={"Visit only after booking an appointment online. Check for all these safety practices before choosing a salon"}
