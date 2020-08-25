@@ -12,7 +12,7 @@ import SkipNextIcon from '@material-ui/icons/SkipNext';
 export class FeatureCard extends Component {
     render() {
         return (
-            <div className="mx-auto">
+            <div className="mx-auto" style={{width:'300px'}}>
                 {window.innerWidth < 768
                     ?
                     <div style={styles.root}>
@@ -61,7 +61,8 @@ const styles = {
     root: {
         display: 'flex',
         height: 200,
-        fontFamily: 'Montserrat'
+        fontFamily: 'Montserrat',
+        width:'100%'
     },
     details: {
         flexDirection: 'column',
@@ -70,7 +71,7 @@ const styles = {
         width: '100%'
     },
     cover: {
-        width: '100%'
+        width: '200%'
     },
     controls: {
         alignItems: 'center',
