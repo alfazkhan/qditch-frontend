@@ -41,12 +41,12 @@ const Slideshow = (props) => {
     }, [categories])
 
 
-    const clickHandler = (e) => {
-        if (e.target.id === "") {
+    const clickHandler = (id) => {
+        if (id === "") {
             return true
         }
-        console.log(e.target.id)
-        props.history.push('/results/' + categories[e.target.id] + '/' + e.target.id)
+        console.log(id)
+        props.history.push('/results/' + categories[id] + '/' + id)
 
     }
 
@@ -109,13 +109,13 @@ const Slideshow = (props) => {
                     </div> */}
                         <table className="table table-borderless" style={{ overflowX: 'scroll' }}>
                             <tr style={{ overflowX: 'scroll' }}>
-                                <td><CategoryImage image={Hair} /></td>
-                                <td><CategoryImage image={Skin} /></td>
-                                <td><CategoryImage image={Spa} /></td>
-                                <td><CategoryImage image={Makeup} /></td>
-                                <td><CategoryImage image={Eyebrows} /></td>
-                                <td><CategoryImage image={HairRemoval} /></td>
-                                <td><CategoryImage image={Massage} /></td>
+                                <td><CategoryImage onClick={clickHandler} id="Hair" image={Hair} /></td>
+                                <td><CategoryImage onClick={clickHandler} id="Skin" image={Skin} /></td>
+                                <td><CategoryImage onClick={clickHandler} id="Spa" image={Spa} /></td>
+                                <td><CategoryImage onClick={clickHandler} id="Makeup" image={Makeup} /></td>
+                                <td><CategoryImage onClick={clickHandler} id="Eyebrows" image={Eyebrows} /></td>
+                                <td><CategoryImage onClick={clickHandler} id="Hair Removal" image={HairRemoval} /></td>
+                                <td><CategoryImage onClick={clickHandler} id="Massage" image={Massage} /></td>
                             </tr>
                         </table>
                     </div>

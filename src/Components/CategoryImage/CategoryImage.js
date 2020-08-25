@@ -4,7 +4,7 @@ export class CategoryImage extends Component {
     render() {
         return (
 
-            <img className="mx-2" height="80px" width="auto" src={this.props.image} />
+            <img onClick={()=>this.props.onClick(this.props.id)} className="mx-2" height="80px" width="auto" src={this.props.image} />
 
         )
     }
