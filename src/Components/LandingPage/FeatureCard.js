@@ -37,9 +37,9 @@ export class FeatureCard extends Component {
                         <Typography component="h5" variant="h5">
                             <strong style={{fontFamily:'Montserrat'}}> {this.props.heading}</strong>
                         </Typography>
-                        <Typography variant="subtitle1" color="textSecondary" className="mt-4" style={{fontFamily:'Montserrat'}}>
+                        {/* <Typography variant="subtitle1" color="textSecondary" className="mt-4" style={{fontFamily:'Montserrat'}}>
                             {this.props.text}
-                        </Typography>
+                        </Typography> */}
                     </CardContent>
                     {this.props.right && window.innerWidth >= 768
                         ? <CardMedia

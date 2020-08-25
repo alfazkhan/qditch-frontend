@@ -52,49 +52,91 @@ export class Landing extends Component {
 
 
                 <h3 className="my-3 text-center">Things to keep in mind while choosing a salon</h3>
-                <div style={{overflowX:'scroll',overflowY:"auto"}}>
-                    <table className="table table-borderless">
-                        <tr>
+                {window.innerWidth > 768
+                    ?
+                    <div className="container">
+                        <FeatureCard image={BodyTemp}
+                            text={"Temperature of all the customers and salon staff should be monitored regularly"}
+                            heading={"Body Temperature"}
+                            right={true}
+                        />
 
-                            <td><FeatureCard image={BodyTemp}
-                                text={"Temperature of all the customers and salon staff should be monitored regularly"}
-                                heading={"Body Temperature"}
-                                right={true}
-                            /></td>
-
-                            <td><FeatureCard image={DigitalPayments}
-                                text={"Salon should accept payments through mobile and card. Avoid cash payments wherever possible"}
-                                heading={"Digital Payments"}
-                                left={true}
-                            /></td>
+                        <FeatureCard image={DigitalPayments}
+                            text={"Salon should accept payments through mobile and card. Avoid cash payments wherever possible"}
+                            heading={"Digital Payments"}
+                            left={true}
+                        />
 
 
-                            <td><FeatureCard image={OnlineBooking}
-                                text={"Visit only after booking an appointment online. Check for all these safety practices before choosing a salon"}
-                                heading={"Online Appointment Booking"}
-                                right={true}
-                            /></td>
+                        <FeatureCard image={OnlineBooking}
+                            text={"Visit only after booking an appointment online. Check for all these safety practices before choosing a salon"}
+                            heading={"Online Appointment Booking"}
+                            right={true}
+                        />
 
-                            <td><FeatureCard image={PPEKits}
-                                text={"Stylists should use a mask and a face shield. Use of complete protective kit is recommended"}
-                                heading={"Use of PPE Kits"}
-                                left={true}
-                            /></td>
+                        <FeatureCard image={PPEKits}
+                            text={"Stylists should use a mask and a face shield. Use of complete protective kit is recommended"}
+                            heading={"Use of PPE Kits"}
+                            left={true}
+                        />
 
-                            <td><FeatureCard image={SanitizeSalon}
-                                text={"Deep cleaning of salon should be done daily and seats should be sanitized after every service"}
-                                heading={"Sanitization of Salon"}
-                                right={true}
-                            /></td>
+                        <FeatureCard image={SanitizeSalon}
+                            text={"Deep cleaning of salon should be done daily and seats should be sanitized after every service"}
+                            heading={"Sanitization of Salon"}
+                            right={true}
+                        />
 
-                            <td><FeatureCard image={SocialDistancing}
-                                text={"2 metres of distance should be maintained between the seats"}
-                                heading={"Social Distancing"}
-                                left={true}
-                            /></td>
-                        </tr>
-                    </table>
-                </div>
+                        <FeatureCard image={SocialDistancing}
+                            text={"2 metres of distance should be maintained between the seats"}
+                            heading={"Social Distancing"}
+                            left={true}
+                        />
+                    </div>
+                    :
+                    <div style={{ overflowX: 'scroll', overflowY: "auto" }}>
+                        <table className="table table-borderless">
+                            <tr>
+
+                                <td><FeatureCard image={BodyTemp}
+                                    text={"Temperature of all the customers and salon staff should be monitored regularly"}
+                                    heading={"Body Temperature"}
+                                    left={true}
+                                /></td>
+
+                                <td><FeatureCard image={DigitalPayments}
+                                    text={"Salon should accept payments through mobile and card. Avoid cash payments wherever possible"}
+                                    heading={"Digital Payments"}
+                                    left={true}
+                                /></td>
+
+
+                                <td><FeatureCard image={OnlineBooking}
+                                    text={"Visit only after booking an appointment online. Check for all these safety practices before choosing a salon"}
+                                    heading={"Online Appointment Booking"}
+                                    left={true}
+                                /></td>
+
+                                <td><FeatureCard image={PPEKits}
+                                    text={"Stylists should use a mask and a face shield. Use of complete protective kit is recommended"}
+                                    heading={"Use of PPE Kits"}
+                                    left={true}
+                                /></td>
+
+                                <td><FeatureCard image={SanitizeSalon}
+                                    text={"Deep cleaning of salon should be done daily and seats should be sanitized after every service"}
+                                    heading={"Sanitization of Salon"}
+                                    left={true}
+                                /></td>
+
+                                <td><FeatureCard image={SocialDistancing}
+                                    text={"2 metres of distance should be maintained between the seats"}
+                                    heading={"Social Distancing"}
+                                    left={true}
+                                /></td>
+                            </tr>
+                        </table>
+                    </div>
+                }
             </div>
 
         )
