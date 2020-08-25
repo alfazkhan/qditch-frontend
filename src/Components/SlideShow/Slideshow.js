@@ -107,8 +107,8 @@ const Slideshow = (props) => {
                         <CategoryImage image={HairRemoval}/>
                         <CategoryImage image={Massage}/>
                     </div> */}
-                        <table className="table table-borderless" style={{ overflowX: 'scroll' }}>
-                            <tr style={{ overflowX: 'scroll' }}>
+                        <table className="table table-borderless" >
+                            <tr >
                                 <td><CategoryImage onClick={clickHandler} id="Hair" image={Hair} /></td>
                                 <td><CategoryImage onClick={clickHandler} id="Skin" image={Skin} /></td>
                                 <td><CategoryImage onClick={clickHandler} id="Spa" image={Spa} /></td>
