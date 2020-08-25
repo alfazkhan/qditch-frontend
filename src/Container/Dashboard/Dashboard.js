@@ -139,7 +139,7 @@ class Dashboard extends Component {
           <div>
             <div style={styles.root} className="text-center">
               {window.innerWidth > 768
-                ? <AppBar position="relative" color="default" style={{marginTop:'4em'}}>
+                ? <AppBar position="relative" color="default" style={{marginTop:'5em'}}>
                   <Tabs
                     value={this.state.value}
                     onChange={this.handleChange}

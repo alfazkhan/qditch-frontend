@@ -109,7 +109,7 @@ class BusinessInfo extends Component {
                     <div className="mx-auto">
                         <div className="row mt-1">
                             {/* <Button  style={{ backgroundColor: Colors.danger, color: '#fff' }} variant="contained" className="mr-auto" >{"<< Back"}</Button> */}
-                            <strong onClick={() => this.props.history.goBack()} className="mx-auto text-danger">{"<< Back"}</strong>
+                            <strong style={{cursor:'pointer'}} onClick={() => this.props.history.goBack()} className="mx-auto text-danger">{"<< Back"}</strong>
                         </div>
                         <div className="row mb-2">
                             <div className={window.innerWidth > 768 ? "col-6 ml-5" : "col-12"}>
@@ -156,7 +156,7 @@ class BusinessInfo extends Component {
                                     }
                                 </div>
                                 : null}
-                                {window.innerWidth < 768
+                                {true
                                 ? <div className="col-3">
                                     <strong className="text-success" style={styles.linktext} onClick={this.safetyModalhandler}>
                                     &#10004; Safety Features
@@ -201,7 +201,8 @@ const styles = {
     },
     linktext:{
         fontSize:'14px',
-        color: '#00A3AD'
+        color: '#00A3AD',
+        cursor: 'pointer'
     }
 }
 

@@ -15,7 +15,7 @@ const Heading = (props) => {
     return (
         <div className=" m-4">
             <Fade in={checked}>
-                <h1>{props.text}</h1>
+                <h3>{props.text}</h3>
             </Fade>
         </div>
     )

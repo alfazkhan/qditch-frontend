@@ -4,6 +4,13 @@ import Slide2 from '../../Assets/Slide-2.png'
 import Slide3 from '../../Assets/Slide-3.png'
 import Slide4 from '../../Assets/Slide-4.png'
 import Slide5 from '../../Assets/Slide-5.png'
+import Eyebrows from '../../Assets/Category/Eyebrows.svg'
+import Hair from '../../Assets/Category/Hair.svg'
+import HairRemoval from '../../Assets/Category/Hair Removal.svg'
+import Makeup from '../../Assets/Category/Makeup.svg'
+import Massage from '../../Assets/Category/Massage.svg'
+import Skin from '../../Assets/Category/Skin.svg'
+import Spa from '../../Assets/Category/Spa.svg'
 import Categories from '../Categories/Categories'
 import { Avatar, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core'
 import Axios from '../../Axios'
@@ -11,6 +18,7 @@ import { withRouter } from 'react-router-dom'
 import Colors from '../../Constants/Colors'
 import Chip from '@material-ui/core/Chip';
 import Heading from '../Heading/Heading'
+import CategoryImage from '../CategoryImage/CategoryImage'
 
 const Slideshow = (props) => {
 
@@ -45,8 +53,8 @@ const Slideshow = (props) => {
 
 
     return (
-        <div  className="mt-5">
-            
+        <div className="mt-5">
+
             <div id="carouselExampleIndicators" className="carousel slide carousel-fade" data-ride="carousel" data-interval="4000" pause="false" wrap="true">
                 <ol className="carousel-indicators">
                     <li data-target="#carouselExampleIndicators" data-slide-to="0" className="active"></li>
@@ -87,38 +95,30 @@ const Slideshow = (props) => {
             </div>
 
             {window.innerWidth <= 1000
-                ?
-                <div className="mt-5">
+                ? <div>
                     <Heading text="Services To Choose From" />
-                    < div className="row mx-auto my-3">
-                        <div className="col-1" />
-                        <button onClick={clickHandler} className="col-4 btn chip" style={styles.chip} id="Hair">Hair</button>
-                        <div className="col-2" />
-                        <button onClick={clickHandler} className="col-4 btn chip" style={styles.chip} id="Skin">Skin</button>
-                        <div className="col-1" />
+                    <div className="container-fluid mt-2" style={{ overflowX: 'scroll' }}>
+                        {/* <div className="row" style={{overflowX:'scroll'}}>
+                        <CategoryImage image={Hair}/>
+                        <CategoryImage image={Skin}/>
+                        <CategoryImage image={Spa}/>
+                        <CategoryImage image={Makeup}/>
+                        <CategoryImage image={Eyebrows}/>
+                        <CategoryImage image={HairRemoval}/>
+                        <CategoryImage image={Massage}/>
+                    </div> */}
+                        <table className="table table-borderless" style={{ overflowX: 'scroll' }}>
+                            <tr style={{ overflowX: 'scroll' }}>
+                                <td><CategoryImage image={Hair} /></td>
+                                <td><CategoryImage image={Skin} /></td>
+                                <td><CategoryImage image={Spa} /></td>
+                                <td><CategoryImage image={Makeup} /></td>
+                                <td><CategoryImage image={Eyebrows} /></td>
+                                <td><CategoryImage image={HairRemoval} /></td>
+                                <td><CategoryImage image={Massage} /></td>
+                            </tr>
+                        </table>
                     </div>
-                    < div className="row mx-auto my-3">
-                        <div className="col-1" />
-                        <button onClick={clickHandler} className="col-4 btn chip" style={styles.chip} id="Spa">Spa</button>
-                        <div className="col-2" />
-                        <button onClick={clickHandler} className="col-4 btn chip" style={styles.chip} id="Makeup">Makeup</button>
-                        <div className="col-1" />
-                    </div>
-                    < div className="row mx-auto my-3">
-                        <div className="col-1" />
-                        <button onClick={clickHandler} className="col-4 btn chip" style={styles.chip} id="Eyebrows">Eyebrows</button>
-                        <div className="col-2" />
-                        <button onClick={clickHandler} className="col-4 btn chip" style={styles.chip} id="Hair Removal">Hair Removal</button>
-                        <div className="col-1" />
-                    </div>
-                    < div className="row mx-auto my-3">
-                        <div className="col-1" />
-                        {/* <button onClick={clickHandler} className="col-4 btn chip" style={styles.chip} id="Nails">Nails</button> */}
-                        {/* <div className="col-2" /> */}
-                        <button onClick={clickHandler} className="col-4 btn chip" style={styles.chip} id="Massage" >Massage</button>
-                        <div className="col-1" />
-                    </div>
-
                 </div>
                 : null}
 
@@ -167,7 +167,7 @@ const styles = {
         height: 40,
         backgroundColor: Colors.buttonColor
     },
-    slideshow:{
+    slideshow: {
         marginTop: '0.3%'
     }
 
@@ -175,3 +175,38 @@ const styles = {
 
 
 export default withRouter(Slideshow)
+
+
+
+{/* <div className="mt-5">
+<Heading text="Services To Choose From" />
+< div className="row mx-auto my-3">
+    <div className="col-1" />
+    <button onClick={clickHandler} className="col-4 btn chip" style={styles.chip} id="Hair">Hair</button>
+    <div className="col-2" />
+    <button onClick={clickHandler} className="col-4 btn chip" style={styles.chip} id="Skin">Skin</button>
+    <div className="col-1" />
+</div>
+< div className="row mx-auto my-3">
+    <div className="col-1" />
+    <button onClick={clickHandler} className="col-4 btn chip" style={styles.chip} id="Spa">Spa</button>
+    <div className="col-2" />
+    <button onClick={clickHandler} className="col-4 btn chip" style={styles.chip} id="Makeup">Makeup</button>
+    <div className="col-1" />
+</div>
+< div className="row mx-auto my-3">
+    <div className="col-1" />
+    <button onClick={clickHandler} className="col-4 btn chip" style={styles.chip} id="Eyebrows">Eyebrows</button>
+    <div className="col-2" />
+    <button onClick={clickHandler} className="col-4 btn chip" style={styles.chip} id="Hair Removal">Hair Removal</button>
+    <div className="col-1" />
+</div>
+< div className="row mx-auto my-3">
+    <div className="col-1" />
+    {/* <button onClick={clickHandler} className="col-4 btn chip" style={styles.chip} id="Nails">Nails</button> */}
+{/* <div className="col-2" /> */ }
+//     <button onClick={clickHandler} className="col-4 btn chip" style={styles.chip} id="Massage" >Massage</button>
+//     <div className="col-1" />
+// </div>
+
+//</div> */}
