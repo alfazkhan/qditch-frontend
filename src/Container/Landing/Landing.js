@@ -11,6 +11,7 @@ import PPEKits from '../../Assets/SafetyFeatures/PPEKits.jpg'
 import SanitizeSalon from '../../Assets/SafetyFeatures/SanitizeSalon.png'
 import SocialDistancing from '../../Assets/SafetyFeatures/SocialDistancing.jpg'
 import FeatureCard from '../../Components/LandingPage/FeatureCard'
+import Footer from '../../Components/Footer/Footer'
 
 export class Landing extends Component {
     state = {
@@ -137,6 +138,7 @@ export class Landing extends Component {
                         </table>
                     </div>
                 }
+                <Footer/>
             </div>
 
         )
