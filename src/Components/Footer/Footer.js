@@ -91,11 +91,11 @@ export class Footer extends Component {
         return (
             <div>
                 <div class="container-fluid mt-3" style={styles.footer}>
-                    <div className="row mx-auto">
+                    <div className="row mx-auto my-auto">
                         <h6 className="mt-5 col" onClick={this.policyModalHandler} style={{cursor:'pointer'}}><strong >Privacy Policy</strong></h6>
                         <h6 className="mt-5 col" onClick={this.contactModalHandler} style={{cursor:'pointer'}}><strong >Contact Us</strong></h6>
                     </div>
-                    <div className="row mx-auto">
+                    <div className="row mx-auto my-auto">
                         <h6 className="mt-5 col" onClick={this.aboutUsHandler} style={{cursor:'pointer'}}><strong >About Us</strong></h6>
                         <div className="col"></div>
                     </div>
