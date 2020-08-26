@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Paper } from '@material-ui/core'
+import { Paper, isWidthDown } from '@material-ui/core'
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -25,7 +25,7 @@ export class FeatureCard extends Component {
                     : null
                 }
 
-                <div style={styles.root}>
+                <div style={window.innerWidth<768?{height:20}: styles.root}>
                     {this.props.left && window.innerWidth >= 768
                         ? <CardMedia
                             style={styles.cover}
@@ -68,7 +68,8 @@ const styles = {
         flexDirection: 'column',
     },
     content: {
-        width: '100%'
+        width: '100%',
+        height:'20px'
     },
     cover: {
         width: '200%'

@@ -71,7 +71,7 @@ export class Navigator extends Component {
     render() {
         return (
             <div>
-                <div className={"navigation-bar pb-3"}>
+                <div className={"navigation-bar"}>
                     <div>
                         <nav className="navbar navbar-expand-lg fixed-top" style={{ backgroundColor: Colors.primary, fontWeight: 'bold' }}>
                             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
