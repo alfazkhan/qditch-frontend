@@ -34,9 +34,9 @@ export class FeatureCard extends Component {
                         />
                         : null}
                     <CardContent style={styles.content}>
-                        <Typography component="h5" variant="h5">
+                        <h6>
                             <strong style={{fontFamily:'Montserrat'}}> {this.props.heading}</strong>
-                        </Typography>
+                        </h6>
                         {/* <Typography variant="subtitle1" color="textSecondary" className="mt-4" style={{fontFamily:'Montserrat'}}>
                             {this.props.text}
                         </Typography> */}

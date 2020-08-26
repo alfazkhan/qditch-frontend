@@ -52,7 +52,7 @@ export class Landing extends Component {
                 <Slideshow />
 
 
-                <h4 className="my-2 text-center">Things to keep in mind while choosing a salon</h4>
+                <h5 className="my-2 text-center">Things to keep in mind while choosing a salon</h5>
                 {window.innerWidth > 768
                     ?
                     <div className="container">

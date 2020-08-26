@@ -96,7 +96,7 @@ const Slideshow = (props) => {
 
             {window.innerWidth <= 1000
                 ? <div>
-                    <h4 className="mt-3">Services To Choose From</h4>
+                    <h5 className="mt-3">Services To Choose From</h5>
                     <div className="container-fluid mt-2" style={{ overflowX: 'scroll' }}>
                         {/* <div className="row" style={{overflowX:'scroll'}}>
                         <CategoryImage image={Hair}/>
