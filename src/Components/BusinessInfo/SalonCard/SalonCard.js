@@ -9,6 +9,8 @@ import Typography from '@material-ui/core/Typography';
 import Axios from '../../../Axios';
 import { withRouter } from 'react-router-dom';
 import { CircularProgress } from '@material-ui/core';
+import Lottie from 'react-lottie';
+
 import SalonResults from '../../SearchResults/SalonResultCards/SalonResultCards';
 
 

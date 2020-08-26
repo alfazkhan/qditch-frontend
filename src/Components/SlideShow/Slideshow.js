@@ -65,7 +65,7 @@ const Slideshow = (props) => {
                 </ol>
                 <div className="carousel-inner">
                     <div className="carousel-item active">
-                        <img className="d-block w-100" src={Slide5} style={styles.thumbpost_down} alt="First slide" />
+                        <img className="d-block w-100" src={Slide5} style={styles.thumbpost_center} alt="First slide" />
                     </div>
                     <div className="carousel-item">
                         <img className="d-block w-100" src={Slide1} style={styles.thumbpost_up} alt="First slide" />
@@ -96,7 +96,7 @@ const Slideshow = (props) => {
 
             {window.innerWidth <= 1000
                 ? <div>
-                    <Heading text="Services To Choose From" />
+                    <h4 className="mt-3">Services To Choose From</h4>
                     <div className="container-fluid mt-2" style={{ overflowX: 'scroll' }}>
                         {/* <div className="row" style={{overflowX:'scroll'}}>
                         <CategoryImage image={Hair}/>
