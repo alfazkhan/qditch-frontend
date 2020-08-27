@@ -7,6 +7,7 @@ import Contact from '../../ContactUs/Contact'
 import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import { withRouter } from 'react-router-dom'
+import './Footer.css'
 
 export class Footer extends Component {
 
@@ -90,18 +91,22 @@ export class Footer extends Component {
     render() {
         return (
             <div>
-                <div class="container-fluid mt-3" style={styles.footer}>
-                    <div className="row mx-auto my-auto">
-                        <h6 className="mt-5 col" onClick={this.policyModalHandler} style={{cursor:'pointer'}}><strong >Privacy Policy</strong></h6>
-                        <h6 className="mt-5 col" onClick={this.contactModalHandler} style={{cursor:'pointer'}}><strong >Contact Us</strong></h6>
+                <div class="container-fluid mt-3 text-center" style={styles.footer}>
+                    <div className="row mx-auto footer-row">
+                        <h6 className="mt-3 col " onClick={this.policyModalHandler} style={{cursor:'pointer'}}>Privacy Policy</h6>
+                        <h6 className="mt-3 col " onClick={this.contactModalHandler} style={{cursor:'pointer'}}>Contact Us</h6>
                     </div>
-                    <div className="row mx-auto my-auto">
-                        <h6 className="mt-5 col" onClick={this.aboutUsHandler} style={{cursor:'pointer'}}><strong >About Us</strong></h6>
+                    <div className="row mx-auto footer-row">
+                        <h6 className="mt-3 col " onClick={this.aboutUsHandler} style={{cursor:'pointer'}}>About Us</h6>
                         <div className="col"></div>
                     </div>
-                    <div className="row mx-auto mt-4" >
-                        <div className="col"><a href='https://www.facebook.com/qditch'><FacebookIcon style={styles.icons}/></a> </div>
-                        <div className="col"><a href='https://instagram.com/q.ditch'><InstagramIcon style={styles.icons}/></a> </div>
+                    <div className="row mx-auto mt-2 footer-row" >
+                        <div className="col-8 mx-auto "></div>
+                        <div className={"mx-auto  "+ window.innerWidth<768?"col-2":"col"}><a href='https://www.facebook.com/qditch'><FacebookIcon style={styles.icons}/></a> </div>
+                        <div className={"mx-auto "+ window.innerWidth<768?"col-2":"col"}><a href='https://instagram.com/q.ditch'><InstagramIcon style={styles.icons}/></a> </div>
+                    </div>
+                    <div className="row mx-auto mt-2" >
+                        <p className="text-small mx-auto">&copy; 2020 Qditch.com</p>
                     </div>
 
                     <div>
@@ -117,7 +122,8 @@ const styles={
     footer:{
         backgroundColor: Colors.primary,
         color:'#fff',
-        height: '250px'
+        height: '210px',
+        padding:10
     },
     icons:{
         height: 50,
