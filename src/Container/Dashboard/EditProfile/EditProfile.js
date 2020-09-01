@@ -23,7 +23,8 @@ class EditProfile extends Component {
             pincode: this.props.data['pincode'],
             latitude: this.props.data['latitude'],
             longitude: this.props.data['longitude'],
-            map_url: this.props.data['map_url']
+            map_url: this.props.data['map_url'],
+            about: this.props.data['about']
 
         },
         menuItems: null,
@@ -56,6 +57,11 @@ class EditProfile extends Component {
 
         if (e.target.id === "name") {
             values['name'] = e.target.value
+            this.setState({ values: values })
+            return true
+        }
+        if (e.target.id === "about") {
+            values['about'] = e.target.value
             this.setState({ values: values })
             return true
         }
@@ -123,7 +129,8 @@ class EditProfile extends Component {
             "pincode": this.state.values.pincode,
             "latitude": this.state.values.latitude,
             "longitude": this.state.values.longitude,
-            "map_url": this.state.values.mapURL
+            "map_url": this.state.values.mapURL,
+            "about": this.state.values.about
         }
         this.setState({ Loading: true })
         Axios.patch(url, data)
@@ -223,6 +230,21 @@ class EditProfile extends Component {
 
                                         </Select>
                                     </FormControl>
+                                </tr>
+                                <tr>
+                                    <th scope="row">About Salon</th>
+                                    <td>
+                                        <TextField
+                                            label="About Salon"
+                                            id="about"
+
+                                            defaultValue={this.state.values.about}
+                                            onChange={this.valuesChangeHandler}
+                                            variant="outlined"
+                                            className="col-md"
+                                        // margin="normal"
+                                        />
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Address</th>

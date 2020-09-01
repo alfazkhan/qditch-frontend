@@ -142,8 +142,8 @@ class SalonCard extends Component {
                       <Typography variant="body2" color="textPrimary" className="text-left" component="p" style={{ fontFamily: 'Montserrat' }}>
                         {salon.area + ", " + salon.city_name + ", " + salon.pincode}
                       </Typography>
-                      <Typography variant="body2" color="textPrimary" className="text-left" component="p" style={{ fontFamily: 'Montserrat' }}>
-                        {salon.about !== null ? salon.about : null}
+                      <Typography variant="body2" color="textPrimary" className="text-left mt-3" component="p" style={{ fontFamily: 'Montserrat' }}>
+                        <em><strong>{salon.about !== null ? '"'+salon.about+'"' : null}</strong></em>
                       </Typography>
 
 

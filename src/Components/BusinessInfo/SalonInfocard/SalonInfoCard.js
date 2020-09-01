@@ -19,7 +19,7 @@ export class SalonInfoCard extends Component {
             .then(res => {
                 // console.log(res.data)
                 const ids = this.props.data['business_safety_features']
-                for(var key in ids){
+                for (var key in ids) {
                     safetyFeatures.push(<li className="text-left text-muted ml-3 my-3"> {res.data[ids[key]].safety_feature} </li>)
                 }
             })
@@ -43,16 +43,19 @@ export class SalonInfoCard extends Component {
             <div className="mx-3">
                 {!this.state.Loading
                     ? <div>
-                        <h4 className="text-left mt-2" style={{fontWeight:"bolder",fontSize:"20px"}}>{this.props.data['business_name']}</h4>
-                        <p className="text-left text-muted" style={{fontSize:"12px"}}>{this.props.data['line1'] +", "+ this.props.data['line2']+' '+
-                        this.props.data['area'] + ", " + this.props.data['city_name'] + ", " + this.props.data['pincode']}</p>
+                        <h4 className="text-left mt-2" style={{ fontWeight: "bolder", fontSize: "20px" }}>{this.props.data['business_name']}</h4>
+                        <p className="text-left text-muted" style={{ fontSize: "12px" }}>{this.props.data['line1'] + ", " + this.props.data['line2'] + ' ' +
+                            this.props.data['area'] + ", " + this.props.data['city_name'] + ", " + this.props.data['pincode']}</p>
+
+                        <p className="mb-3"><em><strong>{this.props.data['about'] !== null ? '"' + this.props.data['about'] + '"' : null}</strong></em></p>
+
                         {
                             this.props.data['map_url'] === ""
-                            ? this.props.data['latitude'] 
-                            ? <a href={"http://maps.google.com/maps?q="+this.props.data['latitude']+","+this.props.data['longitude']} target="blank"><button className="btn btn-sm btn-block " style={{backgroundColor: Color.buttonColor,color:'#fff'}}>Get Directions</button></a> 
-                            :null
-                            :
-                        <a href={this.props.data['map_url']} target="blank"><button className="btn btn-sm btn-block" style={{backgroundColor: Color.buttonColor,color:'#fff'}}>Get Directions</button></a>
+                                ? this.props.data['latitude']
+                                    ? <a href={"http://maps.google.com/maps?q=" + this.props.data['latitude'] + "," + this.props.data['longitude']} target="blank"><button className="btn btn-sm btn-block " style={{ backgroundColor: Color.buttonColor, color: '#fff' }}>Get Directions</button></a>
+                                    : null
+                                :
+                                <a href={this.props.data['map_url']} target="blank"><button className="btn btn-sm btn-block" style={{ backgroundColor: Color.buttonColor, color: '#fff' }}>Get Directions</button></a>
                         }
                         {/* <div className='mt-1 mb-1' style={{maxHeight: 400,overflow: 'scroll',overflowX: 'hidden', color: '#fff'}}>
                         {this.state.safetyFeatures}
