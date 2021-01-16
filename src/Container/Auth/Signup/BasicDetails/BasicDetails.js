@@ -422,7 +422,7 @@ class BasicDetails extends Component {
                     />
                 </div>
                 <div className="submitButton text-right">
-                    <Button variant="contained" size="large" style={{ backgroundColor: Colors.success, color: 'white' }} onClick={this.otpHandler}>
+                    <Button variant="contained" size="large" style={{ backgroundColor: Colors.success, color: 'white' }} onClick={this.submitHandler}>
                         Next
                     </Button>
                     {this.state.otpModal ? this.state.modalContent : null}

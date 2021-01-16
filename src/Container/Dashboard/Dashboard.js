@@ -88,7 +88,7 @@ const styles = {
 class Dashboard extends Component {
 
   state = {
-    value: 6,
+    value: 0,
     business_id: null,
     Loading: false,
     Data: null,

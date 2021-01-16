@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const Axios = axios.create({
-  baseURL: `https://master.qditch.com`,
+  baseURL: `https://qditch.herokuapp.com/`,
   headers:{
  
     'Content-Type': 'application/json',

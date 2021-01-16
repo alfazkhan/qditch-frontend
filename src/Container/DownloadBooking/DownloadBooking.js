@@ -21,7 +21,7 @@ export class DownloadBooking extends Component {
             "booking_id": booking_id
         }
 
-        const url = 'https://master.qditch.com/api/booking/booking_details/'
+        const url = 'https://qditch.herokuapp.com/api/booking/booking_details/'
 
         const tableList = this.state.tableList
         Axios.post(url, data)

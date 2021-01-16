@@ -118,7 +118,7 @@ class SalonCard extends Component {
                       component="img"
                       alt="Contemplative Reptile"
                       height="200"
-                      image={this.state.coverImages[salon.id] ? "https://master.qditch.com" + this.state.coverImages[salon.id] : "https://images.pexels.com/photos/705255/pexels-photo-705255.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"}
+                      image={this.state.coverImages[salon.id] ? "https://qditch.herokuapp.com" + this.state.coverImages[salon.id] : "https://images.pexels.com/photos/705255/pexels-photo-705255.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"}
                       title={salon.business_name}
                       className={window.innerWidth > 768 ? "my-5" : "my-auto"}
                     />

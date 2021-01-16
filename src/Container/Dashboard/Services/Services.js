@@ -49,7 +49,7 @@ export class Services extends Component {
         const allCat = this.state.categoriesName
         const allServ = this.state.allServices
 
-        const services =
+        // const services =
 
             // const all = this.state.allServices
             //         const services = this.state.services
@@ -89,7 +89,7 @@ export class Services extends Component {
                 .then(res => {
 
                     for (var key in res.data) {
-                        // console.log(key)
+                        // console.log(res.data)
                         allServ[res.data[key].id] = { ...allServ[res.data[key].id], "category": res.data[key].categories, "name": res.data[key].name }
                     }
                     this.setState({ allServices: allServ }, () => {
@@ -163,9 +163,13 @@ export class Services extends Component {
     }
 
     loadCustomTableData = () => {
+
         const customServices = this.state.customServices
+        if(customServices === []){
+            return
+        }
         const custom_services_data = this.state.data['custom_business_services']
-        if (custom_services_data.length === 0) {
+        if (custom_services_data != null && custom_services_data.length === 0) {
             this.setState({
                 Loading: false
             })
@@ -248,7 +252,7 @@ export class Services extends Component {
 
 
 
-    setServiceTable = () => {
+    setServiceTable = async () => {
         const List = []
         const services = this.state.data['business_services']
         const allServices = this.state.allServices
@@ -259,16 +263,18 @@ export class Services extends Component {
 
 
         for (var key = 0; key < services.length; key++) {
-            const id = services[key].id
-            console.log(services[key].disable)
+            const id = services[key]
+            let serviceData = await Axios.get('api/service/business_services/?service='+id)
+            serviceData = serviceData.data
+
 
             List.push(
                 <tr>
                     <th scope="row">{key + 1}</th>
-                    <td>{services[key].service_name}</td>
-                    <td>{allCat[allServices[services[key].service].category].name}</td>
-                    <td> {services[key].business_service_duration} </td>
-                    <td>{services[key].business_service_price} </td>
+                    <td>{allServices[services[key]].name}</td>
+                    <td>{allCat[allServices[services[key]].category].name}</td>
+                    <td> {serviceData[0].business_service_duration} minutes </td>
+                    <td>{serviceData[0].business_service_price} ₹</td>
                     <td><button id={"edit-custom-service:" + key + ':' + id}
                         type="button" class="btn btn-primary btn-sm" onClick={(e) => this.toggleModal(e, "ServiceEdit")}>Edit</button></td>
                     <td ><button id={"disable-service:" + id + ':' + key + ':' + services[key].disable}
@@ -413,16 +419,17 @@ export class Services extends Component {
         let currentValue = ''
         switch (action) {
             case "ServiceEdit":
-                console.log(this.state.data['business_services'])
+                console.log(allCat[allServices[services[id]].category].name)
+                // return
                 data = {
-                    category: allCat[allServices[services[id].service].category].name,
+                    category: allCat[allServices[services[id]].category].name,
                     mode: "ServiceEdit",
                     id: e.target.id.split(':')[2]
                 }
                 currentValue = this.state.services[e.target.id.split(':')[1]]
                 console.log(allServices[currentValue.service])
-                currentValue = <div> Service: {allServices[currentValue.service].name} ,
-                     Category:  {allCat[allServices[currentValue.service].category].name}  ,
+                currentValue = <div> Service: {allServices[services[id]].name} ,
+                     Category:  {allCat[allServices[services[id]].category].name}  ,
                     Price:  {currentValue.business_service_price}  ,
                      Duration:  {currentValue.business_service_duration} </div>
                 break;

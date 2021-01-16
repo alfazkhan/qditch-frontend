@@ -89,7 +89,7 @@ export class Login extends Component {
         "email": this.state.values.email.toLowerCase(),
         "password": this.state.values.password
       })
-      const url = 'https://master.qditch.com/custom/login/'
+      const url = 'https://qditch.herokuapp.com/custom/login/'
       Axios.post(url, data)
         .then(res => {
           console.log(res.data)

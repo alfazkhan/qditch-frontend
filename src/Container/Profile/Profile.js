@@ -52,7 +52,7 @@ class Profile extends Component {
         scheduleModalContent: []
     }
 
-    componentDidMount() {
+    componentDidMount = async () => {
         const DetailID = this.props.user_detail_id
         const business_id = this.props.business_id
         const user_id = this.props.user_id
@@ -76,19 +76,19 @@ class Profile extends Component {
         const data = {
             "user": user_id
         }
-        Axios.post('api/users/user_data/', data)
-            .then(res => {
-                console.log(res.data)
-                this.setState({
-                    email: res.data.email,
-                    name: res.data.user_details.first_name + " " + res.data.user_details.last_name,
-                    number: res.data.user_details.mobile_number,
-                    Loading: false
-                })
-            })
-            .catch(e => {
-                console.log(e.response)
-            })
+        let userData = await Axios.get('api/users/user_details/' + business_id + '/')
+        let userEmail = await Axios.get('api/users/user/' + user_id + '/')
+        userEmail = userEmail.data.email
+        userData = userData.data
+        console.log(userData)
+
+        this.setState({
+            email: userEmail,
+            name: userData.first_name + " " + userData.last_name,
+            number: userData.mobile_number,
+            Loading: false
+        })
+
     }
 
 
@@ -386,7 +386,7 @@ class Profile extends Component {
                             <Button variant="contained" className="px-auto" style={{ width: '100%', backgroundColor: Colors.success, color: '#fff' }} onClick={this.scheduleModalHandler}>
                                 View My Appointments
                             </Button>
-                            
+
                             {this.state.scheduleModal
                                 ? this.state.scheduleModalContent
                                 : null}

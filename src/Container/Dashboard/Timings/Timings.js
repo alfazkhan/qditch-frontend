@@ -156,7 +156,7 @@ class Timings extends Component {
     timeEditSubmit = () =>{
         const data = this.state.editedTimeValues
         console.log(data)
-        const url = 'https://master.qditch.com/api/availability/timing/' + this.props.data['business_timings'][0] + '/'
+        const url = 'https://qditch.herokuapp.com/api/availability/timing/' + this.props.data['business_timings'][0] + '/'
 
         this.setState({Loading:true})
         Axios.put(url,data)

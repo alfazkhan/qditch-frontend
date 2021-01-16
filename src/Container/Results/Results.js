@@ -50,7 +50,7 @@ class Results extends Component {
             "longitude": long
         }
         console.log(data)
-        Axios.post('api/category/super_category/', data)
+        Axios.post('api/category/business_super_categories/', data)
             .then(res => {
                 let data
                 if (lat === null) {
